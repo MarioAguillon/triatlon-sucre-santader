@@ -1,0 +1,249 @@
+/* ============================================================
+   TRIATLÓN SUCRE SIN LÍMITES 2.0
+   Design System Global — styles.css
+   ============================================================ */
+
+/* ── Google Fonts ─────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Bebas+Neue&display=swap');
+
+/* ── CSS Variables ────────────────────────────────────────── */
+:root {
+  /* Colors */
+  --c-bg:           #07090f;
+  --c-surface:      #0d1117;
+  --c-card:         #131720;
+  --c-border:       rgba(255,255,255,0.07);
+
+  --c-blue:         #1a6bff;
+  --c-blue-light:   #4d8eff;
+  --c-blue-dark:    #0047cc;
+  --c-orange:       #ff6b00;
+  --c-orange-light: #ff8c38;
+  --c-green:        #00c853;
+  --c-green-dark:   #009c40;
+
+  --c-white:        #ffffff;
+  --c-text:         #e2e8f0;
+  --c-muted:        #8899aa;
+
+  /* Gradients */
+  --g-hero:    linear-gradient(135deg, #0d1117 0%, #0a1628 50%, #0f1a10 100%);
+  --g-blue:    linear-gradient(135deg, var(--c-blue-dark), var(--c-blue-light));
+  --g-orange:  linear-gradient(135deg, #cc4400, var(--c-orange-light));
+  --g-green:   linear-gradient(135deg, var(--c-green-dark), var(--c-green));
+  --g-tricolor: linear-gradient(135deg, var(--c-blue) 0%, var(--c-orange) 50%, var(--c-green) 100%);
+
+  /* Typography */
+  --font-body:    'Outfit', sans-serif;
+  --font-display: 'Bebas Neue', cursive;
+
+  /* Spacing */
+  --sp-xs:  0.5rem;
+  --sp-sm:  1rem;
+  --sp-md:  1.5rem;
+  --sp-lg:  2rem;
+  --sp-xl:  3rem;
+  --sp-2xl: 5rem;
+
+  /* Radii */
+  --r-sm:  8px;
+  --r-md:  16px;
+  --r-lg:  24px;
+  --r-xl:  32px;
+
+  /* Shadows */
+  --sh-card:   0 4px 32px rgba(0,0,0,0.4);
+  --sh-blue:   0 8px 32px rgba(26,107,255,0.35);
+  --sh-orange: 0 8px 32px rgba(255,107,0,0.35);
+  --sh-green:  0 8px 32px rgba(0,200,83,0.3);
+
+  /* Transitions */
+  --tr-fast: 0.2s ease;
+  --tr-med:  0.35s ease;
+  --tr-slow: 0.6s cubic-bezier(0.23,1,0.32,1);
+}
+
+/* ── Reset & Base ─────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--c-bg);
+  color: var(--c-text);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+img { max-width: 100%; height: auto; display: block; }
+a   { color: inherit; text-decoration: none; }
+ul  { list-style: none; }
+
+/* ── Scrollbar ────────────────────────────────────────────── */
+::-webkit-scrollbar       { width: 6px; }
+::-webkit-scrollbar-track { background: var(--c-bg); }
+::-webkit-scrollbar-thumb { background: var(--c-blue); border-radius: 3px; }
+
+/* ── Utility classes ──────────────────────────────────────── */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: var(--sp-lg);
+}
+
+.section {
+  padding-block: var(--sp-2xl);
+}
+
+.section-label {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--c-orange);
+  margin-bottom: var(--sp-sm);
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: var(--c-white);
+  margin-bottom: var(--sp-md);
+}
+
+.section-subtitle {
+  font-size: 1.1rem;
+  color: var(--c-muted);
+  max-width: 600px;
+}
+
+/* ── Buttons ──────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-xs);
+  padding: 0.9rem 2rem;
+  border: none;
+  border-radius: 50px;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--tr-med);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.08);
+  opacity: 0;
+  transition: opacity var(--tr-fast);
+}
+.btn:hover::before { opacity: 1; }
+
+.btn-primary {
+  background: var(--g-orange);
+  color: var(--c-white);
+  box-shadow: var(--sh-orange);
+}
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 48px rgba(255,107,0,0.5);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--c-white);
+  border: 2px solid rgba(255,255,255,0.25);
+}
+.btn-outline:hover {
+  border-color: var(--c-blue);
+  box-shadow: var(--sh-blue);
+  transform: translateY(-2px);
+}
+
+/* ── Badge ───────────────────────────────────────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+/* ── Animations ─────────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.05); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-12px); }
+}
+
+@keyframes gradientShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes countUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+
+.animate-fade-up {
+  animation: fadeUp 0.7s ease forwards;
+}
+
+/* ── Glassmorphism card ──────────────────────────────────── */
+.glass {
+  background: rgba(19, 23, 32, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-lg);
+}
+
+/* ── Divider decoration ──────────────────────────────────── */
+.divider-gradient {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--c-blue), var(--c-orange), transparent);
+  margin-block: var(--sp-xl);
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .container { padding-inline: var(--sp-sm); }
+  .section   { padding-block: var(--sp-xl); }
+}

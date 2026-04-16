@@ -1,0 +1,330 @@
+// ============================================================
+// components/invitation/invitation.component.ts
+// ============================================================
+import { Component } from '@angular/core';
+
+@Component({
+  selector:   'app-invitation',
+  standalone: true,
+  template: `
+    <section id="invitacion" class="section invitation-section">
+      <!-- Decorative background -->
+      <div class="inv-bg-deco">
+        <div class="deco-circle c1"></div>
+        <div class="deco-circle c2"></div>
+      </div>
+
+      <div class="container">
+        <!-- Header -->
+        <div class="inv-header">
+          <p class="section-label">¡Únete a nosotros!</p>
+          <h2 class="section-title">Una invitación<br>para <span class="accent-text">todos</span></h2>
+        </div>
+
+        <div class="inv-grid">
+          <!-- Invitation text -->
+          <div class="inv-message glass">
+            <div class="inv-icon">📣</div>
+            <p class="inv-text">
+              Invitamos a todos nuestros amigos de <strong>La Pradera, La Sabana, La Granja</strong>
+              y centros poblados como <strong>Arales</strong>, así como a participantes de
+              <strong>Bolívar, Barbosa, Jesús María</strong> y demás municipios cercanos.
+            </p>
+            <p class="inv-text">
+              También a la colonia de <strong>Bucaramanga, Bogotá</strong> y todas las ciudades
+              de Colombia. ¡<strong>Todos están invitados</strong> a vivir esta gran experiencia deportiva!
+            </p>
+            <div class="inv-cta-text">
+              🏆 No importa tu nivel — ¡lo que importa es participar!
+            </div>
+          </div>
+
+          <!-- Info cards -->
+          <div class="inv-cards">
+            <!-- Precio -->
+            <div class="info-card price-card">
+              <h3 class="info-card-title">💰 Costos de Inscripción</h3>
+              <div class="price-options">
+                <div class="price-option featured">
+                  <div class="price-badge">⭐ PREFERENCIAL</div>
+                  <div class="price-amount">$15.000</div>
+                  <div class="price-condition">Hasta el 30 de abril de 2026</div>
+                </div>
+                <div class="price-divider">o</div>
+                <div class="price-option">
+                  <div class="price-amount normal">$30.000</div>
+                  <div class="price-condition">Después del 30 de abril</div>
+                </div>
+              </div>
+              <div class="early-bird-alert">
+                ⏰ ¡No dejes pasar el precio preferencial!
+              </div>
+            </div>
+
+            <!-- Detalles -->
+            <div class="info-card details-card">
+              @for (d of eventInfo; track d.label) {
+                <div class="info-row">
+                  <span class="info-icon">{{ d.icon }}</span>
+                  <div>
+                    <small>{{ d.label }}</small>
+                    <strong>{{ d.value }}</strong>
+                  </div>
+                </div>
+              }
+
+              <a href="#inscripcion" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:1.5rem;">
+                🏁 Inscribirse Ahora
+              </a>
+            </div>
+
+            <!-- Municipios -->
+            <div class="info-card towns-card">
+              <h3 class="info-card-title">📍 Invitamos desde</h3>
+              <div class="towns-grid">
+                @for (t of towns; track t) {
+                  <span class="town-tag">{{ t }}</span>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  `,
+  styles: [`
+    .invitation-section {
+      background: linear-gradient(180deg, var(--c-surface) 0%, var(--c-bg) 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .inv-bg-deco { position: absolute; inset: 0; pointer-events: none; }
+
+    .deco-circle {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.06;
+    }
+
+    .c1 {
+      width: 500px; height: 500px;
+      background: var(--c-orange);
+      top: -100px; right: -150px;
+    }
+
+    .c2 {
+      width: 400px; height: 400px;
+      background: var(--c-blue);
+      bottom: -100px; left: -100px;
+    }
+
+    .inv-header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+
+    .accent-text {
+      background: linear-gradient(135deg, var(--c-orange), var(--c-green));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* ── Grid layout ────────────────── */
+    .inv-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 2.5rem;
+      align-items: start;
+    }
+
+    /* ── Invitation message ─────────── */
+    .inv-message {
+      padding: 2.5rem;
+      position: relative;
+    }
+
+    .inv-icon {
+      font-size: 3rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .inv-text {
+      color: var(--c-muted);
+      line-height: 1.9;
+      margin-bottom: 1.2rem;
+      font-size: 1.05rem;
+    }
+
+    .inv-text strong {
+      color: var(--c-white);
+      font-weight: 600;
+    }
+
+    .inv-cta-text {
+      margin-top: 1.5rem;
+      padding: 1rem 1.5rem;
+      background: linear-gradient(135deg, rgba(0,200,83,0.1), rgba(26,107,255,0.1));
+      border: 1px solid rgba(0,200,83,0.2);
+      border-radius: var(--r-md);
+      color: var(--c-green);
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    /* ── Info cards stack ───────────── */
+    .inv-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .info-card {
+      background: var(--c-card);
+      border: 1px solid var(--c-border);
+      border-radius: var(--r-lg);
+      padding: 1.8rem;
+    }
+
+    .info-card-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--c-white);
+      margin-bottom: 1.2rem;
+    }
+
+    /* Precio card */
+    .price-card { border-color: rgba(255,107,0,0.25); }
+
+    .price-options {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .price-option {
+      flex: 1;
+      text-align: center;
+    }
+
+    .price-option.featured {
+      background: linear-gradient(135deg, rgba(255,107,0,0.1), rgba(255,140,56,0.15));
+      border: 1px solid rgba(255,107,0,0.3);
+      border-radius: var(--r-md);
+      padding: 1rem;
+    }
+
+    .price-badge {
+      font-size: 0.65rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      color: var(--c-orange);
+      margin-bottom: 0.5rem;
+    }
+
+    .price-amount {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 2.5rem;
+      color: var(--c-orange);
+      line-height: 1;
+    }
+
+    .price-amount.normal {
+      font-size: 2rem;
+      color: var(--c-muted);
+    }
+
+    .price-condition {
+      font-size: 0.75rem;
+      color: var(--c-muted);
+      margin-top: 0.3rem;
+    }
+
+    .price-divider {
+      color: var(--c-muted);
+      font-weight: 600;
+    }
+
+    .early-bird-alert {
+      background: rgba(255,107,0,0.08);
+      border: 1px dashed rgba(255,107,0,0.3);
+      border-radius: var(--r-sm);
+      padding: 0.6rem 1rem;
+      font-size: 0.82rem;
+      color: var(--c-orange-light);
+      text-align: center;
+    }
+
+    /* Details card */
+    .info-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid var(--c-border);
+    }
+
+    .info-row:last-of-type { border-bottom: none; }
+
+    .info-icon { font-size: 1.5rem; }
+
+    .info-row small {
+      display: block;
+      font-size: 0.7rem;
+      color: var(--c-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .info-row strong {
+      font-size: 1rem;
+      color: var(--c-white);
+    }
+
+    /* Towns card */
+    .towns-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .town-tag {
+      padding: 4px 12px;
+      background: rgba(26,107,255,0.1);
+      border: 1px solid rgba(26,107,255,0.2);
+      border-radius: 50px;
+      font-size: 0.8rem;
+      color: var(--c-blue-light);
+      font-weight: 500;
+      transition: all var(--tr-fast);
+    }
+
+    .town-tag:hover {
+      background: rgba(26,107,255,0.2);
+      transform: translateY(-1px);
+    }
+
+    @media (max-width: 900px) {
+      .inv-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 480px) {
+      .price-options { flex-direction: column; }
+    }
+  `]
+})
+export class InvitationComponent {
+  eventInfo = [
+    { icon: '📍', label: 'Lugar del evento', value: 'Sucre, Santander, Colombia' },
+    { icon: '📅', label: 'Fecha',            value: '18 de julio de 2026' },
+    { icon: '🕗', label: 'Hora de inicio',   value: '7:00 AM' },
+    { icon: '📞', label: 'Información',       value: 'vía formulario de inscripción' },
+  ];
+
+  towns = [
+    'La Pradera', 'La Sabana', 'La Granja', 'Arales',
+    'Bolívar', 'Barbosa', 'Jesús María', 'Bucaramanga',
+    'Bogotá', 'Sucre', 'Santander', 'Colombia 🇨🇴',
+  ];
+}
