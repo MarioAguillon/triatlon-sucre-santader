@@ -1,7 +1,7 @@
 // ============================================================
 // components/registration/registration.component.ts
 // ============================================================
-import { Component, signal, computed } from '@angular/core';
+import { Component, OnInit, signal, computed } from '@angular/core';
 import { CommonModule }                from '@angular/common';
 import { FormsModule }                 from '@angular/forms';
 import { RegistrationService }         from '../../services/registration.service';
@@ -20,6 +20,14 @@ type FormState = 'idle' | 'loading' | 'success' | 'error';
   imports:    [CommonModule, FormsModule],
   template: `
     <section id="inscripcion" class="section registration-section">
+      <div class="section-bg">
+        <img src="bg_disciplines.jpg" class="section-img">
+        <div class="section-overlay"></div>
+      </div>
+      <div class="particles">
+        @for (p of particles; track $index) { <div class="particle" [style]="p"></div> }
+      </div>
+
       <div class="container">
         <div class="reg-grid">
           <!-- Left: Info panel -->
@@ -211,7 +219,7 @@ type FormState = 'idle' | 'loading' | 'success' | 'error';
   `,
   styles: [`
     .registration-section {
-      background: linear-gradient(135deg, #07090f 0%, #0a1628 50%, #07090f 100%);
+      
       position: relative;
     }
 
@@ -457,7 +465,18 @@ type FormState = 'idle' | 'loading' | 'success' | 'error';
     }
   `]
 })
-export class RegistrationComponent {
+export class RegistrationComponent implements OnInit {
+  particles: string[] = [];
+  ngOnInit() {
+    this.particles = Array.from({ length: 20 }, () => {
+      const x = Math.random() * 100;
+      const dur = 8 + Math.random() * 12;
+      const del = Math.random() * 8;
+      const size = 2 + Math.random() * 4;
+      return `left:${x}%;width:${size}px;height:${size}px;animation-duration:${dur}s;animation-delay:${del}s`;
+    });
+  }
+
   form: Participant = {
     nombre: '', edad: 0, ciudad: '', telefono: '',
     correo: '', disciplina: '' as Disciplina, categoria: '' as Categoria

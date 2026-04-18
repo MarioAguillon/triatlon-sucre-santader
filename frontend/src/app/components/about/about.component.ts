@@ -1,13 +1,21 @@
 // ============================================================
 // components/about/about.component.ts
 // ============================================================
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector:   'app-about',
   standalone: true,
   template: `
     <section id="evento" class="section about-section">
+      <div class="section-bg">
+        <img src="bg_about.jpg" class="section-img">
+        <div class="section-overlay"></div>
+      </div>
+      <div class="particles">
+        @for (p of particles; track $index) { <div class="particle" [style]="p"></div> }
+      </div>
+
       <div class="container">
         <div class="about-grid">
           <!-- Left: Text -->
@@ -73,8 +81,8 @@ import { Component } from '@angular/core';
     </section>
   `,
   styles: [`
-    .about-section {
-      background: linear-gradient(180deg, var(--c-bg) 0%, var(--c-surface) 100%);
+    .about-section { position: relative; overflow: hidden;
+      
       border-top: 1px solid var(--c-border);
     }
 
@@ -231,7 +239,18 @@ import { Component } from '@angular/core';
     }
   `]
 })
-export class AboutComponent {
+export class AboutComponent implements OnInit {
+  particles: string[] = [];
+  ngOnInit() {
+    this.particles = Array.from({ length: 20 }, () => {
+      const x = Math.random() * 100;
+      const dur = 8 + Math.random() * 12;
+      const del = Math.random() * 8;
+      const size = 2 + Math.random() * 4;
+      return `left:${x}%;width:${size}px;height:${size}px;animation-duration:${dur}s;animation-delay:${del}s`;
+    });
+  }
+
   highlights = [
     { icon: '🏆', label: 'Segunda Edición',       value: 'Más grande y mejor que nunca' },
     { icon: '🌄', label: 'Naturaleza santandereana', value: 'Paisajes únicos de Sucre, Santander' },

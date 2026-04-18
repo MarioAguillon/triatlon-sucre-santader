@@ -12,7 +12,7 @@ import { CommonModule } from '@angular/common';
     <nav class="navbar" [class.scrolled]="scrolled()">
       <div class="container nav-inner">
         <a href="#inicio" class="nav-brand">
-          <span class="brand-icon">🏆</span>
+          <img src="logo.png" alt="Triatlón Sucre Logo" class="brand-logo" />
           <span class="brand-text">
             <strong>TRIATLÓN</strong>
             <small>Sucre Sin Límites 2.0</small>
@@ -69,7 +69,11 @@ import { CommonModule } from '@angular/common';
       text-decoration: none;
     }
 
-    .brand-icon { font-size: 1.8rem; }
+    .brand-logo { 
+      height: 60px; 
+      width: auto; 
+      object-fit: contain;
+    }
 
     .brand-text {
       display: flex;

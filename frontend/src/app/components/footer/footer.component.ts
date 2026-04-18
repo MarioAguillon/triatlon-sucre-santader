@@ -1,13 +1,21 @@
 // ============================================================
 // components/footer/footer.component.ts
 // ============================================================
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector:   'app-footer',
   standalone: true,
   template: `
     <footer class="footer">
+      <div class="section-bg">
+        <img src="bg_about.jpg" class="section-img">
+        <div class="section-overlay"></div>
+      </div>
+      <div class="particles">
+        @for (p of particles; track $index) { <div class="particle" [style]="p"></div> }
+      </div>
+
       <div class="footer-wave">
         <svg viewBox="0 0 1440 80" preserveAspectRatio="none">
           <path d="M0,40 C360,80 1080,0 1440,40 L1440,80 L0,80 Z" fill="#0d1117"/>
@@ -249,7 +257,18 @@ import { Component } from '@angular/core';
     }
   `]
 })
-export class FooterComponent {
+export class FooterComponent implements OnInit {
+  particles: string[] = [];
+  ngOnInit() {
+    this.particles = Array.from({ length: 20 }, () => {
+      const x = Math.random() * 100;
+      const dur = 8 + Math.random() * 12;
+      const del = Math.random() * 8;
+      const size = 2 + Math.random() * 4;
+      return `left:${x}%;width:${size}px;height:${size}px;animation-duration:${dur}s;animation-delay:${del}s`;
+    });
+  }
+
   eventInfo = [
     { icon: '📅', label: 'Fecha',    value: '18 de julio de 2026' },
     { icon: '📍', label: 'Lugar',    value: 'Sucre, Santander, Colombia' },

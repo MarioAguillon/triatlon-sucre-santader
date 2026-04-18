@@ -1,13 +1,21 @@
 // ============================================================
 // components/disciplines/disciplines.component.ts
 // ============================================================
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector:   'app-disciplines',
   standalone: true,
   template: `
     <section id="disciplinas" class="section disciplines-section">
+      <div class="section-bg">
+        <img src="bg_disciplines.jpg" class="section-img">
+        <div class="section-overlay"></div>
+      </div>
+      <div class="particles">
+        @for (p of particles; track $index) { <div class="particle" [style]="p"></div> }
+      </div>
+
       <div class="container">
         <div class="section-header">
           <p class="section-label">3 Competencias Independientes</p>
@@ -28,7 +36,6 @@ import { Component } from '@angular/core';
               </div>
 
               <div class="card-body">
-                <div class="card-icon">{{ d.emoji }}</div>
                 <h3 class="card-title">{{ d.name }}</h3>
                 <p class="card-desc">{{ d.desc }}</p>
 
@@ -83,7 +90,7 @@ import { Component } from '@angular/core';
   `,
   styles: [`
     .disciplines-section {
-      background: var(--c-surface);
+      
       position: relative;
       overflow: hidden;
     }
@@ -321,13 +328,24 @@ import { Component } from '@angular/core';
     }
   `]
 })
-export class DisciplinesComponent {
+export class DisciplinesComponent implements OnInit {
+  particles: string[] = [];
+  ngOnInit() {
+    this.particles = Array.from({ length: 20 }, () => {
+      const x = Math.random() * 100;
+      const dur = 8 + Math.random() * 12;
+      const del = Math.random() * 8;
+      const size = 2 + Math.random() * 4;
+      return `left:${x}%;width:${size}px;height:${size}px;animation-duration:${dur}s;animation-delay:${del}s`;
+    });
+  }
+
   disciplines = [
     {
       order: '01',
       emoji: '🏃',
       name:  'Running',
-      image: '/running.png',
+      image: 'running.png',
       color: '#00c853',
       desc:  'Recorre las calles y paisajes más bellos de Sucre en esta emocionante carrera. Velocidad, resistencia y pasión por correr.',
       categorias: ['Elite', 'Recreativa', 'Niños'],
@@ -340,7 +358,7 @@ export class DisciplinesComponent {
       order: '02',
       emoji: '🚴',
       name:  'Ciclismo',
-      image: '/ciclismo.png',
+      image: 'ciclismo.png',
       color: '#ff6b00',
       desc:  'Sube y baja por los caminos santandereanos en la disciplina más intensa del evento. Velocidad y potencia al máximo.',
       categorias: ['Elite', 'Recreativa'],
@@ -353,7 +371,7 @@ export class DisciplinesComponent {
       order: '03',
       emoji: '🏊',
       name:  'Natación',
-      image: '/natacion.png',
+      image: 'natacion.png',
       color: '#1a6bff',
       desc:  'Sumérgete en las aguas naturales de Sucre y demuestra tu técnica y resistencia en el agua.',
       categorias: ['Categoría Única'],

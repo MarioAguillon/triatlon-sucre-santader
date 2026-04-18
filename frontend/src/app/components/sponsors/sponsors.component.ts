@@ -12,6 +12,14 @@ import { Sponsor }                   from '../../models/participant.model';
   imports:    [CommonModule],
   template: `
     <section id="patrocinadores" class="section sponsors-section">
+      <div class="section-bg">
+        <img src="bg_hero.jpg" class="section-img">
+        <div class="section-overlay"></div>
+      </div>
+      <div class="particles">
+        @for (p of particles; track $index) { <div class="particle" [style]="p"></div> }
+      </div>
+
       <div class="container">
         <div class="section-header" style="text-align:center">
           <p class="section-label">Apoyan el evento</p>
@@ -81,7 +89,7 @@ import { Sponsor }                   from '../../models/participant.model';
   `,
   styles: [`
     .sponsors-section {
-      background: var(--c-bg);
+      
       border-top: 1px solid var(--c-border);
     }
 
@@ -240,7 +248,10 @@ export class SponsorsComponent implements OnInit {
 
   constructor(private regSvc: RegistrationService) {}
 
+  particles: string[] = [];
   ngOnInit() {
+    this.particles = Array.from({ length: 20 }, () => { const x = Math.random() * 100; const dur = 8 + Math.random() * 12; const del = Math.random() * 8; const size = 2 + Math.random() * 4; return `left:${x}%;width:${size}px;height:${size}px;animation-duration:${dur}s;animation-delay:${del}s`; });
+
     this.regSvc.getSponsors().subscribe({
       next: data => { this.sponsors.set(data); this.loading.set(false); },
       error: ()   => this.loading.set(false),

@@ -1,13 +1,21 @@
 // ============================================================
 // components/invitation/invitation.component.ts
 // ============================================================
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector:   'app-invitation',
   standalone: true,
   template: `
     <section id="invitacion" class="section invitation-section">
+      <div class="section-bg">
+        <img src="bg_invitation.jpg" class="section-img">
+        <div class="section-overlay"></div>
+      </div>
+      <div class="particles">
+        @for (p of particles; track $index) { <div class="particle" [style]="p"></div> }
+      </div>
+
       <!-- Decorative background -->
       <div class="inv-bg-deco">
         <div class="deco-circle c1"></div>
@@ -24,19 +32,25 @@ import { Component } from '@angular/core';
         <div class="inv-grid">
           <!-- Invitation text -->
           <div class="inv-message glass">
-            <div class="inv-icon">📣</div>
             <p class="inv-text">
-              Invitamos a todos nuestros amigos de <strong>La Pradera, La Sabana, La Granja</strong>
-              y centros poblados como <strong>Arales</strong>, así como a participantes de
-              <strong>Bolívar, Barbosa, Jesús María</strong> y demás municipios cercanos.
+              Invitamos a nuestros amigos de los corregimientos de <strong>La Pradera, La Sabana y La Granja</strong>, 
+              así como de centros poblados como <strong>Arales, El Porvenir</strong> y de todas las veredas de nuestro municipio.
             </p>
             <p class="inv-text">
-              También a la colonia de <strong>Bucaramanga, Bogotá</strong> y todas las ciudades
-              de Colombia. ¡<strong>Todos están invitados</strong> a vivir esta gran experiencia deportiva!
+              Extendemos esta invitación a deportistas de municipios cercanos como <strong>Bolívar, Barbosa, Vélez, Guavatá, 
+              Jesús María, La Belleza, Florián, Puente Nacional</strong> y demás poblaciones de la región.
             </p>
-            <div class="inv-cta-text">
-              🏆 No importa tu nivel — ¡lo que importa es participar!
+            <p class="inv-text">
+              También damos una cálida bienvenida a la colonia sucreña residente en <strong>Bucaramanga, Bogotá</strong> y en 
+              diferentes ciudades de Colombia, para que regresen a vivir una jornada inolvidable en su tierra.
+            </p>
+            <div class="elegant-cta">
+              No importa si eres principiante o experimentado:<br>
+              <strong>lo más importante es participar, disfrutar el recorrido y compartir la pasión por el deporte.</strong>
             </div>
+            <p class="inv-signature">
+              Únete a nosotros y vive una experiencia deportiva que recordarás siempre.
+            </p>
           </div>
 
           <!-- Info cards -->
@@ -94,7 +108,7 @@ import { Component } from '@angular/core';
   `,
   styles: [`
     .invitation-section {
-      background: linear-gradient(180deg, var(--c-surface) 0%, var(--c-bg) 100%);
+      
       position: relative;
       overflow: hidden;
     }
@@ -144,11 +158,6 @@ import { Component } from '@angular/core';
       position: relative;
     }
 
-    .inv-icon {
-      font-size: 3rem;
-      margin-bottom: 1.5rem;
-    }
-
     .inv-text {
       color: var(--c-muted);
       line-height: 1.9;
@@ -161,15 +170,53 @@ import { Component } from '@angular/core';
       font-weight: 600;
     }
 
-    .inv-cta-text {
-      margin-top: 1.5rem;
-      padding: 1rem 1.5rem;
-      background: linear-gradient(135deg, rgba(0,200,83,0.1), rgba(26,107,255,0.1));
-      border: 1px solid rgba(0,200,83,0.2);
+    .elegant-cta {
+      margin-top: 2rem;
+      padding: 1.4rem 1.8rem;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01));
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: var(--r-md);
-      color: var(--c-green);
-      font-weight: 600;
-      font-size: 0.95rem;
+      color: var(--c-white);
+      font-size: 1.1rem;
+      line-height: 1.6;
+      text-align: center;
+      border-left: 4px solid var(--c-orange);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .elegant-cta strong {
+      display: block;
+      margin-top: 0.5rem;
+      color: var(--c-orange);
+      font-weight: 700;
+      font-size: 1.15rem;
+    }
+
+    .inv-signature {
+      margin-top: 2rem;
+      font-family: inherit;
+      font-style: italic;
+      font-size: 1.25rem;
+      color: rgba(255, 255, 255, 0.9);
+      text-align: center;
+      font-weight: 500;
+    }
+
+    @media (max-width: 768px) {
+      .inv-text {
+        font-size: 1rem;
+        line-height: 1.7;
+      }
+      .elegant-cta {
+        padding: 1.2rem;
+        font-size: 1rem;
+      }
+      .elegant-cta strong {
+        font-size: 1.05rem;
+      }
+      .inv-signature {
+        font-size: 1.15rem;
+      }
     }
 
     /* ── Info cards stack ───────────── */
@@ -314,7 +361,18 @@ import { Component } from '@angular/core';
     }
   `]
 })
-export class InvitationComponent {
+export class InvitationComponent implements OnInit {
+  particles: string[] = [];
+  ngOnInit() {
+    this.particles = Array.from({ length: 20 }, () => {
+      const x = Math.random() * 100;
+      const dur = 8 + Math.random() * 12;
+      const del = Math.random() * 8;
+      const size = 2 + Math.random() * 4;
+      return `left:${x}%;width:${size}px;height:${size}px;animation-duration:${dur}s;animation-delay:${del}s`;
+    });
+  }
+
   eventInfo = [
     { icon: '📍', label: 'Lugar del evento', value: 'Sucre, Santander, Colombia' },
     { icon: '📅', label: 'Fecha',            value: '18 de julio de 2026' },
