@@ -347,11 +347,11 @@ export class DisciplinesComponent implements OnInit {
       name:  'Running',
       image: 'running.png',
       color: '#00c853',
-      desc:  'Recorre las calles y paisajes más bellos de Sucre en esta emocionante carrera. Velocidad, resistencia y pasión por correr.',
+      desc:  'Recorre una ruta maravillosa iniciando donde se encuentra la quebrada Agua Blanca y el río Ture, ascendiendo por La Laja hasta finalizar en la Parroquia San Isidro.',
       categorias: ['Elite', 'Recreativa', 'Niños'],
       stats: [
-        { value: '5km',  label: 'Distancia' },
-        { value: '3',    label: 'Categorías' },
+        { value: '6.5km',  label: 'Distancia Máx' },
+        { value: '4',      label: 'Categorías' },
       ]
     },
     {
@@ -360,11 +360,11 @@ export class DisciplinesComponent implements OnInit {
       name:  'Ciclismo',
       image: 'ciclismo.png',
       color: '#0047cc',
-      desc:  'Sube y baja por los caminos santandereanos en la disciplina más intensa del evento. Velocidad y potencia al máximo.',
-      categorias: ['Elite', 'Recreativa'],
+      desc:  'Desafía las vías secundarias de Sucre, pasando por Casateja y Helechales, hasta la llegada triunfal en la plaza principal.',
+      categorias: ['Elite', 'Recreativa', 'Niños'],
       stats: [
-        { value: '20km', label: 'Distancia' },
-        { value: '2',    label: 'Categorías' },
+        { value: '25km', label: 'Distancia Máx' },
+        { value: '4',    label: 'Categorías' },
       ]
     },
     {
@@ -373,11 +373,11 @@ export class DisciplinesComponent implements OnInit {
       name:  'Natación',
       image: 'natacion.png',
       color: '#1a6bff',
-      desc:  'Sumérgete en las aguas naturales de Sucre y demuestra tu técnica y resistencia en el agua.',
-      categorias: ['Categoría Única'],
+      desc:  'Disfruta nadando en la piscina del centro recreacional de Sucre. Un ambiente inigualable estilo olímpico bajo la atención del equipo local.',
+      categorias: ['Hombres', 'Mujeres', 'Niños'],
       stats: [
-        { value: '750m',  label: 'Distancia' },
-        { value: '1',     label: 'Categoría' },
+        { value: '1600m', label: 'Distancia Máx' },
+        { value: '4',     label: 'Categorías' },
       ]
     },
   ];
