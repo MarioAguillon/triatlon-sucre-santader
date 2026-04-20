@@ -33,7 +33,10 @@ import { Component, OnInit, OnDestroy, signal } from '@angular/core';
           <div class="carousel-track" [style.transform]="'translateX(-' + currentIndex() * 100 + '%)'">
             @for (img of images; track $index) {
               <div class="carousel-slide">
-                <img [src]="img" [alt]="'Primera Edición - Foto ' + ($index + 1)" loading="lazy" />
+                <img [src]="img" 
+                     [alt]="'Primera Edición - Foto ' + ($index + 1)" 
+                     loading="lazy" 
+                     [style.object-position]="$index === 3 ? 'center 15%' : ($index === 14 ? 'center 20%' : 'center center')" />
               </div>
             }
           </div>

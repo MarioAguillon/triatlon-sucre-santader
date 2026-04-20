@@ -4,8 +4,23 @@
 const router = require('express').Router();
 
 // ── Almacenamiento temporal en memoria ──────────────────────
-let participants = [];
-let nextId = 1;
+let participants = [
+  { id: 1, nombre: 'Yesenia Fernanda Rueda Fandiño', edad: 30, ciudad: 'Pendiente', telefono: '3173783323', correo: 'yesenia@example.com', disciplina: 'running', categoria: 'recreativa', participo_primera_edicion: 'SI', precio_aplicado: 30000, fecha_inscripcion: new Date().toISOString(), activo: true },
+  { id: 2, nombre: 'María Fernanda Camargo Ariza', edad: 30, ciudad: 'Pendiente', telefono: '3227263345', correo: 'mariaf@example.com', disciplina: 'running', categoria: 'recreativa', participo_primera_edicion: 'NO', precio_aplicado: 30000, fecha_inscripcion: new Date().toISOString(), activo: true },
+  { id: 3, nombre: 'Angie Daniela Camargo Ariza', edad: 30, ciudad: 'Pendiente', telefono: '3503364464', correo: 'angied@example.com', disciplina: 'running', categoria: 'recreativa', participo_primera_edicion: 'NO', precio_aplicado: 30000, fecha_inscripcion: new Date().toISOString(), activo: true },
+  { id: 4, nombre: 'Deisy Yohana Medina Quitian', edad: 30, ciudad: 'Pendiente', telefono: '3209927574', correo: 'deisy@example.com', disciplina: 'running', categoria: 'recreativa', participo_primera_edicion: 'SI', precio_aplicado: 30000, fecha_inscripcion: new Date().toISOString(), activo: true },
+  { id: 5, nombre: 'Cristian Quiroga Marin', edad: 30, ciudad: 'Pendiente', telefono: '3214521497', correo: 'cristian@example.com', disciplina: 'running', categoria: 'elite', participo_primera_edicion: 'SI', precio_aplicado: 30000, fecha_inscripcion: new Date().toISOString(), activo: true },
+  { id: 6, nombre: 'EDGAR ARMANDO MARIN ARDILA', edad: 30, ciudad: 'Pendiente', telefono: '3102198939', correo: 'edgar@example.com', disciplina: 'running', categoria: 'recreativa', participo_primera_edicion: 'SI', precio_aplicado: 30000, fecha_inscripcion: new Date().toISOString(), activo: true },
+  { id: 7, nombre: 'JULIAN DAVID MONCADA VARGAS', edad: 30, ciudad: 'Pendiente', telefono: '3134733817', correo: 'julian@example.com', disciplina: 'ciclismo', categoria: 'recreativa', participo_primera_edicion: 'NO', precio_aplicado: 30000, fecha_inscripcion: new Date().toISOString(), activo: true },
+  { id: 8, nombre: 'Leidy Ruiz', edad: 30, ciudad: 'Pendiente', telefono: '3219035730', correo: 'leidy@example.com', disciplina: 'running', categoria: 'recreativa', participo_primera_edicion: 'SI', precio_aplicado: 30000, fecha_inscripcion: new Date().toISOString(), activo: true },
+  { id: 9, nombre: 'Taylor Alirio Garcia Espinosa', edad: 30, ciudad: 'Pendiente', telefono: '3001952365', correo: 'taylor@example.com', disciplina: 'running', categoria: 'recreativa', participo_primera_edicion: 'SI', precio_aplicado: 30000, fecha_inscripcion: new Date().toISOString(), activo: true },
+  { id: 10, nombre: 'Armando Marin Marin', edad: 30, ciudad: 'Pendiente', telefono: '3213047058', correo: 'armando@example.com', disciplina: 'running', categoria: 'elite', participo_primera_edicion: 'SI', precio_aplicado: 30000, fecha_inscripcion: new Date().toISOString(), activo: true },
+  { id: 11, nombre: 'Arley Ariza Marin', edad: 30, ciudad: 'Pendiente', telefono: '3115036263', correo: 'arley@example.com', disciplina: 'running', categoria: 'elite', participo_primera_edicion: 'NO', precio_aplicado: 30000, fecha_inscripcion: new Date().toISOString(), activo: true },
+  { id: 12, nombre: 'Luis Evelio Quiroga Marin', edad: 30, ciudad: 'Pendiente', telefono: '3114880481', correo: 'luis@example.com', disciplina: 'running', categoria: 'recreativa', participo_primera_edicion: 'NO', precio_aplicado: 30000, fecha_inscripcion: new Date().toISOString(), activo: true },
+  { id: 13, nombre: 'Daniel Stiven Quiroga Bareño', edad: 30, ciudad: 'Pendiente', telefono: '3108084230', correo: 'daniel@example.com', disciplina: 'ciclismo', categoria: 'elite', participo_primera_edicion: 'SI', precio_aplicado: 30000, fecha_inscripcion: new Date().toISOString(), activo: true },
+  { id: 14, nombre: 'Hugo Ariza Mateus', edad: 30, ciudad: 'Pendiente', telefono: '3208089145', correo: 'hugo@example.com', disciplina: 'running', categoria: 'recreativa', participo_primera_edicion: 'NO', precio_aplicado: 30000, fecha_inscripcion: new Date().toISOString(), activo: true }
+];
+let nextId = 15;
 
 // ── Categorías válidas por disciplina ───────────────────────
 const CATEGORIAS_VALIDAS = {

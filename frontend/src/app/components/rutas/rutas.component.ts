@@ -31,7 +31,7 @@ import { Component, OnInit } from '@angular/core';
             <div class="ruta-card" [style.--accent]="ruta.color">
               <!-- Placeholder para el mapa — Insertar aquí el mapa real de la ruta -->
               <div class="ruta-map-placeholder">
-                <div class="map-icon">{{ ruta.icon }}</div>
+                <div class="map-icon material-symbols-outlined">{{ ruta.icon }}</div>
                 <span class="map-text">Mapa de {{ ruta.name }}</span>
                 <span class="map-coming">Próximamente</span>
               </div>
@@ -44,7 +44,7 @@ import { Component, OnInit } from '@angular/core';
                 <div class="ruta-details">
                   @for (detail of ruta.details; track detail.label) {
                     <div class="ruta-detail">
-                      <span class="rd-icon">{{ detail.icon }}</span>
+                      <span class="rd-icon material-symbols-outlined">{{ detail.icon }}</span>
                       <div>
                         <small>{{ detail.label }}</small>
                         <strong>{{ detail.value }}</strong>
@@ -236,39 +236,42 @@ export class RutasComponent implements OnInit {
 
   rutas = [
     {
-      name: 'Natación',
-      icon: '🏊',
-      color: '#1a6bff',
-      distance: '750m',
-      desc: 'Recorrido acuático en las aguas naturales de Sucre. Una experiencia única rodeada de naturaleza santandereana.',
+      name: 'Running',
+      icon: 'sprint',
+      color: '#00c853',
+      distance: 'Hasta 6.5km',
+      desc: 'Un recorrido que inicia por una belleza natural como es el nacimiento de Agua Blanca y el río. Se inicia un ascenso por las vías secundarias de La Laja a la cabecera municipal, pasando por el antiguo molino de Don Jesús Vargas, por el frente del Cerro de la Virgen, por la antigua Casa de la Muda, por el frente de la plaza de mercado hasta llegar a la Parroquia San Isidro Labrador.',
       details: [
-        { icon: '📏', label: 'Distancia', value: '750 metros' },
-        { icon: '🌊', label: 'Tipo', value: 'Aguas abiertas' },
-        { icon: '📍', label: 'Ubicación', value: 'Sucre, Santander' },
+        { icon: 'emoji_events', label: 'Élite', value: '6.5 kilómetros' },
+        { icon: 'directions_run', label: 'Recreativa', value: '5.5 kilómetros' },
+        { icon: 'face', label: 'Infantil 5 a 9 años', value: '500 metros' },
+        { icon: 'person', label: 'Infantil 10 a 15 años', value: '1 kilómetro' },
       ]
     },
     {
       name: 'Ciclismo',
-      icon: '🚴',
-      color: '#ff6b00',
-      distance: '20km',
-      desc: 'Ruta ciclística a través de los caminos más impresionantes de la montaña santandereana. Subidas y bajadas de alta intensidad.',
+      icon: 'directions_bike',
+      color: '#0047cc',
+      distance: 'Hasta 25km',
+      desc: 'Recorre una ruta maravillosa y exigente por las vías secundarias y terciarias del municipio de Sucre, en donde el entrenamiento, disciplina y amor por rodar se pone a prueba con una salida desde la Parroquia San Isidro, con dirección al casino. Se desvía por la ruta de Sucre por la quebrada. Se continúa derecho por Casateja hasta llegar a la vía que viene de Guavatá para llegar a la vereda de La Chacera. Se llega a la escuela de esta vereda con destino a la cabecera municipal, subiendo por la plaza de mercado, palacio municipal y finalizando nuevamente en la Parroquia San Isidro Labrador.',
       details: [
-        { icon: '📏', label: 'Distancia', value: '20 kilómetros' },
-        { icon: '⛰️', label: 'Terreno', value: 'Montaña y carretera' },
-        { icon: '📍', label: 'Ubicación', value: 'Sucre, Santander' },
+        { icon: 'emoji_events', label: 'Élite', value: '25 kilómetros' },
+        { icon: 'pedal_bike', label: 'Recreativa', value: '18 kilómetros' },
+        { icon: 'face', label: 'Infantil 5 a 9 años', value: '500 metros' },
+        { icon: 'person', label: 'Infantil 10 a 15 años', value: '1 kilómetro' },
       ]
     },
     {
-      name: 'Running',
-      icon: '🏃',
-      color: '#00c853',
-      distance: '5km',
-      desc: 'Carrera por las calles y senderos más emblemáticos de Sucre. Velocidad, resistencia y pasión en cada paso.',
+      name: 'Natación',
+      icon: 'pool',
+      color: '#1a6bff',
+      distance: 'Hasta 1600m',
+      desc: 'Disfrutar de la natación en el centro recreacional de Sucre es una bendición, con su atención VIP por el famosísimo "Mosc". Hace que la experiencia de nadar sea más agradable, ya que se cuenta con el calor humano del sucreño que anima la competencia como si estuviéramos en los olímpicos.',
       details: [
-        { icon: '📏', label: 'Distancia', value: '5 kilómetros' },
-        { icon: '🛤️', label: 'Terreno', value: 'Urbano y rural' },
-        { icon: '📍', label: 'Ubicación', value: 'Sucre, Santander' },
+        { icon: 'man', label: 'Hombres', value: '1600 metros' },
+        { icon: 'woman', label: 'Mujeres', value: '1500 metros' },
+        { icon: 'face', label: 'Infantil 5 a 9 años', value: '20 metros' },
+        { icon: 'person', label: 'Infantil 10 a 15 años', value: '40 metros' },
       ]
     },
   ];

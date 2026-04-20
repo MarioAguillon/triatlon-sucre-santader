@@ -57,10 +57,10 @@ import { Component, OnInit } from '@angular/core';
           <div class="inv-cards">
             <!-- Precio -->
             <div class="info-card price-card">
-              <h3 class="info-card-title">💰 Costos de Inscripción</h3>
+              <h3 class="info-card-title"><span class="material-symbols-outlined" style="vertical-align:-4px; margin-right:4px;">payments</span> Costos de Inscripción</h3>
               <div class="price-options">
                 <div class="price-option featured">
-                  <div class="price-badge">⭐ PREFERENCIAL</div>
+                  <div class="price-badge"><span class="material-symbols-outlined" style="vertical-align:-4px; font-size:inherit; margin-right:2px;">star</span> PREFERENCIAL</div>
                   <div class="price-amount">$15.000</div>
                   <div class="price-condition">Hasta el 30 de abril de 2026</div>
                 </div>
@@ -71,7 +71,7 @@ import { Component, OnInit } from '@angular/core';
                 </div>
               </div>
               <div class="early-bird-alert">
-                ⏰ ¡No dejes pasar el precio preferencial!
+                <span class="material-symbols-outlined" style="vertical-align:-4px; margin-right:4px;">alarm</span> ¡No dejes pasar el precio preferencial!
               </div>
             </div>
 
@@ -79,7 +79,7 @@ import { Component, OnInit } from '@angular/core';
             <div class="info-card details-card">
               @for (d of eventInfo; track d.label) {
                 <div class="info-row">
-                  <span class="info-icon">{{ d.icon }}</span>
+                  <span class="info-icon material-symbols-outlined">{{ d.icon }}</span>
                   <div>
                     <small>{{ d.label }}</small>
                     <strong>{{ d.value }}</strong>
@@ -88,13 +88,13 @@ import { Component, OnInit } from '@angular/core';
               }
 
               <a href="#inscripcion" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:1.5rem;">
-                🏁 Inscribirse Ahora
+                <span class="material-symbols-outlined" style="margin-right:8px;">sports_score</span> Inscribirse Ahora
               </a>
             </div>
 
             <!-- Municipios -->
             <div class="info-card towns-card">
-              <h3 class="info-card-title">📍 Invitamos desde</h3>
+              <h3 class="info-card-title"><span class="material-symbols-outlined" style="vertical-align:-4px; margin-right:4px;">pin_drop</span> Invitamos desde</h3>
               <div class="towns-grid">
                 @for (t of towns; track t) {
                   <span class="town-tag">{{ t }}</span>
@@ -374,10 +374,10 @@ export class InvitationComponent implements OnInit {
   }
 
   eventInfo = [
-    { icon: '📍', label: 'Lugar del evento', value: 'Sucre, Santander, Colombia' },
-    { icon: '📅', label: 'Fecha',            value: '18 de julio de 2026' },
-    { icon: '🕗', label: 'Hora de inicio',   value: '7:00 AM' },
-    { icon: '📞', label: 'Información',       value: 'vía formulario de inscripción' },
+    { icon: 'location_on', label: 'Lugar del evento', value: 'Sucre, Santander, Colombia' },
+    { icon: 'calendar_month', label: 'Fecha',            value: '18 de julio de 2026' },
+    { icon: 'schedule', label: 'Hora de inicio',   value: '7:00 AM' },
+    { icon: 'phone', label: 'Información',       value: 'vía formulario de inscripción' },
   ];
 
   towns = [

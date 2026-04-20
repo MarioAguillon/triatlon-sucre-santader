@@ -2,11 +2,13 @@
 // components/hero/hero.component.ts
 // ============================================================
 import { Component, OnInit, OnDestroy, signal } from '@angular/core';
+import { CommonModule }              from '@angular/common';
 import { RegistrationService }       from '../../services/registration.service';
 
 @Component({
   selector:   'app-hero',
   standalone: true,
+  imports: [CommonModule],
   template: `
     <section id="inicio" class="hero">
       <!-- Background image -->
@@ -25,7 +27,7 @@ import { RegistrationService }       from '../../services/registration.service';
       <!-- Content -->
       <div class="container hero-content">
         <div class="hero-badge animate-fade-up">
-          <span>🗓️</span>
+          <span class="material-symbols-outlined" style="font-size: 1.1rem">calendar_month</span>
           <span>18 de Julio · 2026 · Sucre, Santander</span>
         </div>
 
@@ -45,7 +47,7 @@ import { RegistrationService }       from '../../services/registration.service';
 
             <div class="hero-actions animate-fade-up" style="animation-delay:0.45s">
               <a href="#inscripcion" class="btn btn-primary btn-hero">
-                🏁 Inscribirse Ahora
+                <span class="material-symbols-outlined" style="margin-right: 8px;">sports_score</span> Inscribirse Ahora
               </a>
               <a href="#evento" class="btn btn-outline">
                 Conocer más
@@ -80,10 +82,10 @@ import { RegistrationService }       from '../../services/registration.service';
         </div>
 
         <div class="hero-stats animate-fade-up" style="animation-delay:0.7s">
-          <div class="stat">
+          <button class="stat stat-btn" (click)="abrirModalInscritos()" aria-label="Ver lista de inscritos">
             <span class="stat-num">{{ count() }}+</span>
             <span class="stat-label">Inscritos</span>
-          </div>
+          </button>
           <div class="stat-divider"></div>
           <div class="stat">
             <span class="stat-num">3</span>
@@ -101,6 +103,62 @@ import { RegistrationService }       from '../../services/registration.service';
       <div class="scroll-indicator">
         <div class="scroll-dot"></div>
       </div>
+
+      <!-- Modal de Inscritos -->
+      @if (showInscritosModal()) {
+        <div class="inscritos-modal-overlay" (click)="cerrarModalInscritos()">
+          <div class="inscritos-modal-content glass" (click)="$event.stopPropagation()">
+            <div class="inscritos-modal-header">
+              <h3><span class="material-symbols-outlined">group</span> Atletas Inscritos</h3>
+              <button class="modal-close" (click)="cerrarModalInscritos()"><span class="material-symbols-outlined">close</span></button>
+            </div>
+            
+            <div class="inscritos-modal-body">
+              @if (loadingInscritos()) {
+                <div class="loading-state">
+                  <div class="spinner"></div>
+                  <p>Cargando lista de atletas...</p>
+                </div>
+              } @else if (inscritosList().length === 0) {
+                <div class="empty-state">
+                  <span class="material-symbols-outlined">person_off</span>
+                  <p>Aún no hay inscritos confirmados.</p>
+                </div>
+              } @else {
+                <div class="inscritos-list">
+                  @for (at of inscritosList(); track at.id) {
+                    <div class="inscrito-row">
+                      <div class="inscrito-icon">
+                        <span class="material-symbols-outlined">
+                          {{ at.disciplina === 'ciclismo' ? 'directions_bike' : (at.disciplina === 'natacion' ? 'pool' : 'sprint') }}
+                        </span>
+                      </div>
+                      <div class="inscrito-info-grid">
+                        <div class="info-group">
+                          <span class="info-label">Atleta / Participante</span>
+                          <span class="info-val">{{ at.nombre }}</span>
+                        </div>
+                        <div class="info-group">
+                          <span class="info-label">Disciplina</span>
+                          <span class="info-val"><span class="badge">{{ at.disciplina | titlecase }}</span></span>
+                        </div>
+                        <div class="info-group">
+                          <span class="info-label">Ciudad o Vereda</span>
+                          <span class="info-val"><span class="material-symbols-outlined" style="font-size:12px;vertical-align:middle;margin-right:2px">location_on</span>{{ at.ciudad || 'Pendiente' }}</span>
+                        </div>
+                        <div class="info-group">
+                          <span class="info-label">¿1ra Edición?</span>
+                          <span class="info-val">{{ (at.participo_primera_edicion === 'SI' || at.participo_primera_edicion === true) ? 'Sí' : 'No' }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      }
     </section>
   `,
   styles: [`
@@ -194,7 +252,7 @@ import { RegistrationService }       from '../../services/registration.service';
     }
 
     .title-accent {
-      background: linear-gradient(135deg, #ff6b00, #ff8c38);
+      background: linear-gradient(135deg, #009c40, #00c853);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -251,7 +309,7 @@ import { RegistrationService }       from '../../services/registration.service';
     .btn-hero {
       font-size: 1.1rem;
       padding: 1rem 2.5rem;
-      box-shadow: 0 8px 40px rgba(255,107,0,0.45);
+      box-shadow: 0 8px 40px rgba(26,107,255,0.45);
     }
 
     /* ── Countdown Timer ────────────────────── */
@@ -316,7 +374,24 @@ import { RegistrationService }       from '../../services/registration.service';
       gap: 2rem;
     }
 
-    .stat { text-align: center; }
+    .stat, .stat-btn {
+      text-align: center;
+    }
+    
+    .stat-btn {
+      background: none;
+      border: none;
+      padding: 0.5rem;
+      cursor: pointer;
+      border-radius: var(--r-md);
+      transition: all 0.3s ease;
+    }
+    
+    .stat-btn:hover {
+      background: rgba(26,107,255,0.15);
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(26,107,255,0.3);
+    }
 
     .stat-num {
       display: block;
@@ -359,6 +434,178 @@ import { RegistrationService }       from '../../services/registration.service';
       0%, 100% { transform: translateY(0); opacity: 0.5; }
       50%       { transform: translateY(8px); opacity: 1; }
     }
+    
+    /* ── Modal de Inscritos ─────────────────── */
+    .inscritos-modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      animation: fadeIn var(--tr-fast);
+    }
+    
+    .inscritos-modal-content {
+      width: 100%;
+      max-width: 900px;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      background: rgba(10, 20, 35, 0.9);
+      border: 1px solid rgba(26,107,255,0.3);
+      border-radius: var(--r-xl);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.8), inset 0 0 20px rgba(26,107,255,0.1);
+      overflow: hidden;
+      animation: slideUp var(--tr-med);
+    }
+    
+    .inscritos-modal-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0,0,0,0.2);
+    }
+    
+    .inscritos-modal-header h3 {
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: 'Bebas Neue', cursive;
+      font-size: 1.8rem;
+      letter-spacing: 0.05em;
+      color: #fff;
+    }
+    
+    .modal-close {
+      background: rgba(255,255,255,0.05);
+      border: none;
+      color: var(--c-white);
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background var(--tr-fast);
+    }
+    
+    .modal-close:hover {
+      background: rgba(255,107,0,0.2);
+      color: var(--c-orange);
+    }
+    
+    .inscritos-modal-body {
+      padding: 1.5rem;
+      overflow-y: auto;
+      flex: 1;
+    }
+    
+    /* Scrollbar para la lista */
+    .inscritos-modal-body::-webkit-scrollbar { width: 6px; }
+    .inscritos-modal-body::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 10px; }
+    
+    .loading-state, .empty-state {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--c-muted);
+    }
+    
+    .spinner {
+      width: 40px; height: 40px;
+      margin: 0 auto 1rem;
+      border: 3px solid rgba(255,255,255,0.1);
+      border-top-color: var(--c-blue);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin { to { transform: rotate(360deg); } }
+    
+    .inscritos-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+    
+    .inscrito-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: var(--r-md);
+      transition: all var(--tr-fast);
+    }
+    
+    .inscrito-row:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(26,107,255,0.3);
+      transform: translateX(5px);
+    }
+    
+    .inscrito-icon {
+      width: 50px; height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(26,107,255,0.2), rgba(0,200,83,0.15));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    
+    .inscrito-info-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1.5fr 1fr;
+      gap: 1rem;
+      align-items: center;
+    }
+    
+    .info-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+    
+    .info-label {
+      font-size: 0.65rem;
+      color: var(--c-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 600;
+    }
+    
+    .info-val {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #fff;
+      display: flex;
+      align-items: center;
+    }
+    
+    .info-val .badge {
+      background: rgba(26,107,255,0.15);
+      color: var(--c-blue-light);
+      padding: 3px 10px;
+      border-radius: 4px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+    }
+    
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
     @media (max-width: 900px) {
       .hero-split-layout {
@@ -370,6 +617,11 @@ import { RegistrationService }       from '../../services/registration.service';
         width: 100%;
         margin-top: 1rem;
       }
+      
+      .inscrito-info-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.8rem;
+      }
     }
 
     @media (max-width: 768px) {
@@ -380,6 +632,18 @@ import { RegistrationService }       from '../../services/registration.service';
       .countdown-timer { gap: 0.5rem; padding: 1rem 1.2rem; margin-bottom: 2.5rem; }
       .countdown-item  { min-width: 45px; }
       .countdown-separator { margin-bottom: 0.8rem; }
+    }
+
+    @media (max-width: 500px) {
+      .inscrito-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .inscrito-info-grid {
+        grid-template-columns: 1fr;
+        width: 100%;
+        gap: 0.6rem;
+      }
     }
 
     @media (max-width: 400px) {
@@ -395,6 +659,10 @@ export class HeroComponent implements OnInit, OnDestroy {
   minutes  = signal('00');
   seconds  = signal('00');
   particles: string[] = [];
+
+  showInscritosModal = signal(false);
+  loadingInscritos   = signal(false);
+  inscritosList      = signal<any[]>([]);
 
   private countdownInterval: any;
 
@@ -441,5 +709,30 @@ export class HeroComponent implements OnInit, OnDestroy {
     this.hours.set(String(h).padStart(2, '0'));
     this.minutes.set(String(m).padStart(2, '0'));
     this.seconds.set(String(s).padStart(2, '0'));
+  }
+
+  // Lógica del modal de inscritos
+  abrirModalInscritos() {
+    this.showInscritosModal.set(true);
+    document.body.style.overflow = 'hidden';
+    
+    if (this.inscritosList().length === 0) {
+      this.loadingInscritos.set(true);
+      this.regSvc.getParticipants(1, 1000).subscribe({
+        next: (res: any) => {
+          this.inscritosList.set(res.data || []);
+          this.loadingInscritos.set(false);
+        },
+        error: (err) => {
+          console.error('Error cargando inscritos', err);
+          this.loadingInscritos.set(false);
+        }
+      });
+    }
+  }
+
+  cerrarModalInscritos() {
+    this.showInscritosModal.set(false);
+    document.body.style.overflow = '';
   }
 }

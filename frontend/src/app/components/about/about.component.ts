@@ -28,14 +28,13 @@ import { Component, OnInit } from '@angular/core';
               en un espectáculo que une a toda la comunidad.
             </p>
             <p class="about-desc">
-              Enfrentarás tres disciplinas consecutivas: <em>natación, ciclismo y running</em>, 
-              poniendo a prueba tus límites en un entorno natural único del corazón de Santander, Colombia.
+              En el evento podrás participar en una, dos o tres disciplinas deportivas: running, ciclismo y natación, poniendo a prueba tus límites en un entorno natural único en el sur de Santander.
             </p>
 
             <div class="about-highlights">
               @for (h of highlights; track h.label) {
                 <div class="highlight-item">
-                  <span class="highlight-icon">{{ h.icon }}</span>
+                  <span class="highlight-icon material-symbols-outlined">{{ h.icon }}</span>
                   <div>
                     <strong>{{ h.label }}</strong>
                     <small>{{ h.value }}</small>
@@ -56,7 +55,7 @@ import { Component, OnInit } from '@angular/core';
               <div class="event-details">
                 @for (d of details; track d.label) {
                   <div class="detail-row">
-                    <span class="detail-icon">{{ d.icon }}</span>
+                    <span class="detail-icon material-symbols-outlined">{{ d.icon }}</span>
                     <div>
                       <small>{{ d.label }}</small>
                       <strong>{{ d.value }}</strong>
@@ -66,7 +65,7 @@ import { Component, OnInit } from '@angular/core';
               </div>
 
               <a href="#inscripcion" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:1.5rem;">
-                🏁 Inscribirse Ahora
+                <span class="material-symbols-outlined" style="margin-right:8px;">sports_score</span> Inscribirse Ahora
               </a>
             </div>
 
@@ -252,15 +251,15 @@ export class AboutComponent implements OnInit {
   }
 
   highlights = [
-    { icon: '🏆', label: 'Segunda Edición',       value: 'Más grande y mejor que nunca' },
-    { icon: '🌄', label: 'Naturaleza santandereana', value: 'Paisajes únicos de Sucre, Santander' },
-    { icon: '👥', label: 'Abierto a todos',        value: 'Individual y modalidad relevo' },
+    { icon: 'emoji_events', label: 'Segunda Edición',       value: 'Más exigente, competitiva y participativa' },
+    { icon: 'landscape', label: 'Naturaleza santandereana', value: 'Paisajes únicos de Sucre, Santander' },
+    { icon: 'group', label: 'Abierto a todos',        value: 'Individual y por categorías' },
   ];
 
   details = [
-    { icon: '📅', label: 'Fecha del evento', value: '18 de julio de 2026' },
-    { icon: '📍', label: 'Ubicación',        value: 'Sucre, Santander, Colombia' },
-    { icon: '🏊', label: 'Modalidades',      value: 'Individual · Relevo por equipos' },
-    { icon: '💰', label: 'Inscripción',      value: '$15.000 antes del 30 de abril' },
+    { icon: 'calendar_month', label: 'Fecha del evento', value: '18 de julio de 2026' },
+    { icon: 'location_on', label: 'Ubicación',        value: 'Sucre, Santander, Colombia' },
+    { icon: 'sprint', label: 'Modalidades',      value: 'Running · Ciclismo · Natación' },
+    { icon: 'payments', label: 'Inscripción',      value: '$15.000 antes del 30 de abril' },
   ];
 }

@@ -303,7 +303,7 @@ import { Component, OnInit } from '@angular/core';
     }
 
     .flow-dot.blue   { background: #1a6bff; box-shadow: 0 0 12px #1a6bff; }
-    .flow-dot.orange { background: #ff6b00; box-shadow: 0 0 12px #ff6b00; }
+    .flow-dot.orange { background: #0047cc; box-shadow: 0 0 12px #0047cc; }
     .flow-dot.green  { background: #00c853; box-shadow: 0 0 12px #00c853; }
 
     .flow-sep { color: var(--c-muted); font-size: 1.2rem; }
@@ -343,7 +343,7 @@ export class DisciplinesComponent implements OnInit {
   disciplines = [
     {
       order: '01',
-      emoji: '🏃',
+      emoji: 'sprint',
       name:  'Running',
       image: 'running.png',
       color: '#00c853',
@@ -356,10 +356,10 @@ export class DisciplinesComponent implements OnInit {
     },
     {
       order: '02',
-      emoji: '🚴',
+      emoji: 'directions_bike',
       name:  'Ciclismo',
       image: 'ciclismo.png',
-      color: '#ff6b00',
+      color: '#0047cc',
       desc:  'Sube y baja por los caminos santandereanos en la disciplina más intensa del evento. Velocidad y potencia al máximo.',
       categorias: ['Elite', 'Recreativa'],
       stats: [
@@ -369,7 +369,7 @@ export class DisciplinesComponent implements OnInit {
     },
     {
       order: '03',
-      emoji: '🏊',
+      emoji: 'pool',
       name:  'Natación',
       image: 'natacion.png',
       color: '#1a6bff',

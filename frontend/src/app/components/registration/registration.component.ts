@@ -119,14 +119,14 @@ type FormState = 'idle' | 'loading' | 'success' | 'error';
 
                   <!-- Ciudad -->
                   <div class="form-group">
-                    <label for="reg-ciudad">Ciudad *</label>
+                    <label for="reg-ciudad">Ciudad o Vereda *</label>
                     <input
                       id="reg-ciudad"
                       name="ciudad"
                       type="text"
                       [(ngModel)]="form.ciudad"
                       required
-                      placeholder="Tu ciudad"
+                      placeholder="Ej: Sucre, La Sabana, Vélez..."
                     />
                   </div>
 

@@ -25,6 +25,7 @@ import { CommonModule } from '@angular/common';
           <li><a href="#disciplinas" (click)="closeMenu()">Disciplinas</a></li>
           <li><a href="#invitacion"  (click)="closeMenu()">Invitación</a></li>
           <li><a href="#jerseys"      (click)="closeMenu()">Jerseys</a></li>
+          <li><a href="#galeria-primera" (click)="closeMenu()">Galería</a></li>
           <li><a href="#patrocinadores" (click)="closeMenu()">Patrocinadores</a></li>
           <li>
             <a href="#inscripcion" class="nav-cta" (click)="closeMenu()">
@@ -86,7 +87,7 @@ import { CommonModule } from '@angular/common';
       font-size: 1.3rem;
       letter-spacing: 0.08em;
       color: #fff;
-      background: linear-gradient(90deg, #fff, #ff6b00);
+      background: linear-gradient(90deg, #00c853, #fff, #1a6bff);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -119,7 +120,7 @@ import { CommonModule } from '@angular/common';
       position: absolute;
       bottom: -4px; left: 0; right: 0;
       height: 2px;
-      background: #ff6b00;
+      background: #1a6bff;
       transform: scaleX(0);
       transition: transform 0.2s;
     }
@@ -128,12 +129,12 @@ import { CommonModule } from '@angular/common';
     .nav-links a:hover::after { transform: scaleX(1); }
 
     .nav-cta {
-      background: linear-gradient(135deg, #cc4400, #ff8c38) !important;
+      background: linear-gradient(135deg, #0047cc, #4d8eff) !important;
       color: #fff !important;
       padding: 0.55rem 1.4rem;
       border-radius: 50px;
       font-weight: 700 !important;
-      box-shadow: 0 4px 20px rgba(255,107,0,0.35);
+      box-shadow: 0 4px 20px rgba(26,107,255,0.35);
       transition: all 0.2s !important;
     }
 
@@ -141,7 +142,7 @@ import { CommonModule } from '@angular/common';
 
     .nav-cta:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 28px rgba(255,107,0,0.5) !important;
+      box-shadow: 0 8px 28px rgba(26,107,255,0.5) !important;
     }
 
     .hamburger {

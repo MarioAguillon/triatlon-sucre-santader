@@ -28,7 +28,7 @@ import { Component, OnInit } from '@angular/core';
             <!-- Brand -->
             <div class="footer-brand">
               <div class="brand-logo">
-                <span>🏆</span>
+                <span class="material-symbols-outlined" style="font-size: 2.5rem; color: #00c853; padding-right: 10px;">emoji_events</span>
                 <div>
                   <strong>TRIATLÓN</strong>
                   <small>Sucre Sin Límites 2.0</small>
@@ -77,7 +77,7 @@ import { Component, OnInit } from '@angular/core';
               <div class="footer-info">
                 @for (info of eventInfo; track info.label) {
                   <div class="footer-info-row">
-                    <span>{{ info.icon }}</span>
+                    <span class="material-symbols-outlined">{{ info.icon }}</span>
                     <div>
                       <small>{{ info.label }}</small>
                       <span>{{ info.value }}</span>
@@ -138,7 +138,7 @@ import { Component, OnInit } from '@angular/core';
     .brand-logo strong {
       font-family: 'Bebas Neue', cursive;
       font-size: 1.4rem;
-      background: linear-gradient(90deg, #fff, #ff6b00);
+      background: linear-gradient(90deg, #00c853, #fff, #1a6bff);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       letter-spacing: 0.06em;
@@ -270,8 +270,8 @@ export class FooterComponent implements OnInit {
   }
 
   eventInfo = [
-    { icon: '📅', label: 'Fecha',    value: '18 de julio de 2026' },
-    { icon: '📍', label: 'Lugar',    value: 'Sucre, Santander, Colombia' },
-    { icon: '📧', label: 'Contacto', value: 'triatlon.sucre.2026@gmail.com' },
+    { icon: 'calendar_month', label: 'Fecha',    value: '18 de julio de 2026' },
+    { icon: 'location_on', label: 'Lugar',    value: 'Sucre, Santander, Colombia' },
+    { icon: 'mail', label: 'Contacto', value: 'triatlon.sucre.2026@gmail.com' },
   ];
 }

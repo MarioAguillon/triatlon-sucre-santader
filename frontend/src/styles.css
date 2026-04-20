@@ -17,8 +17,8 @@
   --c-blue:         #1a6bff;
   --c-blue-light:   #4d8eff;
   --c-blue-dark:    #0047cc;
-  --c-orange:       #ff6b00;
-  --c-orange-light: #ff8c38;
+  --c-orange:       #00c853;
+  --c-orange-light: #4dffa0;
   --c-green:        #00c853;
   --c-green-dark:   #009c40;
 
@@ -29,9 +29,9 @@
   /* Gradients */
   --g-hero:    linear-gradient(135deg, #0d1117 0%, #0a1628 50%, #0f1a10 100%);
   --g-blue:    linear-gradient(135deg, var(--c-blue-dark), var(--c-blue-light));
-  --g-orange:  linear-gradient(135deg, #cc4400, var(--c-orange-light));
+  --g-orange:  linear-gradient(135deg, var(--c-blue-dark), var(--c-blue-light)); /* Remapped to blue for legacy btn classes */
   --g-green:   linear-gradient(135deg, var(--c-green-dark), var(--c-green));
-  --g-tricolor: linear-gradient(135deg, var(--c-blue) 0%, var(--c-orange) 50%, var(--c-green) 100%);
+  --g-tricolor: linear-gradient(135deg, var(--c-blue) 0%, var(--c-green) 50%, var(--c-white) 100%);
 
   /* Typography */
   --font-body:    'Outfit', sans-serif;
@@ -54,7 +54,7 @@
   /* Shadows */
   --sh-card:   0 4px 32px rgba(0,0,0,0.4);
   --sh-blue:   0 8px 32px rgba(26,107,255,0.35);
-  --sh-orange: 0 8px 32px rgba(255,107,0,0.35);
+  --sh-orange: 0 8px 32px rgba(26,107,255,0.35); /* Remapped to blue */
   --sh-green:  0 8px 32px rgba(0,200,83,0.3);
 
   /* Transitions */
@@ -111,7 +111,7 @@ ul  { list-style: none; }
   font-weight: 600;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--c-orange);
+  color: var(--c-green);
   margin-bottom: var(--sp-sm);
 }
 
@@ -158,13 +158,13 @@ ul  { list-style: none; }
 .btn:hover::before { opacity: 1; }
 
 .btn-primary {
-  background: var(--g-orange);
+  background: var(--g-blue);
   color: var(--c-white);
-  box-shadow: var(--sh-orange);
+  box-shadow: var(--sh-blue);
 }
 .btn-primary:hover {
   transform: translateY(-3px);
-  box-shadow: 0 16px 48px rgba(255,107,0,0.5);
+  box-shadow: 0 16px 48px rgba(26,107,255,0.5);
 }
 
 .btn-outline {
@@ -238,7 +238,7 @@ ul  { list-style: none; }
 /* ── Divider decoration ──────────────────────────────────── */
 .divider-gradient {
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--c-blue), var(--c-orange), transparent);
+  background: linear-gradient(90deg, transparent, var(--c-blue), var(--c-green), transparent);
   margin-block: var(--sp-xl);
 }
 

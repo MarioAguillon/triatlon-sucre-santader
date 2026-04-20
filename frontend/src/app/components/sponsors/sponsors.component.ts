@@ -35,7 +35,7 @@ import { Sponsor }                   from '../../models/participant.model';
             @if (getSponsorsByType(cat.tipo).length > 0) {
               <div class="sponsor-category">
                 <div class="cat-label">
-                  <span>{{ cat.icon }}</span>
+                  <span class="material-symbols-outlined">{{ cat.icon }}</span>
                   <span>{{ cat.label }}</span>
                 </div>
                 <div class="sponsor-grid">
@@ -45,7 +45,7 @@ import { Sponsor }                   from '../../models/participant.model';
                         <img [src]="s.logo_url" [alt]="s.nombre" class="sponsor-logo" />
                       } @else {
                         <div class="sponsor-placeholder">
-                          <span>{{ cat.icon }}</span>
+                          <span class="material-symbols-outlined">{{ cat.icon }}</span>
                         </div>
                       }
                       <div class="sponsor-name">{{ s.nombre }}</div>
@@ -60,7 +60,7 @@ import { Sponsor }                   from '../../models/participant.model';
         <!-- Empty state -->
         @if (sponsors().length === 0 && !loading()) {
           <div class="sponsors-empty">
-            <p>Pronto anunciaremos nuestros patrocinadores 🏆</p>
+            <p>Pronto anunciaremos nuestros patrocinadores <span class="material-symbols-outlined" style="vertical-align: middle;">emoji_events</span></p>
             <p class="sponsors-contact">¿Deseas patrocinar el evento? Contáctanos.</p>
           </div>
         }
@@ -81,7 +81,7 @@ import { Sponsor }                   from '../../models/participant.model';
             <p>Apoya el deporte en Sucre, Santander y llega a toda la comunidad.</p>
           </div>
           <a href="mailto:triatlon.sucre.2026@gmail.com" class="btn btn-outline">
-            📧 Contactar
+            <span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 4px;">mail</span> Contactar
           </a>
         </div>
       </div>
@@ -241,9 +241,9 @@ export class SponsorsComponent implements OnInit {
   loading  = signal(true);
 
   categories = [
-    { tipo: 'alcaldia', label: 'Alcaldías y Entidades Públicas', icon: '🏛️' },
-    { tipo: 'empresa',  label: 'Empresas Patrocinadoras',        icon: '🏢' },
-    { tipo: 'persona',  label: 'Patrocinadores Particulares',    icon: '🤝' },
+    { tipo: 'alcaldia', label: 'Alcaldías y Entidades Públicas', icon: 'account_balance' },
+    { tipo: 'empresa',  label: 'Empresas Patrocinadoras',        icon: 'domain' },
+    { tipo: 'persona',  label: 'Patrocinadores Particulares',    icon: 'handshake' },
   ];
 
   constructor(private regSvc: RegistrationService) {}
