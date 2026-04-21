@@ -27,6 +27,7 @@ import { CommonModule } from '@angular/common';
           <li><a href="#jerseys"      (click)="closeMenu()">Jerseys</a></li>
           <li><a href="#galeria-primera" (click)="closeMenu()">Galería</a></li>
           <li><a href="#patrocinadores" (click)="closeMenu()">Patrocinadores</a></li>
+          <li><a href="#pagos"           (click)="closeMenu()">Pagos</a></li>
           <li>
             <a href="#inscripcion" class="nav-cta" (click)="closeMenu()">
               Inscribirse

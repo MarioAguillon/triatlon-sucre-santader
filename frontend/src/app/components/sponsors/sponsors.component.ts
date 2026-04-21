@@ -80,9 +80,14 @@ import { Sponsor }                   from '../../models/participant.model';
             <h3>¿Quieres patrocinar el Triatlón?</h3>
             <p>Apoya el deporte en Sucre, Santander y llega a toda la comunidad.</p>
           </div>
-          <a href="mailto:triatlon.sucre.2026@gmail.com" class="btn btn-outline">
-            <span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 4px;">mail</span> Contactar
-          </a>
+          <div class="cta-buttons">
+            <a href="mailto:triatlon.sucre.2026&#64;gmail.com" class="btn btn-outline">
+              <span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 4px;">mail</span> Contactar
+            </a>
+            <a href="#pagos" class="btn btn-primary">
+              <span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 4px;">volunteer_activism</span> Hacer un Aporte
+            </a>
+          </div>
         </div>
       </div>
     </section>
@@ -233,6 +238,13 @@ import { Sponsor }                   from '../../models/participant.model';
 
     @media (max-width: 600px) {
       .sponsor-cta-box { flex-direction: column; text-align: center; }
+      .cta-buttons { flex-direction: column; width: 100%; }
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 0.8rem;
+      flex-shrink: 0;
     }
   `]
 })

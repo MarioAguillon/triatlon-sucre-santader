@@ -71,7 +71,14 @@ type FormState = 'idle' | 'loading' | 'success' | 'error';
                 <div class="success-price">
                   Precio aplicado: <strong>{{ successPrice() | currency:'COP':'symbol':'1.0-0' }}</strong>
                 </div>
-                <button class="btn btn-outline" (click)="resetForm()">
+                <p class="success-next-step">
+                  Tu información fue registrada correctamente. Ahora puedes continuar con el pago para completar el proceso.
+                </p>
+                <a href="#pagos" class="btn btn-primary btn-pagos-cta">
+                  <span class="material-symbols-outlined" style="margin-right:6px;vertical-align:middle">payments</span>
+                  Continuar a pagos
+                </a>
+                <button class="btn btn-outline" (click)="resetForm()" style="margin-top:0.8rem">
                   Inscribir otra persona
                 </button>
               </div>
@@ -458,6 +465,23 @@ type FormState = 'idle' | 'loading' | 'success' | 'error';
     }
 
     .success-price strong { font-size: 1.1rem; }
+
+    .success-next-step {
+      color: var(--c-muted);
+      font-size: 0.92rem;
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+      max-width: 380px;
+      margin-inline: auto;
+    }
+
+    .btn-pagos-cta {
+      width: 100%;
+      justify-content: center;
+      font-size: 1.05rem;
+      padding: 1rem;
+      box-shadow: 0 8px 32px rgba(26,107,255,0.4);
+    }
 
     @media (max-width: 900px) {
       .reg-grid      { grid-template-columns: 1fr; }

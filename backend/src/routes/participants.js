@@ -18,9 +18,10 @@ let participants = [
   { id: 11, nombre: 'Arley Ariza Marin', edad: 30, ciudad: 'Pendiente', telefono: '3115036263', correo: 'arley@example.com', disciplina: 'running', categoria: 'elite', participo_primera_edicion: 'NO', precio_aplicado: 30000, fecha_inscripcion: new Date().toISOString(), activo: true },
   { id: 12, nombre: 'Luis Evelio Quiroga Marin', edad: 30, ciudad: 'Pendiente', telefono: '3114880481', correo: 'luis@example.com', disciplina: 'running', categoria: 'recreativa', participo_primera_edicion: 'NO', precio_aplicado: 30000, fecha_inscripcion: new Date().toISOString(), activo: true },
   { id: 13, nombre: 'Daniel Stiven Quiroga Bareño', edad: 30, ciudad: 'Pendiente', telefono: '3108084230', correo: 'daniel@example.com', disciplina: 'ciclismo', categoria: 'elite', participo_primera_edicion: 'SI', precio_aplicado: 30000, fecha_inscripcion: new Date().toISOString(), activo: true },
-  { id: 14, nombre: 'Hugo Ariza Mateus', edad: 30, ciudad: 'Pendiente', telefono: '3208089145', correo: 'hugo@example.com', disciplina: 'running', categoria: 'recreativa', participo_primera_edicion: 'NO', precio_aplicado: 30000, fecha_inscripcion: new Date().toISOString(), activo: true }
+  { id: 14, nombre: 'Hugo Ariza Mateus', edad: 30, ciudad: 'Pendiente', telefono: '3208089145', correo: 'hugo@example.com', disciplina: 'running', categoria: 'recreativa', participo_primera_edicion: 'NO', precio_aplicado: 30000, fecha_inscripcion: new Date().toISOString(), activo: true },
+  { id: 15, nombre: 'Aminta Marin Marin', edad: 30, ciudad: 'Sucre', telefono: '3118559869', correo: 'aminta.m@example.com', disciplina: 'running', categoria: 'elite', participo_primera_edicion: 'SI', precio_aplicado: 30000, fecha_inscripcion: new Date().toISOString(), activo: true }
 ];
-let nextId = 15;
+let nextId = 16;
 
 // ── Categorías válidas por disciplina ───────────────────────
 const CATEGORIAS_VALIDAS = {

@@ -81,55 +81,71 @@ import { Component, OnInit } from '@angular/core';
         <div class="modal-overlay" (click)="cerrarModal($event)">
           <div class="modal-content glass" (click)="$event.stopPropagation()">
             <div class="modal-header">
-              <h3>Reserva tu Camiseta</h3>
+              <h3>{{ reservaExitosa ? '¡Reserva Registrada!' : 'Reserva tu Camiseta' }}</h3>
               <button class="modal-close" (click)="cerrarModal($event)"><span class="material-symbols-outlined">close</span></button>
             </div>
-            
-            <p class="modal-desc">
-              Llena tus datos y serás dirigido a WhatsApp para coordinar tu pedido y envío de forma personalizada.
-            </p>
-            
-            <form class="modal-form" (submit)="enviarpedido($event, nombre.value, talla.value, cantidad.value)">
-              
-              <div class="form-group">
-                <label>Modelo Seleccionado (Unisex)</label>
-                <input type="text" class="form-control" [value]="modeloSeleccionado" readonly />
-              </div>
 
-              <div class="form-group">
-                <label>Nombre y Apellidos *</label>
-                <input type="text" #nombre class="form-control" placeholder="Ej. Carlos Rodríguez" required />
-              </div>
-              
-              <div class="form-row">
-                <div class="form-group half">
-                  <label>Talla *</label>
-                  <select #talla class="form-control" required>
-                    <option value="" disabled selected>Selecciona talla...</option>
-                    <option value="XS">XS</option>
-                    <option value="S">S</option>
-                    <option value="M">M</option>
-                    <option value="L">L</option>
-                    <option value="XL">XL</option>
-                    <option value="XXL">XXL</option>
-                  </select>
+            @if (reservaExitosa) {
+              <div class="modal-success">
+                <div class="success-check">✅</div>
+                <p class="success-msg">Tu reserva fue registrada correctamente. Ahora puedes continuar con el pago para completar el proceso.</p>
+                <div class="success-detail">
+                  <span>👕 {{ modeloSeleccionado }}</span>
+                  <span>📏 Talla: {{ tallaSeleccionada }}</span>
+                  <span>🔢 Cantidad: {{ cantidadSeleccionada }}</span>
                 </div>
-                
-                <div class="form-group half">
-                  <label>Cantidad *</label>
-                  <input type="number" #cantidad class="form-control" min="1" max="50" value="1" required />
-                </div>
+                <a href="#pagos" class="btn btn-primary btn-block" (click)="cerrarModal($event)">
+                  <span class="material-symbols-outlined" style="margin-right:6px;vertical-align:middle">payments</span>
+                  Continuar a pagos
+                </a>
               </div>
-              
-              <div class="form-info-alert">
-                <span class="material-symbols-outlined">info</span>
-                <small>Las tallas son estándar unisex. Precio por confirmar.</small>
-              </div>
+            } @else {
+              <p class="modal-desc">
+                Llena tus datos para reservar tu camiseta oficial del evento.
+              </p>
 
-              <button type="submit" class="btn btn-primary btn-block">
-                <span class="material-symbols-outlined" style="margin-right: 5px; vertical-align: middle;">send</span> Enviar por WhatsApp
-              </button>
-            </form>
+              <form class="modal-form" (submit)="enviarpedido($event, nombre.value, talla.value, cantidad.value)">
+
+                <div class="form-group">
+                  <label>Modelo Seleccionado (Unisex)</label>
+                  <input type="text" class="form-control" [value]="modeloSeleccionado" readonly />
+                </div>
+
+                <div class="form-group">
+                  <label>Nombre y Apellidos *</label>
+                  <input type="text" #nombre class="form-control" placeholder="Ej. Carlos Rodríguez" required />
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group half">
+                    <label>Talla *</label>
+                    <select #talla class="form-control" required>
+                      <option value="" disabled selected>Selecciona talla...</option>
+                      <option value="XS">XS</option>
+                      <option value="S">S</option>
+                      <option value="M">M</option>
+                      <option value="L">L</option>
+                      <option value="XL">XL</option>
+                      <option value="XXL">XXL</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group half">
+                    <label>Cantidad *</label>
+                    <input type="number" #cantidad class="form-control" min="1" max="50" value="1" required />
+                  </div>
+                </div>
+
+                <div class="form-info-alert">
+                  <span class="material-symbols-outlined">info</span>
+                  <small>Las tallas son estándar unisex. Precio por confirmar.</small>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">
+                  <span class="material-symbols-outlined" style="margin-right: 5px; vertical-align: middle;">check_circle</span> Reservar Camiseta
+                </button>
+              </form>
+            }
           </div>
         </div>
       }
@@ -259,13 +275,18 @@ import { Component, OnInit } from '@angular/core';
     .modal-content {
       width: 100%;
       max-width: 500px;
-      background: var(--c-bg); /* O glass más opaco */
+      max-height: 90vh;
+      overflow-y: auto;
+      background: var(--c-bg);
       border: 1px solid var(--c-border);
       border-radius: var(--r-xl);
       padding: 2.5rem;
       position: relative;
       animation: slideUp var(--tr-med);
     }
+
+    .modal-content::-webkit-scrollbar { width: 5px; }
+    .modal-content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 10px; }
     
     .modal-header {
       display: flex;
@@ -411,13 +432,70 @@ import { Component, OnInit } from '@angular/core';
       }
     }
 
+    /* ── Modal Success State ─────────── */
+    .modal-success {
+      text-align: center;
+      padding: 1.5rem 0;
+    }
+
+    .success-check {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+      animation: pulse 1s ease;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+    }
+
+    .success-msg {
+      color: var(--c-muted);
+      font-size: 0.95rem;
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
+    .success-detail {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--r-md);
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.9rem;
+      color: var(--c-white);
+      font-weight: 600;
+    }
+
     @media (max-width: 600px) {
       .modal-content {
         padding: 1.5rem;
+        margin: 0.5rem;
+        max-height: 92vh;
+        border-radius: var(--r-lg);
       }
       .form-row {
         flex-direction: column;
         gap: 1.2rem;
+      }
+      .btn-block {
+        padding: 0.9rem;
+        margin-bottom: 0.5rem;
+      }
+      .modal-form {
+        padding-bottom: 1rem;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .modal-content {
+        padding: 1.2rem;
+      }
+      .modal-header h3 {
+        font-size: 1.6rem;
       }
     }
   `]
@@ -425,11 +503,10 @@ import { Component, OnInit } from '@angular/core';
 export class JerseysComponent implements OnInit {
   particles: string[] = [];
   mostrarModal = false;
+  reservaExitosa = false;
   modeloSeleccionado = '';
-  
-  // Número de WhatsApp oficial para recibir las órdenes (código país + número)
-  // Ejemplo ficticio: '573001234567'
-  telefonoOficial = '573196985790'; // Reemplazar con el número real de atención
+  tallaSeleccionada = '';
+  cantidadSeleccionada = '';
 
   ngOnInit() {
     this.particles = Array.from({ length: 20 }, () => {
@@ -443,8 +520,9 @@ export class JerseysComponent implements OnInit {
 
   abrirModal(modelo: string) {
     this.modeloSeleccionado = modelo;
+    this.reservaExitosa = false;
     this.mostrarModal = true;
-    document.body.style.overflow = 'hidden'; // Prevenir scroll de fondo
+    document.body.style.overflow = 'hidden';
   }
 
   cerrarModal(event?: Event) {
@@ -452,35 +530,22 @@ export class JerseysComponent implements OnInit {
       event.stopPropagation();
     }
     this.mostrarModal = false;
+    this.reservaExitosa = false;
     this.modeloSeleccionado = '';
     document.body.style.overflow = '';
   }
 
   enviarpedido(event: Event, nombre: string, talla: string, cantidad: string) {
     event.preventDefault();
-    
+
     if (!nombre || !talla || !cantidad) {
-      alert("Por favor completa todos los campos requeridos.");
+      alert('Por favor completa todos los campos requeridos.');
       return;
     }
-    
-    // Construir mensaje de WhatsApp
-    const mensaje = `Hola Triatlón Sucre Sin Límites 2.0 🏆. Deseo reservar indumentaria:
-    
-👤 Nombre: ${nombre}
-👕 Modelo: ${this.modeloSeleccionado}
-📏 Talla: ${talla} (Unisex)
-🔢 Cantidad: ${cantidad}
 
-Quedo atento(a) a la confirmación de disponibilidad y método de pago.`;
-
-    // Codificar URL para WhatsApp
-    const url = `https://api.whatsapp.com/send?phone=${this.telefonoOficial}&text=${encodeURIComponent(mensaje)}`;
-    
-    // Abrir en nueva pestaña
-    window.open(url, '_blank');
-    
-    // Cerrar modal
-    this.cerrarModal();
+    // Guardar datos de la reserva y mostrar estado de éxito
+    this.tallaSeleccionada = talla;
+    this.cantidadSeleccionada = cantidad;
+    this.reservaExitosa = true;
   }
 }

@@ -37,7 +37,7 @@ import { Component, OnInit, OnDestroy, signal } from '@angular/core';
             @for (item of mediaItems; track $index) {
               <div class="carousel-slide">
                 @if (item.type === 'image') {
-                  <img [src]="item.src" [alt]="'Paisaje de Sucre ' + ($index + 1)" loading="lazy" />
+                  <img [src]="item.src" [alt]="'Paisaje de Sucre ' + ($index + 1)" loading="lazy" [style.object-position]="item.position || 'center'" />
                 }
                 @if (item.type === 'video') {
                   <video [src]="item.src"
@@ -229,7 +229,7 @@ import { Component, OnInit, OnDestroy, signal } from '@angular/core';
 })
 export class GalleryPaisajesComponent implements OnInit, OnDestroy {
   // Las imágenes de esta galería se cargan desde /public/paisajes/
-  mediaItems: { src: string; type: 'image' | 'video' }[] = [];
+  mediaItems: { src: string; type: 'image' | 'video', position?: string }[] = [];
   currentIndex = signal(0);
   particles: string[] = [];
   private autoplayTimer: any;
@@ -241,7 +241,8 @@ export class GalleryPaisajesComponent implements OnInit, OnDestroy {
       { src: 'paisajes/paisaje1.jpg', type: 'image' },
       { src: 'paisajes/paisaje2.jpg', type: 'image' },
       { src: 'paisajes/paisaje3.jpg', type: 'image' },
-      { src: 'paisajes/paisaje4.jpg', type: 'image' },
+      { src: 'paisajes/paisaje4.jpg', type: 'image', position: 'center 20%' },
+      { src: 'paisajes/paisaje5.jpg', type: 'image', position: 'center 10%' },
       // Cargar videos si existen
       { src: 'paisajes/video1.mp4', type: 'video' },
       { src: 'paisajes/video2.mp4', type: 'video' },

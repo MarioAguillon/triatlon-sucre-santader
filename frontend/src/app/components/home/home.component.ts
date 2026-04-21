@@ -13,6 +13,7 @@ import { GalleryPrimeraComponent }  from '../gallery-primera/gallery-primera.com
 import { GalleryPaisajesComponent } from '../gallery-paisajes/gallery-paisajes.component';
 import { JerseysComponent }         from '../jerseys/jerseys.component';
 import { SponsorsComponent }        from '../sponsors/sponsors.component';
+import { PagosComponent }           from '../pagos/pagos.component';
 import { FooterComponent }          from '../footer/footer.component';
 import { NavbarComponent }          from '../navbar/navbar.component';
 
@@ -32,6 +33,7 @@ import { NavbarComponent }          from '../navbar/navbar.component';
     GalleryPaisajesComponent,
     JerseysComponent,
     SponsorsComponent,
+    PagosComponent,
     FooterComponent,
   ],
   template: `
@@ -48,6 +50,7 @@ import { NavbarComponent }          from '../navbar/navbar.component';
       <app-gallery-paisajes />
       <app-jerseys />
       <app-sponsors />
+      <app-pagos />
     </main>
     <app-footer />
   `,
