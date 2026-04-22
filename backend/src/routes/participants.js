@@ -1,36 +1,18 @@
 // ============================================================
-// routes/participants.js — CRUD Participantes (almacenamiento en memoria)
+// routes/participants.js — CRUD Participantes (MySQL + Hardened)
 // ============================================================
 const router = require('express').Router();
+const { body, param, query, validationResult } = require('express-validator');
+const pool = require('../db');
+const { verifyToken } = require('../middleware/auth');
 
-// ── Almacenamiento temporal en memoria ──────────────────────
-let participants = [
-  { id: 1, nombre: 'Yesenia Fernanda Rueda Fandiño', edad: 30, ciudad: 'Pendiente', telefono: '3173783323', correo: 'yesenia@example.com', disciplina: 'running', categoria: 'recreativa', participo_primera_edicion: 'SI', precio_aplicado: 30000, fecha_inscripcion: new Date().toISOString(), activo: true },
-  { id: 2, nombre: 'María Fernanda Camargo Ariza', edad: 30, ciudad: 'Pendiente', telefono: '3227263345', correo: 'mariaf@example.com', disciplina: 'running', categoria: 'recreativa', participo_primera_edicion: 'NO', precio_aplicado: 30000, fecha_inscripcion: new Date().toISOString(), activo: true },
-  { id: 3, nombre: 'Angie Daniela Camargo Ariza', edad: 30, ciudad: 'Pendiente', telefono: '3503364464', correo: 'angied@example.com', disciplina: 'running', categoria: 'recreativa', participo_primera_edicion: 'NO', precio_aplicado: 30000, fecha_inscripcion: new Date().toISOString(), activo: true },
-  { id: 4, nombre: 'Deisy Yohana Medina Quitian', edad: 30, ciudad: 'Pendiente', telefono: '3209927574', correo: 'deisy@example.com', disciplina: 'running', categoria: 'recreativa', participo_primera_edicion: 'SI', precio_aplicado: 30000, fecha_inscripcion: new Date().toISOString(), activo: true },
-  { id: 5, nombre: 'Cristian Quiroga Marin', edad: 30, ciudad: 'Pendiente', telefono: '3214521497', correo: 'cristian@example.com', disciplina: 'running', categoria: 'elite', participo_primera_edicion: 'SI', precio_aplicado: 30000, fecha_inscripcion: new Date().toISOString(), activo: true },
-  { id: 6, nombre: 'EDGAR ARMANDO MARIN ARDILA', edad: 30, ciudad: 'Pendiente', telefono: '3102198939', correo: 'edgar@example.com', disciplina: 'running', categoria: 'recreativa', participo_primera_edicion: 'SI', precio_aplicado: 30000, fecha_inscripcion: new Date().toISOString(), activo: true },
-  { id: 7, nombre: 'JULIAN DAVID MONCADA VARGAS', edad: 30, ciudad: 'Pendiente', telefono: '3134733817', correo: 'julian@example.com', disciplina: 'ciclismo', categoria: 'recreativa', participo_primera_edicion: 'NO', precio_aplicado: 30000, fecha_inscripcion: new Date().toISOString(), activo: true },
-  { id: 8, nombre: 'Leidy Ruiz', edad: 30, ciudad: 'Pendiente', telefono: '3219035730', correo: 'leidy@example.com', disciplina: 'running', categoria: 'recreativa', participo_primera_edicion: 'SI', precio_aplicado: 30000, fecha_inscripcion: new Date().toISOString(), activo: true },
-  { id: 9, nombre: 'Taylor Alirio Garcia Espinosa', edad: 30, ciudad: 'Pendiente', telefono: '3001952365', correo: 'taylor@example.com', disciplina: 'running', categoria: 'recreativa', participo_primera_edicion: 'SI', precio_aplicado: 30000, fecha_inscripcion: new Date().toISOString(), activo: true },
-  { id: 10, nombre: 'Armando Marin Marin', edad: 30, ciudad: 'Pendiente', telefono: '3213047058', correo: 'armando@example.com', disciplina: 'running', categoria: 'elite', participo_primera_edicion: 'SI', precio_aplicado: 30000, fecha_inscripcion: new Date().toISOString(), activo: true },
-  { id: 11, nombre: 'Arley Ariza Marin', edad: 30, ciudad: 'Pendiente', telefono: '3115036263', correo: 'arley@example.com', disciplina: 'running', categoria: 'elite', participo_primera_edicion: 'NO', precio_aplicado: 30000, fecha_inscripcion: new Date().toISOString(), activo: true },
-  { id: 12, nombre: 'Luis Evelio Quiroga Marin', edad: 30, ciudad: 'Pendiente', telefono: '3114880481', correo: 'luis@example.com', disciplina: 'running', categoria: 'recreativa', participo_primera_edicion: 'NO', precio_aplicado: 30000, fecha_inscripcion: new Date().toISOString(), activo: true },
-  { id: 13, nombre: 'Daniel Stiven Quiroga Bareño', edad: 30, ciudad: 'Pendiente', telefono: '3108084230', correo: 'daniel@example.com', disciplina: 'ciclismo', categoria: 'elite', participo_primera_edicion: 'SI', precio_aplicado: 30000, fecha_inscripcion: new Date().toISOString(), activo: true },
-  { id: 14, nombre: 'Hugo Ariza Mateus', edad: 30, ciudad: 'Pendiente', telefono: '3208089145', correo: 'hugo@example.com', disciplina: 'running', categoria: 'recreativa', participo_primera_edicion: 'NO', precio_aplicado: 30000, fecha_inscripcion: new Date().toISOString(), activo: true },
-  { id: 15, nombre: 'Aminta Marin Marin', edad: 30, ciudad: 'Sucre', telefono: '3118559869', correo: 'aminta.m@example.com', disciplina: 'running', categoria: 'elite', participo_primera_edicion: 'SI', precio_aplicado: 30000, fecha_inscripcion: new Date().toISOString(), activo: true }
-];
-let nextId = 16;
-
-// ── Categorías válidas por disciplina ───────────────────────
+// ── Constantes de validación ────────────────────────────────
+const DISCIPLINAS_VALIDAS = ['running', 'ciclismo', 'natacion'];
 const CATEGORIAS_VALIDAS = {
   running:  ['elite', 'recreativa', 'ninos'],
   ciclismo: ['elite', 'recreativa', 'ninos'],
   natacion: ['natacion'],
 };
-
-const DISCIPLINAS_VALIDAS = ['running', 'ciclismo', 'natacion'];
 
 // ── Calcular precio según fecha ─────────────────────────────
 function calcularPrecio() {
@@ -40,117 +22,194 @@ function calcularPrecio() {
   return new Date() <= FECHA_LIMITE ? PRECIO_TEMP : PRECIO_NORMAL;
 }
 
-// ────────────────────────────────────────────────────────────
-// POST /api/participants — Registrar participante (público)
-// ────────────────────────────────────────────────────────────
-router.post('/', (req, res) => {
-  const {
-    nombre, edad, ciudad, telefono, correo,
-    disciplina, categoria, participo_primera_edicion
-  } = req.body;
-
-  // Validaciones básicas
-  if (!nombre || !edad || !ciudad || !telefono || !correo || !participo_primera_edicion) {
-    return res.status(400).json({ error: 'Todos los campos obligatorios deben completarse' });
+// ── Verificar reCAPTCHA con Google ──────────────────────────
+async function verificarCaptcha(token) {
+  const secret = process.env.RECAPTCHA_SECRET_KEY;
+  if (!secret) {
+    console.warn('⚠️ RECAPTCHA_SECRET_KEY no configurado, omitiendo verificación');
+    return true; // En desarrollo sin clave, permitir
   }
 
-  const edadNum = parseInt(edad);
-  if (isNaN(edadNum) || edadNum < 5 || edadNum > 100) {
-    return res.status(400).json({ error: 'La edad debe estar entre 5 y 100 años' });
-  }
+  try {
+    const params = new URLSearchParams();
+    params.append('secret', secret);
+    params.append('response', token);
 
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(correo)) {
-    return res.status(400).json({ error: 'Correo electrónico inválido' });
-  }
-
-  // Validación de disciplina
-  if (!disciplina || !DISCIPLINAS_VALIDAS.includes(disciplina)) {
-    return res.status(400).json({ error: 'Disciplina inválida. Opciones: running, ciclismo, natacion' });
-  }
-
-  // Validación de categoría según disciplina
-  const categoriasValidas = CATEGORIAS_VALIDAS[disciplina];
-  if (!categoria || !categoriasValidas.includes(categoria)) {
-    return res.status(400).json({
-      error: `Categoría inválida para ${disciplina}. Opciones: ${categoriasValidas.join(', ')}`
+    const response = await fetch('https://www.google.com/recaptcha/api/siteverify', {
+      method: 'POST',
+      body: params,
     });
+
+    const data = await response.json();
+    return data.success === true;
+  } catch (err) {
+    console.error('Error verificando reCAPTCHA:', err);
+    return false;
   }
+}
 
-  // Validación de participación previa
-  if (!['SI', 'NO'].includes(participo_primera_edicion)) {
-    return res.status(400).json({ error: 'Respuesta inválida para participación previa' });
+// ────────────────────────────────────────────────────────────
+// POST /api/participants — Registrar participante (PÚBLICO)
+// Protegido con: validación, sanitización, reCAPTCHA
+// ────────────────────────────────────────────────────────────
+router.post('/',
+  // Sanitización y validación con express-validator
+  body('nombre')
+    .trim()
+    .notEmpty().withMessage('Nombre es requerido')
+    .isLength({ min: 2, max: 100 }).withMessage('Nombre debe tener entre 2 y 100 caracteres')
+    .matches(/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s'-]+$/).withMessage('Nombre contiene caracteres no válidos'),
+  body('edad')
+    .isInt({ min: 5, max: 100 }).withMessage('Edad debe estar entre 5 y 100 años'),
+  body('ciudad')
+    .trim()
+    .notEmpty().withMessage('Ciudad es requerida')
+    .isLength({ max: 100 }).withMessage('Ciudad demasiado larga')
+    .matches(/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s,.'0-9-]+$/).withMessage('Ciudad contiene caracteres no válidos'),
+  body('telefono')
+    .trim()
+    .notEmpty().withMessage('Teléfono es requerido')
+    .isLength({ max: 25 }).withMessage('Teléfono demasiado largo')
+    .matches(/^[0-9+\s()-]+$/).withMessage('Teléfono contiene caracteres no válidos'),
+  body('correo')
+    .trim()
+    .notEmpty().withMessage('Correo es requerido')
+    .isEmail().withMessage('Correo electrónico inválido')
+    .normalizeEmail()
+    .isLength({ max: 150 }).withMessage('Correo demasiado largo'),
+  body('disciplina')
+    .trim()
+    .notEmpty().withMessage('Disciplina es requerida')
+    .isIn(DISCIPLINAS_VALIDAS).withMessage('Disciplina inválida'),
+  body('categoria')
+    .trim()
+    .notEmpty().withMessage('Categoría es requerida'),
+  body('participo_primera_edicion')
+    .isIn(['SI', 'NO']).withMessage('Respuesta inválida para participación previa'),
+  body('captchaToken')
+    .optional()
+    .trim(),
+  async (req, res) => {
+    // Verificar errores de validación
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ error: errors.array()[0].msg });
+    }
+
+    const {
+      nombre, edad, ciudad, telefono, correo,
+      disciplina, categoria, participo_primera_edicion, captchaToken
+    } = req.body;
+
+    // Verificar reCAPTCHA
+    if (!captchaToken) {
+      return res.status(400).json({ error: 'Verificación de reCAPTCHA requerida' });
+    }
+
+    const captchaValido = await verificarCaptcha(captchaToken);
+    if (!captchaValido) {
+      return res.status(400).json({ error: 'Verificación de reCAPTCHA fallida. Intenta de nuevo.' });
+    }
+
+    // Validación cruzada: categoría válida para la disciplina seleccionada
+    const categoriasValidas = CATEGORIAS_VALIDAS[disciplina];
+    if (!categoriasValidas || !categoriasValidas.includes(categoria)) {
+      return res.status(400).json({
+        error: `Categoría inválida para ${disciplina}. Opciones: ${categoriasValidas?.join(', ') || 'ninguna'}`
+      });
+    }
+
+    try {
+      // Verificar correo duplicado con prepared statement
+      const [existing] = await pool.execute(
+        'SELECT id FROM participantes WHERE correo = ? AND activo = 1 LIMIT 1',
+        [correo.trim().toLowerCase()]
+      );
+
+      if (existing.length > 0) {
+        return res.status(409).json({ error: 'Este correo ya está registrado en el evento' });
+      }
+
+      const precio = calcularPrecio();
+
+      // Insertar con prepared statement (previene SQL Injection)
+      const [result] = await pool.execute(
+        `INSERT INTO participantes
+          (nombre, edad, ciudad, telefono, correo, disciplina, categoria, participo_primera_edicion, precio_aplicado)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [
+          nombre.trim(),
+          parseInt(edad),
+          ciudad.trim(),
+          telefono.trim(),
+          correo.trim().toLowerCase(),
+          disciplina,
+          categoria,
+          participo_primera_edicion,
+          precio,
+        ]
+      );
+
+      res.status(201).json({
+        message: '¡Inscripción exitosa! Nos vemos el 18 de julio de 2026 en Sucre.',
+        id: result.insertId,
+        precio,
+        disciplina,
+        categoria,
+      });
+    } catch (err) {
+      console.error('Error registrando participante:', err);
+      res.status(500).json({ error: 'Error interno del servidor' });
+    }
   }
-
-  // Verificar correo duplicado
-  const yaExiste = participants.find(
-    p => p.correo === correo.trim().toLowerCase() && p.activo
-  );
-  if (yaExiste) {
-    return res.status(409).json({ error: 'Este correo ya está registrado en el evento' });
-  }
-
-  const precio = calcularPrecio();
-  const participante = {
-    id: nextId++,
-    nombre: nombre.trim(),
-    edad: edadNum,
-    ciudad: ciudad.trim(),
-    telefono: telefono.trim(),
-    correo: correo.trim().toLowerCase(),
-    disciplina,
-    categoria,
-    participo_primera_edicion,
-    precio_aplicado: precio,
-    fecha_inscripcion: new Date().toISOString(),
-    activo: true,
-  };
-
-  participants.push(participante);
-
-  res.status(201).json({
-    message:     '¡Inscripción exitosa! Nos vemos el 18 de julio de 2026 en Sucre.',
-    id:          participante.id,
-    precio,
-    disciplina,
-    categoria,
-  });
-});
+);
 
 // ────────────────────────────────────────────────────────────
 // GET /api/participants/count — Contador público
 // ────────────────────────────────────────────────────────────
-router.get('/count', (_req, res) => {
-  const total = participants.filter(p => p.activo).length;
-  res.json({ total });
+router.get('/count', async (_req, res) => {
+  try {
+    const [rows] = await pool.execute(
+      'SELECT COUNT(*) as total FROM participantes WHERE activo = 1'
+    );
+    res.json({ total: rows[0].total });
+  } catch (err) {
+    console.error('Error contando participantes:', err);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
 });
 
 // ────────────────────────────────────────────────────────────
-// GET /api/participants — Listar todos [ADMIN]
+// GET /api/participants — Listar todos [ADMIN - JWT REQUERIDO]
 // ────────────────────────────────────────────────────────────
-// Nota: se omite verifyToken temporalmente para modo sin BD
-router.get('/', (req, res) => {
+router.get('/', verifyToken, async (req, res) => {
   try {
-    const page  = Math.max(parseInt(req.query.page  || '1'), 1);
-    const limit = Math.min(parseInt(req.query.limit || '50'), 100);
-    const search = (req.query.search || '').toLowerCase();
+    const page   = Math.max(parseInt(req.query.page  || '1'), 1);
+    const limit  = Math.min(Math.max(parseInt(req.query.limit || '50'), 1), 100);
+    const search = (req.query.search || '').trim();
+    const offset = (page - 1) * limit;
 
-    let filtered = participants.filter(p => p.activo);
+    let countQuery = 'SELECT COUNT(*) as total FROM participantes WHERE activo = 1';
+    let dataQuery  = 'SELECT * FROM participantes WHERE activo = 1';
+    const params   = [];
 
     if (search) {
-      filtered = filtered.filter(p =>
-        p.nombre.toLowerCase().includes(search) ||
-        p.ciudad.toLowerCase().includes(search) ||
-        p.correo.toLowerCase().includes(search)
-      );
+      const searchFilter = ' AND (nombre LIKE ? OR ciudad LIKE ? OR correo LIKE ?)';
+      const searchParam  = `%${search}%`;
+      countQuery += searchFilter;
+      dataQuery  += searchFilter;
+      params.push(searchParam, searchParam, searchParam);
     }
 
-    // Ordenar por fecha desc
-    filtered.sort((a, b) => new Date(b.fecha_inscripcion) - new Date(a.fecha_inscripcion));
+    dataQuery += ' ORDER BY fecha_inscripcion DESC LIMIT ? OFFSET ?';
 
-    const total  = filtered.length;
-    const offset = (page - 1) * limit;
-    const data   = filtered.slice(offset, offset + limit);
+    // Ejecutar count
+    const [countRows] = await pool.execute(countQuery, params);
+    const total = countRows[0].total;
+
+    // Ejecutar data (con limit/offset como números)
+    const dataParams = [...params, String(limit), String(offset)];
+    const [data] = await pool.execute(dataQuery, dataParams);
 
     res.json({ data, total, page, limit });
   } catch (err) {
@@ -160,70 +219,126 @@ router.get('/', (req, res) => {
 });
 
 // ────────────────────────────────────────────────────────────
-// GET /api/participants/:id — Detalle [ADMIN]
+// GET /api/participants/:id — Detalle [ADMIN - JWT REQUERIDO]
 // ────────────────────────────────────────────────────────────
-router.get('/:id', (req, res) => {
-  const p = participants.find(
-    p => p.id === parseInt(req.params.id) && p.activo
-  );
-  if (!p) return res.status(404).json({ error: 'Participante no encontrado' });
-  res.json(p);
-});
+router.get('/:id',
+  verifyToken,
+  param('id').isInt({ min: 1 }).withMessage('ID inválido'),
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ error: 'ID de participante inválido' });
+    }
 
-// ────────────────────────────────────────────────────────────
-// PUT /api/participants/:id — Editar [ADMIN]
-// ────────────────────────────────────────────────────────────
-router.put('/:id', (req, res) => {
-  const { nombre, edad, ciudad, telefono, correo, disciplina, categoria } = req.body;
+    try {
+      const [rows] = await pool.execute(
+        'SELECT * FROM participantes WHERE id = ? AND activo = 1 LIMIT 1',
+        [req.params.id]
+      );
 
-  if (!nombre || !edad || !ciudad || !telefono || !correo) {
-    return res.status(400).json({ error: 'Todos los campos son requeridos' });
+      if (rows.length === 0) {
+        return res.status(404).json({ error: 'Participante no encontrado' });
+      }
+
+      res.json(rows[0]);
+    } catch (err) {
+      console.error('Error obteniendo participante:', err);
+      res.status(500).json({ error: 'Error interno del servidor' });
+    }
   }
-
-  const idx = participants.findIndex(
-    p => p.id === parseInt(req.params.id) && p.activo
-  );
-
-  if (idx === -1) {
-    return res.status(404).json({ error: 'Participante no encontrado' });
-  }
-
-  // Verificar correo duplicado (excluyendo el participante actual)
-  const duplicado = participants.find(
-    p => p.correo === correo.trim().toLowerCase() && p.activo && p.id !== parseInt(req.params.id)
-  );
-  if (duplicado) {
-    return res.status(409).json({ error: 'El correo ya pertenece a otro participante' });
-  }
-
-  participants[idx] = {
-    ...participants[idx],
-    nombre: nombre.trim(),
-    edad: parseInt(edad),
-    ciudad: ciudad.trim(),
-    telefono: telefono.trim(),
-    correo: correo.trim().toLowerCase(),
-    disciplina: disciplina || participants[idx].disciplina,
-    categoria: categoria || participants[idx].categoria,
-  };
-
-  res.json({ message: 'Participante actualizado correctamente' });
-});
+);
 
 // ────────────────────────────────────────────────────────────
-// DELETE /api/participants/:id — Eliminar (soft) [ADMIN]
+// PUT /api/participants/:id — Editar [ADMIN - JWT REQUERIDO]
 // ────────────────────────────────────────────────────────────
-router.delete('/:id', (req, res) => {
-  const idx = participants.findIndex(
-    p => p.id === parseInt(req.params.id) && p.activo
-  );
+router.put('/:id',
+  verifyToken,
+  param('id').isInt({ min: 1 }).withMessage('ID inválido'),
+  body('nombre').trim().notEmpty().withMessage('Nombre es requerido').isLength({ max: 100 }),
+  body('edad').isInt({ min: 5, max: 100 }).withMessage('Edad inválida'),
+  body('ciudad').trim().notEmpty().withMessage('Ciudad es requerida').isLength({ max: 100 }),
+  body('telefono').trim().notEmpty().withMessage('Teléfono es requerido').isLength({ max: 25 }),
+  body('correo').trim().isEmail().withMessage('Correo inválido').normalizeEmail().isLength({ max: 150 }),
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ error: errors.array()[0].msg });
+    }
 
-  if (idx === -1) {
-    return res.status(404).json({ error: 'Participante no encontrado' });
+    const { nombre, edad, ciudad, telefono, correo, disciplina, categoria } = req.body;
+
+    try {
+      // Verificar que existe
+      const [existing] = await pool.execute(
+        'SELECT id FROM participantes WHERE id = ? AND activo = 1 LIMIT 1',
+        [req.params.id]
+      );
+      if (existing.length === 0) {
+        return res.status(404).json({ error: 'Participante no encontrado' });
+      }
+
+      // Verificar correo duplicado (excluyendo el actual)
+      const [duplicado] = await pool.execute(
+        'SELECT id FROM participantes WHERE correo = ? AND activo = 1 AND id != ? LIMIT 1',
+        [correo.trim().toLowerCase(), req.params.id]
+      );
+      if (duplicado.length > 0) {
+        return res.status(409).json({ error: 'El correo ya pertenece a otro participante' });
+      }
+
+      await pool.execute(
+        `UPDATE participantes
+         SET nombre = ?, edad = ?, ciudad = ?, telefono = ?, correo = ?,
+             disciplina = COALESCE(?, disciplina), categoria = COALESCE(?, categoria)
+         WHERE id = ? AND activo = 1`,
+        [
+          nombre.trim(),
+          parseInt(edad),
+          ciudad.trim(),
+          telefono.trim(),
+          correo.trim().toLowerCase(),
+          disciplina || null,
+          categoria || null,
+          req.params.id,
+        ]
+      );
+
+      res.json({ message: 'Participante actualizado correctamente' });
+    } catch (err) {
+      console.error('Error actualizando participante:', err);
+      res.status(500).json({ error: 'Error interno del servidor' });
+    }
   }
+);
 
-  participants[idx].activo = false;
-  res.json({ message: 'Participante eliminado correctamente' });
-});
+// ────────────────────────────────────────────────────────────
+// DELETE /api/participants/:id — Eliminar soft [ADMIN - JWT]
+// ────────────────────────────────────────────────────────────
+router.delete('/:id',
+  verifyToken,
+  param('id').isInt({ min: 1 }).withMessage('ID inválido'),
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ error: 'ID de participante inválido' });
+    }
+
+    try {
+      const [result] = await pool.execute(
+        'UPDATE participantes SET activo = 0 WHERE id = ? AND activo = 1',
+        [req.params.id]
+      );
+
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ error: 'Participante no encontrado' });
+      }
+
+      res.json({ message: 'Participante eliminado correctamente' });
+    } catch (err) {
+      console.error('Error eliminando participante:', err);
+      res.status(500).json({ error: 'Error interno del servidor' });
+    }
+  }
+);
 
 module.exports = router;

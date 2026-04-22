@@ -1,9 +1,10 @@
 // ============================================================
 // components/registration/registration.component.ts
 // ============================================================
-import { Component, OnInit, signal, computed } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ElementRef, NgZone, signal, computed } from '@angular/core';
 import { CommonModule }                from '@angular/common';
 import { FormsModule }                 from '@angular/forms';
+import { environment }                 from '../../../environments/environment';
 import { RegistrationService }         from '../../services/registration.service';
 import {
   Participant,
@@ -224,20 +225,9 @@ type FormState = 'idle' | 'loading' | 'success' | 'error';
                   }
                 </div>
 
-                <!-- CAPTCHA Anti-Robot -->
+                <!-- Google reCAPTCHA v2 Real -->
                 <div class="captcha-wrapper">
-                  <div class="captcha-box" [class.verified]="isRobotVerified()">
-                    <label class="captcha-container">
-                      <input type="checkbox" [(ngModel)]="captchaChecked" name="captcha" (change)="verifyCaptcha()">
-                      <span class="checkmark"></span>
-                      <span class="captcha-text">No soy un robot</span>
-                    </label>
-                    <div class="captcha-logo">
-                      <img src="https://www.gstatic.com/recaptcha/api2/logo_48.png" alt="reCAPTCHA">
-                      <span>reCAPTCHA</span>
-                      <small>Privacidad - Términos</small>
-                    </div>
-                  </div>
+                  <div id="recaptcha-container"></div>
                 </div>
 
                 <button
@@ -480,101 +470,12 @@ type FormState = 'idle' | 'loading' | 'success' | 'error';
 
     .category-info-box strong { color: var(--c-blue); }
 
-    /* ── Captcha Styles ──────────────── */
+    /* ── reCAPTCHA Container ──────────── */
     .captcha-wrapper {
       margin-bottom: 1.5rem;
       display: flex;
       justify-content: center;
     }
-
-    .captcha-box {
-      background: #f9f9f9;
-      border: 1px solid #d3d3d3;
-      border-radius: 3px;
-      padding: 0.8rem;
-      width: 300px;
-      height: 74px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    }
-
-    .captcha-box.verified {
-      border-color: #4CAF50;
-      background: #f0fdf4;
-    }
-
-    .captcha-container {
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      font-family: Roboto, helvetica, arial, sans-serif;
-      font-size: 14px;
-      color: #333;
-      user-select: none;
-      position: relative;
-      padding-left: 35px;
-    }
-
-    .captcha-container input {
-      position: absolute;
-      opacity: 0;
-      cursor: pointer;
-      height: 0; width: 0;
-    }
-
-    .checkmark {
-      position: absolute;
-      left: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      height: 24px;
-      width: 24px;
-      background-color: #fff;
-      border: 2px solid #c1c1c1;
-      border-radius: 2px;
-    }
-
-    .captcha-container:hover input ~ .checkmark {
-      border-color: #b2b2b2;
-    }
-
-    .captcha-container input:checked ~ .checkmark {
-      background-color: #4CAF50;
-      border-color: #4CAF50;
-    }
-
-    .checkmark:after {
-      content: "";
-      position: absolute;
-      display: none;
-    }
-
-    .captcha-container input:checked ~ .checkmark:after {
-      display: block;
-    }
-
-    .captcha-container .checkmark:after {
-      left: 8px;
-      top: 4px;
-      width: 5px;
-      height: 10px;
-      border: solid white;
-      border-width: 0 3px 3px 0;
-      transform: rotate(45deg);
-    }
-
-    .captcha-logo {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 2px;
-    }
-
-    .captcha-logo img { width: 32px; height: 32px; }
-    .captcha-logo span { font-size: 10px; color: #555; font-weight: 500; }
-    .captcha-logo small { font-size: 8px; color: #999; }
 
     /* ── Success state ──────────────── */
     .form-success {
@@ -637,8 +538,16 @@ type FormState = 'idle' | 'loading' | 'success' | 'error';
     }
   `]
 })
-export class RegistrationComponent implements OnInit {
+export class RegistrationComponent implements OnInit, AfterViewInit {
   particles: string[] = [];
+  private recaptchaWidgetId: number | null = null;
+  private captchaToken = '';
+
+  constructor(
+    private regSvc: RegistrationService,
+    private ngZone: NgZone,
+  ) {}
+
   ngOnInit() {
     this.particles = Array.from({ length: 20 }, () => {
       const x = Math.random() * 100;
@@ -649,13 +558,50 @@ export class RegistrationComponent implements OnInit {
     });
   }
 
+  ngAfterViewInit() {
+    this.renderRecaptcha();
+  }
+
+  /** Renderiza el widget reCAPTCHA v2 de Google */
+  private renderRecaptcha() {
+    const w = window as any;
+    if (w.grecaptcha && w.grecaptcha.render) {
+      this.doRender();
+    } else {
+      // Si el script aún no cargó, registrar callback global
+      w.onRecaptchaLoad = () => this.doRender();
+    }
+  }
+
+  private doRender() {
+    const container = document.getElementById('recaptcha-container');
+    if (!container || this.recaptchaWidgetId !== null) return;
+
+    const w = window as any;
+    this.recaptchaWidgetId = w.grecaptcha.render('recaptcha-container', {
+      sitekey: environment.recaptchaSiteKey,
+      callback: (token: string) => {
+        this.ngZone.run(() => {
+          this.captchaToken = token;
+          this.isRobotVerified.set(true);
+        });
+      },
+      'expired-callback': () => {
+        this.ngZone.run(() => {
+          this.captchaToken = '';
+          this.isRobotVerified.set(false);
+        });
+      },
+      theme: 'dark',
+    });
+  }
+
   form: Participant = {
     nombre: '', edad: 0, ciudad: '', telefono: '',
     correo: '', disciplina: '' as Disciplina, categoria: '' as Categoria,
     participo_primera_edicion: '' as any
   };
 
-  captchaChecked = false;
   isRobotVerified = signal(false);
 
   formState      = signal<FormState>('idle');
@@ -679,14 +625,12 @@ export class RegistrationComponent implements OnInit {
   ];
 
   benefits = [
-    'Kit de bienvenida del evento',
-    'Número de competidor oficial',
-    'Hidratación en recorrido',
-    'Certificado de participación',
-    'Ambiente deportivo y familiar',
+    'Número',
+    'Hidratación',
+    'Carro Escoba',
+    'Servicio de Ambulancia',
+    'Póliza de asistencia',
   ];
-
-  constructor(private regSvc: RegistrationService) {}
 
   onDisciplinaChange(disc: Disciplina) {
     this.selectedDisciplina.set(disc);
@@ -700,23 +644,12 @@ export class RegistrationComponent implements OnInit {
     }
   }
 
-  verifyCaptcha() {
-    if (this.captchaChecked) {
-      // Simular tiempo de verificación para realismo
-      setTimeout(() => {
-        this.isRobotVerified.set(true);
-      }, 600);
-    } else {
-      this.isRobotVerified.set(false);
-    }
-  }
-
   submit() {
     if (this.formState() === 'loading') return;
     this.formState.set('loading');
     this.errorMessage.set('');
 
-    this.regSvc.register(this.form).subscribe({
+    this.regSvc.register(this.form, this.captchaToken).subscribe({
       next: res => {
         this.formState.set('success');
         this.successMessage.set(res.message);
@@ -727,8 +660,19 @@ export class RegistrationComponent implements OnInit {
         this.errorMessage.set(
           err.error?.error || 'Error al registrar. Por favor intenta de nuevo.'
         );
+        // Reset reCAPTCHA para que el usuario pueda intentar de nuevo
+        this.resetCaptcha();
       }
     });
+  }
+
+  private resetCaptcha() {
+    const w = window as any;
+    if (w.grecaptcha && this.recaptchaWidgetId !== null) {
+      w.grecaptcha.reset(this.recaptchaWidgetId);
+    }
+    this.captchaToken = '';
+    this.isRobotVerified.set(false);
   }
 
   resetForm() {
@@ -739,7 +683,6 @@ export class RegistrationComponent implements OnInit {
     };
     this.selectedDisciplina.set('');
     this.formState.set('idle');
-    this.captchaChecked = false;
-    this.isRobotVerified.set(false);
+    this.resetCaptcha();
   }
 }

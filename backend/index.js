@@ -1,17 +1,72 @@
 // ============================================================
-// index.js — Servidor principal Express
+// index.js — Servidor principal Express (Hardened)
 // Triatlón Sucre Sin Límites 2.0
 // ============================================================
 require('dotenv').config();
 
-const express      = require('express');
-const cors         = require('cors');
+const express   = require('express');
+const cors      = require('cors');
+const helmet    = require('helmet');
+const rateLimit = require('express-rate-limit');
+const hpp       = require('hpp');
+const morgan    = require('morgan');
+
 const participantsRouter = require('./src/routes/participants');
 const sponsorsRouter     = require('./src/routes/sponsors');
 const authRouter         = require('./src/routes/auth');
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
+
+// ── Seguridad: Cabeceras HTTP ───────────────────────────────
+// helmet configura automáticamente: X-Content-Type-Options,
+// X-Frame-Options, Strict-Transport-Security, etc.
+app.use(helmet({
+  contentSecurityPolicy: false,  // Desactivado para permitir CDNs del frontend
+  crossOriginEmbedderPolicy: false,
+}));
+
+// Ocultar la tecnología del servidor
+app.disable('x-powered-by');
+
+// ── Seguridad: Rate Limiting Global ─────────────────────────
+// Máximo 100 peticiones por IP cada 15 minutos
+const globalLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Demasiadas solicitudes. Intenta de nuevo en 15 minutos.' },
+});
+app.use('/api/', globalLimiter);
+
+// ── Seguridad: Rate Limiting estricto para Login ────────────
+// Máximo 5 intentos de login por IP cada 15 minutos
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Demasiados intentos de inicio de sesión. Intenta en 15 minutos.' },
+});
+
+// ── Seguridad: Rate Limiting para registro público ──────────
+// Máximo 10 registros por IP cada 30 minutos
+const registerLimiter = rateLimit({
+  windowMs: 30 * 60 * 1000,
+  max: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Demasiados registros. Intenta de nuevo más tarde.' },
+});
+
+// ── Seguridad: HPP (HTTP Parameter Pollution) ───────────────
+app.use(hpp());
+
+// ── Logging ─────────────────────────────────────────────────
+if (process.env.NODE_ENV !== 'test') {
+  app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
+}
 
 // ── CORS ────────────────────────────────────────────────────
 const allowedOrigins = (process.env.CORS_ORIGINS || 'http://localhost:4200')
@@ -24,16 +79,27 @@ app.use(cors({
     cb(new Error(`Origen no permitido por CORS: ${origin}`));
   },
   credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
-// ── Body parsers ────────────────────────────────────────────
-app.use(express.json({ limit: '1mb' }));
-app.use(express.urlencoded({ extended: true }));
+// ── Body parsers (con límite de tamaño) ─────────────────────
+app.use(express.json({ limit: '256kb' }));
+app.use(express.urlencoded({ extended: true, limit: '256kb' }));
 
 // ── Rutas API ───────────────────────────────────────────────
+app.use('/api/auth/login', loginLimiter);
 app.use('/api/auth',         authRouter);
 app.use('/api/participants', participantsRouter);
 app.use('/api/sponsors',     sponsorsRouter);
+
+// Aplicar rate limit estricto solo al POST de registro
+app.use('/api/participants', (req, _res, next) => {
+  if (req.method === 'POST' && req.path === '/') {
+    return registerLimiter(req, _res, next);
+  }
+  next();
+});
 
 // ── Health check ────────────────────────────────────────────
 app.get('/api/health', (_req, res) => {
@@ -50,18 +116,22 @@ app.use((_req, res) => {
   res.status(404).json({ error: 'Ruta no encontrada' });
 });
 
-// ── Error handler ───────────────────────────────────────────
+// ── Error handler global ────────────────────────────────────
+// No exponer detalles del error en producción
 app.use((err, _req, res, _next) => {
   console.error('Error no manejado:', err);
-  res.status(500).json({ error: 'Error interno del servidor' });
+  const message = process.env.NODE_ENV === 'production'
+    ? 'Error interno del servidor'
+    : err.message || 'Error interno del servidor';
+  res.status(500).json({ error: message });
 });
 
-// ── Base de datos (deshabilitada temporalmente) ─────────────
-// Modo actual: almacenamiento en memoria
-// require('./src/db');
+// ── Conexión a base de datos MySQL ──────────────────────────
+require('./src/db');
 
 app.listen(PORT, () => {
   console.log(`\n🏊‍♂️🚴‍♂️🏃‍♂️ Triatlón Sucre Sin Límites 2.0`);
   console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
+  console.log(`🛡️  Seguridad: helmet + rate-limit + hpp activos`);
   console.log(`📡 Ambiente: ${process.env.NODE_ENV || 'development'}\n`);
 });

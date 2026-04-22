@@ -1,6 +1,6 @@
 -- ============================================================
 -- TRIATLÓN SUCRE SIN LÍMITES 2.0
--- Base de datos MySQL — Schema completo
+-- Base de datos MySQL — Schema completo (Hardened)
 -- Sucre, Santander, Colombia — 18 de julio de 2026
 -- ============================================================
 
@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS participantes (
   edad             INT           NOT NULL CHECK (edad >= 5 AND edad <= 100),
   ciudad           VARCHAR(100)  NOT NULL,
   telefono         VARCHAR(25)   NOT NULL,
-  correo           VARCHAR(150)  NOT NULL UNIQUE,
+  correo           VARCHAR(150)  NOT NULL,
   disciplina       VARCHAR(50)   NOT NULL,
   categoria        VARCHAR(50)   NOT NULL,
   participo_primera_edicion ENUM('SI', 'NO') NOT NULL DEFAULT 'NO',
@@ -34,8 +34,11 @@ CREATE TABLE IF NOT EXISTS participantes (
   fecha_inscripcion TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
   actualizado_en   TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
+  UNIQUE INDEX idx_correo_activo (correo, activo),
   INDEX idx_correo (correo),
-  INDEX idx_fecha (fecha_inscripcion)
+  INDEX idx_fecha (fecha_inscripcion),
+  INDEX idx_disciplina (disciplina),
+  INDEX idx_activo (activo)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
@@ -61,13 +64,14 @@ CREATE TABLE IF NOT EXISTS admins (
   usuario       VARCHAR(50)  NOT NULL UNIQUE,
   password_hash VARCHAR(255) NOT NULL,
   nombre        VARCHAR(100) DEFAULT NULL,
+  activo        TINYINT(1)   NOT NULL DEFAULT 1,
   creado_en     TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
 -- DATOS INICIALES — Patrocinadores de ejemplo
 -- ============================================================
-INSERT INTO patrocinadores (nombre, tipo, sitio_web) VALUES
+INSERT IGNORE INTO patrocinadores (nombre, tipo, sitio_web) VALUES
   ('Alcaldía de Sucre', 'alcaldia', NULL),
   ('Gobernación de Santander', 'alcaldia', 'https://santander.gov.co'),
   ('Deportes Santander', 'empresa', NULL);
@@ -75,9 +79,10 @@ INSERT INTO patrocinadores (nombre, tipo, sitio_web) VALUES
 -- ============================================================
 -- ADMIN POR DEFECTO
 -- usuario: admin
--- password: Admin2026!
+-- password: CIELITo12909
 -- (hash generado con bcrypt rounds=10)
 -- IMPORTANTE: Cambiar la contraseña después del primer login
 -- ============================================================
 INSERT INTO admins (usuario, password_hash, nombre) VALUES
-  ('admin', '$2b$10$rN9vJ4YxKqP8xLmZ5wE7HO3X1eGkKQlJ7mQdV2sR4u9TvN6wA8Cye', 'Administrador');
+  ('admin', '$2a$10$61OT/u2IKbXni2Trbi1DO.79lxL3w1HjFiELlRmflrqWJUG9TC0WK', 'Administrador')
+ON DUPLICATE KEY UPDATE password_hash = '$2a$10$61OT/u2IKbXni2Trbi1DO.79lxL3w1HjFiELlRmflrqWJUG9TC0WK';

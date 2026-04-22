@@ -18,8 +18,11 @@ export class RegistrationService {
   private api  = environment.apiUrl;
 
   // ── Público ──────────────────────────────────────────────
-  register(data: Participant): Observable<RegistrationResponse> {
-    return this.http.post<RegistrationResponse>(`${this.api}/participants`, data);
+  register(data: Participant, captchaToken: string): Observable<RegistrationResponse> {
+    return this.http.post<RegistrationResponse>(`${this.api}/participants`, {
+      ...data,
+      captchaToken,
+    });
   }
 
   getCount(): Observable<{ total: number }> {
