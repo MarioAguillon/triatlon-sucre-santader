@@ -26,8 +26,8 @@ let nextId = 16;
 // ── Categorías válidas por disciplina ───────────────────────
 const CATEGORIAS_VALIDAS = {
   running:  ['elite', 'recreativa', 'ninos'],
-  ciclismo: ['elite', 'recreativa'],
-  natacion: ['unica'],
+  ciclismo: ['elite', 'recreativa', 'ninos'],
+  natacion: ['natacion'],
 };
 
 const DISCIPLINAS_VALIDAS = ['running', 'ciclismo', 'natacion'];
@@ -44,10 +44,13 @@ function calcularPrecio() {
 // POST /api/participants — Registrar participante (público)
 // ────────────────────────────────────────────────────────────
 router.post('/', (req, res) => {
-  const { nombre, edad, ciudad, telefono, correo, disciplina, categoria } = req.body;
+  const {
+    nombre, edad, ciudad, telefono, correo,
+    disciplina, categoria, participo_primera_edicion
+  } = req.body;
 
   // Validaciones básicas
-  if (!nombre || !edad || !ciudad || !telefono || !correo) {
+  if (!nombre || !edad || !ciudad || !telefono || !correo || !participo_primera_edicion) {
     return res.status(400).json({ error: 'Todos los campos obligatorios deben completarse' });
   }
 
@@ -74,6 +77,11 @@ router.post('/', (req, res) => {
     });
   }
 
+  // Validación de participación previa
+  if (!['SI', 'NO'].includes(participo_primera_edicion)) {
+    return res.status(400).json({ error: 'Respuesta inválida para participación previa' });
+  }
+
   // Verificar correo duplicado
   const yaExiste = participants.find(
     p => p.correo === correo.trim().toLowerCase() && p.activo
@@ -92,6 +100,7 @@ router.post('/', (req, res) => {
     correo: correo.trim().toLowerCase(),
     disciplina,
     categoria,
+    participo_primera_edicion,
     precio_aplicado: precio,
     fecha_inscripcion: new Date().toISOString(),
     activo: true,

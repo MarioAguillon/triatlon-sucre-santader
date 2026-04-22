@@ -163,6 +163,21 @@ type FormState = 'idle' | 'loading' | 'success' | 'error';
                     />
                   </div>
 
+                  <!-- ¿Participó en la primera edición? -->
+                  <div class="form-group">
+                    <label for="reg-primera">¿Participó en la primera edición? *</label>
+                    <select
+                      id="reg-primera"
+                      name="participo_primera_edicion"
+                      [(ngModel)]="form.participo_primera_edicion"
+                      required
+                    >
+                      <option value="" disabled>Selecciona una opción</option>
+                      <option value="SI">Sí, participé</option>
+                      <option value="NO">No, es mi primera vez</option>
+                    </select>
+                  </div>
+
                   <!-- Disciplina -->
                   <div class="form-group full">
                     <label for="reg-disciplina">Disciplina *</label>
@@ -181,7 +196,7 @@ type FormState = 'idle' | 'loading' | 'success' | 'error';
                   </div>
 
                   <!-- Categoría (dinámica) -->
-                  @if (categoriasDisponibles().length > 0) {
+                  @if (categoriasDisponibles().length > 1) {
                     <div class="form-group full">
                       <label for="reg-categoria">Categoría *</label>
                       <select
@@ -196,16 +211,39 @@ type FormState = 'idle' | 'loading' | 'success' | 'error';
                         }
                       </select>
                       <span class="field-hint">
-                        {{ categoriasDisponibles().length }} categoría(s) disponible(s) para esta disciplina
+                        Selecciona tu nivel de competencia
                       </span>
                     </div>
+                  } @else if (categoriasDisponibles().length === 1) {
+                    <div class="form-group full">
+                      <div class="category-info-box">
+                        <span class="material-symbols-outlined">info</span>
+                        <span>Disciplina con <strong>Categoría Única</strong></span>
+                      </div>
+                    </div>
                   }
+                </div>
+
+                <!-- CAPTCHA Anti-Robot -->
+                <div class="captcha-wrapper">
+                  <div class="captcha-box" [class.verified]="isRobotVerified()">
+                    <label class="captcha-container">
+                      <input type="checkbox" [(ngModel)]="captchaChecked" name="captcha" (change)="verifyCaptcha()">
+                      <span class="checkmark"></span>
+                      <span class="captcha-text">No soy un robot</span>
+                    </label>
+                    <div class="captcha-logo">
+                      <img src="https://www.gstatic.com/recaptcha/api2/logo_48.png" alt="reCAPTCHA">
+                      <span>reCAPTCHA</span>
+                      <small>Privacidad - Términos</small>
+                    </div>
+                  </div>
                 </div>
 
                 <button
                   type="submit"
                   class="btn btn-primary submit-btn"
-                  [disabled]="formState() === 'loading' || regForm.invalid"
+                  [disabled]="formState() === 'loading' || regForm.invalid || !isRobotVerified()"
                 >
                   @if (formState() === 'loading') {
                     <span class="spinner"></span> Registrando...
@@ -428,6 +466,116 @@ type FormState = 'idle' | 'loading' | 'success' | 'error';
       margin-top: 1rem;
     }
 
+    .category-info-box {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 0.8rem 1.2rem;
+      background: rgba(26,107,255,0.08);
+      border: 1px dashed var(--c-blue);
+      border-radius: var(--r-sm);
+      color: var(--c-muted);
+      font-size: 0.9rem;
+    }
+
+    .category-info-box strong { color: var(--c-blue); }
+
+    /* ── Captcha Styles ──────────────── */
+    .captcha-wrapper {
+      margin-bottom: 1.5rem;
+      display: flex;
+      justify-content: center;
+    }
+
+    .captcha-box {
+      background: #f9f9f9;
+      border: 1px solid #d3d3d3;
+      border-radius: 3px;
+      padding: 0.8rem;
+      width: 300px;
+      height: 74px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .captcha-box.verified {
+      border-color: #4CAF50;
+      background: #f0fdf4;
+    }
+
+    .captcha-container {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      font-family: Roboto, helvetica, arial, sans-serif;
+      font-size: 14px;
+      color: #333;
+      user-select: none;
+      position: relative;
+      padding-left: 35px;
+    }
+
+    .captcha-container input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+      height: 0; width: 0;
+    }
+
+    .checkmark {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      height: 24px;
+      width: 24px;
+      background-color: #fff;
+      border: 2px solid #c1c1c1;
+      border-radius: 2px;
+    }
+
+    .captcha-container:hover input ~ .checkmark {
+      border-color: #b2b2b2;
+    }
+
+    .captcha-container input:checked ~ .checkmark {
+      background-color: #4CAF50;
+      border-color: #4CAF50;
+    }
+
+    .checkmark:after {
+      content: "";
+      position: absolute;
+      display: none;
+    }
+
+    .captcha-container input:checked ~ .checkmark:after {
+      display: block;
+    }
+
+    .captcha-container .checkmark:after {
+      left: 8px;
+      top: 4px;
+      width: 5px;
+      height: 10px;
+      border: solid white;
+      border-width: 0 3px 3px 0;
+      transform: rotate(45deg);
+    }
+
+    .captcha-logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .captcha-logo img { width: 32px; height: 32px; }
+    .captcha-logo span { font-size: 10px; color: #555; font-weight: 500; }
+    .captcha-logo small { font-size: 8px; color: #999; }
+
     /* ── Success state ──────────────── */
     .form-success {
       padding: 3rem;
@@ -503,8 +651,12 @@ export class RegistrationComponent implements OnInit {
 
   form: Participant = {
     nombre: '', edad: 0, ciudad: '', telefono: '',
-    correo: '', disciplina: '' as Disciplina, categoria: '' as Categoria
+    correo: '', disciplina: '' as Disciplina, categoria: '' as Categoria,
+    participo_primera_edicion: '' as any
   };
+
+  captchaChecked = false;
+  isRobotVerified = signal(false);
 
   formState      = signal<FormState>('idle');
   errorMessage   = signal('');
@@ -548,6 +700,17 @@ export class RegistrationComponent implements OnInit {
     }
   }
 
+  verifyCaptcha() {
+    if (this.captchaChecked) {
+      // Simular tiempo de verificación para realismo
+      setTimeout(() => {
+        this.isRobotVerified.set(true);
+      }, 600);
+    } else {
+      this.isRobotVerified.set(false);
+    }
+  }
+
   submit() {
     if (this.formState() === 'loading') return;
     this.formState.set('loading');
@@ -571,9 +734,12 @@ export class RegistrationComponent implements OnInit {
   resetForm() {
     this.form = {
       nombre: '', edad: 0, ciudad: '', telefono: '',
-      correo: '', disciplina: '' as Disciplina, categoria: '' as Categoria
+      correo: '', disciplina: '' as Disciplina, categoria: '' as Categoria,
+      participo_primera_edicion: '' as any
     };
     this.selectedDisciplina.set('');
     this.formState.set('idle');
+    this.captchaChecked = false;
+    this.isRobotVerified.set(false);
   }
 }

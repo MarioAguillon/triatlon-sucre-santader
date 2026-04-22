@@ -20,6 +20,9 @@ CREATE TABLE IF NOT EXISTS participantes (
   ciudad           VARCHAR(100)  NOT NULL,
   telefono         VARCHAR(25)   NOT NULL,
   correo           VARCHAR(150)  NOT NULL UNIQUE,
+  disciplina       VARCHAR(50)   NOT NULL,
+  categoria        VARCHAR(50)   NOT NULL,
+  participo_primera_edicion ENUM('SI', 'NO') NOT NULL DEFAULT 'NO',
   tipo_participante ENUM(
     'individual',
     'relevo_natacion',

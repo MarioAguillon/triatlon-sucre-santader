@@ -6,7 +6,7 @@
 export type Disciplina = 'running' | 'ciclismo' | 'natacion';
 
 // ── Categorías por disciplina ───────────────────────────────
-export type Categoria = 'elite' | 'recreativa' | 'ninos' | 'unica';
+export type Categoria = 'elite' | 'recreativa' | 'ninos' | 'natacion';
 
 // Mapa de categorías válidas por disciplina
 // (preparado para agregar nuevas categorías fácilmente)
@@ -19,9 +19,10 @@ export const CATEGORIAS_POR_DISCIPLINA: Record<Disciplina, { value: Categoria; l
   ciclismo: [
     { value: 'elite',      label: '🥇 Elite' },
     { value: 'recreativa', label: '🏅 Recreativa' },
+    { value: 'ninos',      label: '👦 Niños' },
   ],
   natacion: [
-    { value: 'unica',      label: '🏊 Categoría Única' },
+    { value: 'natacion',   label: '🏊 Natación' },
   ],
 };
 
@@ -34,6 +35,7 @@ export interface Participant {
   correo:            string;
   disciplina:        Disciplina;
   categoria:         Categoria;
+  participo_primera_edicion: 'SI' | 'NO';
   precio_aplicado?:  number;
   fecha_inscripcion?: string;
 }
