@@ -479,12 +479,12 @@ export class RutasComponent implements OnInit {
       isFlipped: false,
       front: {
         category: 'Categoría Única',
-        distance: '1.6 km',
+        distance: '160 m',
         mapImg: 'paisaje3.jpg',
         desc: 'Natación en el centro recreacional de Sucre. Una experiencia única con atención VIP y el calor humano del pueblo sucreño animando.',
         stats: [
-          { label: 'Hombres', value: '1600m', icon: 'man' },
-          { label: 'Mujeres', value: '1500m', icon: 'woman' }
+          { label: 'Hombres', value: '160m', icon: 'man' },
+          { label: 'Mujeres', value: '150m', icon: 'woman' }
         ]
       }
     }

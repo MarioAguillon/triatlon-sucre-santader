@@ -81,8 +81,8 @@ import { Sponsor }                   from '../../models/participant.model';
             <p>Apoya el deporte en Sucre, Santander y llega a toda la comunidad.</p>
           </div>
           <div class="cta-buttons">
-            <a href="mailto:triatlon.sucre.2026&#64;gmail.com" class="btn btn-outline">
-              <span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 4px;">mail</span> Contactar
+            <a href="https://wa.me/573102198939?text=Hola,%20quiero%20contactarme%20para%20realizar%20un%20aporte%20a%20la%20Triatl%C3%B3n%20Sucre%20Santander." target="_blank" rel="noopener noreferrer" class="btn btn-outline">
+              <span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 4px;">chat</span> Contactar
             </a>
             <a href="#pagos" class="btn btn-primary">
               <span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 4px;">volunteer_activism</span> Hacer un Aporte

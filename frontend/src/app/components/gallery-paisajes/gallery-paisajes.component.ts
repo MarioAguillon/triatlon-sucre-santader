@@ -24,7 +24,7 @@ import { Component, OnInit, OnDestroy, signal } from '@angular/core';
           <p class="section-subtitle section-invite">
             ¿Quieres que tu paisaje aparezca aquí?
           </p>
-          <a href="mailto:triatlon.sucre.2026@gmail.com" class="btn btn-outline paisaje-contact-btn">
+          <a href="mailto:triatlonsucresantander@gmail.com?subject=Quiero%20compartir%20un%20paisaje%20para%20la%20Triatl%C3%B3n%20Sucre%20Santander&body=Hola,%20quiero%20compartir%20una%20fotograf%C3%ADa%20o%20paisaje%20para%20la%20Triatl%C3%B3n%20Sucre%20Santander." class="btn btn-outline paisaje-contact-btn">
             📸 Contáctame
           </a>
         </div>

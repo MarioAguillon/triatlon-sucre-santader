@@ -39,14 +39,8 @@ import { Component, OnInit } from '@angular/core';
                 Natación, Ciclismo y Running en un solo espectáculo.
               </p>
               <div class="social-links">
-                <a href="#" class="social-btn" aria-label="Facebook">
+                <a href="https://www.facebook.com/share/1DUM8vw3kG/" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Facebook">
                   <svg viewBox="0 0 24 24" fill="currentColor" width="18"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
-                </a>
-                <a href="#" class="social-btn" aria-label="Instagram">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
-                </a>
-                <a href="#" class="social-btn" aria-label="WhatsApp">
-                  <svg viewBox="0 0 24 24" fill="currentColor" width="18"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
                 </a>
               </div>
             </div>
@@ -67,7 +61,7 @@ import { Component, OnInit } from '@angular/core';
               <ul>
                 <li><a href="#inscripcion">Inscripción</a></li>
                 <li><a href="#patrocinadores">Patrocinadores</a></li>
-                <li><a href="mailto:triatlon.sucre.2026@gmail.com">Contacto</a></li>
+                <li><a href="mailto:triatlonsucresantander@gmail.com?subject=Contacto%20desde%20la%20p%C3%A1gina%20web%20de%20la%20Triatl%C3%B3n%20Sucre%20Santander">Contacto</a></li>
               </ul>
             </div>
 
@@ -272,6 +266,6 @@ export class FooterComponent implements OnInit {
   eventInfo = [
     { icon: 'calendar_month', label: 'Fecha',    value: '18 de julio de 2026' },
     { icon: 'location_on', label: 'Lugar',    value: 'Sucre, Santander, Colombia' },
-    { icon: 'mail', label: 'Contacto', value: 'triatlon.sucre.2026@gmail.com' },
+    { icon: 'mail', label: 'Contacto', value: 'triatlonsucresantander@gmail.com' },
   ];
 }

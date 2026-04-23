@@ -12,17 +12,17 @@ export type Categoria = 'elite' | 'recreativa' | 'ninos' | 'natacion';
 // (preparado para agregar nuevas categorías fácilmente)
 export const CATEGORIAS_POR_DISCIPLINA: Record<Disciplina, { value: Categoria; label: string }[]> = {
   running: [
-    { value: 'elite',      label: '🥇 Elite' },
-    { value: 'recreativa', label: '🏅 Recreativa' },
-    { value: 'ninos',      label: '👦 Niños' },
+    { value: 'elite',      label: 'Elite' },
+    { value: 'recreativa', label: 'Recreativa' },
+    { value: 'ninos',      label: 'Niños' },
   ],
   ciclismo: [
-    { value: 'elite',      label: '🥇 Elite' },
-    { value: 'recreativa', label: '🏅 Recreativa' },
-    { value: 'ninos',      label: '👦 Niños' },
+    { value: 'elite',      label: 'Elite' },
+    { value: 'recreativa', label: 'Recreativa' },
+    { value: 'ninos',      label: 'Niños' },
   ],
   natacion: [
-    { value: 'natacion',   label: '🏊 Natación' },
+    { value: 'natacion',   label: 'Natación' },
   ],
 };
 

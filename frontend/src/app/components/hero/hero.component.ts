@@ -41,7 +41,7 @@ import { RegistrationService }       from '../../services/registration.service';
             </h1>
 
             <p class="hero-subtitle animate-fade-up" style="animation-delay:0.3s">
-              Natación · Ciclismo · Running<br>
+              Running · Ciclismo · Natación<br>
               <strong>¡La aventura más grande de Santander!</strong>
             </p>
 

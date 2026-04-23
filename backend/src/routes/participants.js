@@ -5,6 +5,8 @@ const router = require('express').Router();
 const { body, param, query, validationResult } = require('express-validator');
 const pool = require('../db');
 const { verifyToken } = require('../middleware/auth');
+const { generarPDFConfirmacion } = require('../services/pdfService');
+const { enviarCorreoConfirmacion } = require('../services/emailService');
 
 // ── Constantes de validación ────────────────────────────────
 const DISCIPLINAS_VALIDAS = ['running', 'ciclismo', 'natacion'];
@@ -150,9 +152,27 @@ router.post('/',
         ]
       );
 
+      const insertId = result.insertId;
+
+      // ── Generar PDF y Enviar Correo ─────────────────────────
+      try {
+        const participantData = {
+          id: insertId,
+          nombre: nombre.trim(),
+          correo: correo.trim().toLowerCase(),
+          disciplina,
+          categoria
+        };
+        const pdfBuffer = await generarPDFConfirmacion(participantData);
+        await enviarCorreoConfirmacion(participantData, pdfBuffer);
+      } catch (emailError) {
+        console.error('Error al generar PDF o enviar correo de confirmación:', emailError);
+        // NOTA: No retornamos error HTTP aquí porque la inscripción en BD ya fue exitosa.
+      }
+
       res.status(201).json({
-        message: '¡Inscripción exitosa! Nos vemos el 18 de julio de 2026 en Sucre.',
-        id: result.insertId,
+        message: 'Tu inscripción fue exitosa. Hemos enviado una confirmación a tu correo electrónico.',
+        id: insertId,
         precio,
         disciplina,
         categoria,

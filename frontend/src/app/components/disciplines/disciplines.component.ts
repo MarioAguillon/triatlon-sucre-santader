@@ -376,8 +376,8 @@ export class DisciplinesComponent implements OnInit {
       desc:  'Disfruta nadando en la piscina del centro recreacional de Sucre. Un ambiente inigualable estilo olímpico bajo la atención del equipo local.',
       categorias: ['Hombres', 'Mujeres', 'Niños'],
       stats: [
-        { value: '1600m', label: 'Distancia Máx' },
-        { value: '4',     label: 'Categorías' },
+        { value: '160m', label: 'Hombres' },
+        { value: '150m', label: 'Mujeres' },
       ]
     },
   ];

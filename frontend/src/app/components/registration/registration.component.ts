@@ -73,7 +73,7 @@ type FormState = 'idle' | 'loading' | 'success' | 'error';
                   Precio aplicado: <strong>{{ successPrice() | currency:'COP':'symbol':'1.0-0' }}</strong>
                 </div>
                 <p class="success-next-step">
-                  Tu información fue registrada correctamente. Ahora puedes continuar con el pago para completar el proceso.
+                  Por favor, revisa tu bandeja de entrada (o carpeta de spam). Ahora puedes continuar con el pago para completar tu registro.
                 </p>
                 <a href="#pagos" class="btn btn-primary btn-pagos-cta">
                   <span class="material-symbols-outlined" style="margin-right:6px;vertical-align:middle">payments</span>
@@ -619,9 +619,9 @@ export class RegistrationComponent implements OnInit, AfterViewInit {
   });
 
   disciplinas = [
-    { value: 'running',  label: '🏃 Running' },
-    { value: 'ciclismo', label: '🚴 Ciclismo' },
-    { value: 'natacion', label: '🏊 Natación' },
+    { value: 'running',  label: 'Running' },
+    { value: 'ciclismo', label: 'Ciclismo' },
+    { value: 'natacion', label: 'Natación' },
   ];
 
   benefits = [
