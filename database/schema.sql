@@ -4,11 +4,7 @@
 -- Sucre, Santander, Colombia — 18 de julio de 2026
 -- ============================================================
 
-CREATE DATABASE IF NOT EXISTS triatlon_sucre
-  CHARACTER SET utf8mb4
-  COLLATE utf8mb4_unicode_ci;
-
-USE triatlon_sucre;
+-- (Base de datos manejada por la variable DB_NAME en .env)
 
 -- ============================================================
 -- TABLA: participantes
