@@ -5,7 +5,7 @@
 const mysql = require('mysql2/promise');
 require('dotenv').config();
 
-const pool = mysql.createPool({
+const poolConfig = {
   host:               process.env.DB_HOST     || 'localhost',
   port:               parseInt(process.env.DB_PORT || '3306'),
   user:               process.env.DB_USER     || 'root',
@@ -15,25 +15,19 @@ const pool = mysql.createPool({
   connectionLimit:    10,
   queueLimit:         0,
   charset:            'utf8mb4',
-  // Seguridad: timeouts para evitar conexiones colgadas
-  connectTimeout:     10000,
-  // Seguridad: reconexión automática deshabilitada (el pool maneja esto)
+  connectTimeout:     20000,
   enableKeepAlive:    true,
   keepAliveInitialDelay: 30000,
-});
+  multipleStatements: true, // Requerido para ejecutar el autoheal si tiene múltiples sentencias
+};
 
-// Verificar conexión al iniciar (sin forzar cierre del proceso)
-(async () => {
-  try {
-    const conn = await pool.getConnection();
-    console.log('✅ Conexión a MySQL establecida correctamente');
-    console.log(`   📦 Base de datos: ${process.env.DB_NAME || 'triatlon_sucre'}`);
-    conn.release();
-  } catch (err) {
-    console.error('❌ Error conectando a MySQL:', err.message);
-    console.error('   Verifica que XAMPP/MySQL esté encendido y la BD exista.');
-    // No forzar process.exit para permitir reintentos en producción
-  }
-})();
+// Si DB_SSL es true, agregar la configuración SSL requerida por TiDB Cloud
+if (process.env.DB_SSL === 'true') {
+  poolConfig.ssl = {
+    rejectUnauthorized: true
+  };
+}
+
+const pool = mysql.createPool(poolConfig);
 
 module.exports = pool;

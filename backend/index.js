@@ -126,12 +126,14 @@ app.use((err, _req, res, _next) => {
   res.status(500).json({ error: message });
 });
 
-// ── Conexión a base de datos MySQL ──────────────────────────
-require('./src/db');
+// ── Auto-Healing y Conexión a Base de Datos ─────────────────
+const runAutoHeal = require('./src/autoheal');
 
-app.listen(PORT, () => {
-  console.log(`\n🏊‍♂️🚴‍♂️🏃‍♂️ Triatlón Sucre Sin Límites 2.0`);
-  console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
-  console.log(`🛡️  Seguridad: helmet + rate-limit + hpp activos`);
-  console.log(`📡 Ambiente: ${process.env.NODE_ENV || 'development'}\n`);
+runAutoHeal().then(() => {
+  app.listen(PORT, () => {
+    console.log(`\n🏊‍♂️🚴‍♂️🏃‍♂️ Triatlón Sucre Sin Límites 2.0`);
+    console.log(`🚀 Servidor corriendo en puerto ${PORT}`);
+    console.log(`🛡️  Seguridad: helmet + rate-limit + hpp activos`);
+    console.log(`📡 Ambiente: ${process.env.NODE_ENV || 'development'}\n`);
+  });
 });

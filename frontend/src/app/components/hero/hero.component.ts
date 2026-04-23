@@ -682,8 +682,8 @@ export class HeroComponent implements OnInit, OnDestroy {
     this.regSvc.getCount().subscribe({
       next: res => this.count.set(res.total),
       error: ()  => {
-        console.warn('Servidor local apagado, usando contador temporal = 15');
-        this.count.set(15);
+        console.warn('Backend no disponible, contador en 0 hasta conexión con TiDB Cloud');
+        this.count.set(0);
       }
     });
 
@@ -739,24 +739,8 @@ export class HeroComponent implements OnInit, OnDestroy {
   }
 
   cargarEstacionRespaldo() {
-    const backup = [
-      { id: 1, nombre: 'Yesenia Fernanda Rueda Fandiño', ciudad: 'Pendiente', disciplina: 'running', participo_primera_edicion: 'SI' },
-      { id: 2, nombre: 'María Fernanda Camargo Ariza', ciudad: 'Pendiente', disciplina: 'running', participo_primera_edicion: 'NO' },
-      { id: 3, nombre: 'Angie Daniela Camargo Ariza', ciudad: 'Pendiente', disciplina: 'running', participo_primera_edicion: 'NO' },
-      { id: 4, nombre: 'Deisy Yohana Medina Quitian', ciudad: 'Pendiente', disciplina: 'running', participo_primera_edicion: 'SI' },
-      { id: 5, nombre: 'Cristian Quiroga Marin', ciudad: 'Pendiente', disciplina: 'running', participo_primera_edicion: 'SI' },
-      { id: 6, nombre: 'EDGAR ARMANDO MARIN ARDILA', ciudad: 'Pendiente', disciplina: 'running', participo_primera_edicion: 'SI' },
-      { id: 7, nombre: 'JULIAN DAVID MONCADA VARGAS', ciudad: 'Pendiente', disciplina: 'ciclismo', participo_primera_edicion: 'NO' },
-      { id: 8, nombre: 'Leidy Ruiz', ciudad: 'Pendiente', disciplina: 'running', participo_primera_edicion: 'SI' },
-      { id: 9, nombre: 'Taylor Alirio Garcia Espinosa', ciudad: 'Pendiente', disciplina: 'running', participo_primera_edicion: 'SI' },
-      { id: 10, nombre: 'Armando Marin Marin', ciudad: 'Pendiente', disciplina: 'running', participo_primera_edicion: 'SI' },
-      { id: 11, nombre: 'Arley Ariza Marin', ciudad: 'Pendiente', disciplina: 'running', participo_primera_edicion: 'NO' },
-      { id: 12, nombre: 'Luis Evelio Quiroga Marin', ciudad: 'Pendiente', disciplina: 'running', participo_primera_edicion: 'NO' },
-      { id: 13, nombre: 'Daniel Stiven Quiroga Bareño', ciudad: 'Pendiente', disciplina: 'ciclismo', participo_primera_edicion: 'SI' },
-      { id: 14, nombre: 'Hugo Ariza Mateus', ciudad: 'Pendiente', disciplina: 'running', participo_primera_edicion: 'NO' },
-      { id: 15, nombre: 'Aminta Marin Marin', ciudad: 'Sucre', disciplina: 'running', participo_primera_edicion: 'SI' }
-    ];
-    this.inscritosList.set(backup);
+    // Sin datos de respaldo — en producción, los datos vienen únicamente de TiDB Cloud
+    this.inscritosList.set([]);
     this.loadingInscritos.set(false);
   }
 

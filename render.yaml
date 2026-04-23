@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: triatlon-backend
+    env: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: node index.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DB_HOST
+        value: gateway01.us-east-1.prod.aws.tidbcloud.com
+      - key: DB_PORT
+        value: "4000"
+      - key: DB_USER
+        value: 2N8umUU59jXSn1X.root
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_NAME
+        value: test
+      - key: DB_SSL
+        value: "true"
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CORS_ORIGINS
+        value: https://tu-dominio-vercel.vercel.app
+      - key: RECAPTCHA_SECRET_KEY
+        sync: false
+      - key: SMTP_PASS
+        sync: false
