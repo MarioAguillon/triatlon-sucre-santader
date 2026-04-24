@@ -39,18 +39,9 @@ import { Component, OnInit } from '@angular/core';
                 <h3 class="card-title">{{ d.name }}</h3>
                 <p class="card-desc">{{ d.desc }}</p>
 
-                <div class="card-stats">
-                  @for (s of d.stats; track s.label) {
-                    <div class="card-stat">
-                      <span class="cs-val">{{ s.value }}</span>
-                      <span class="cs-label">{{ s.label }}</span>
-                    </div>
-                  }
-                </div>
-
-                <!-- Categorías -->
+                <!-- Distancias -->
                 <div class="card-categories">
-                  <span class="cat-label">Categorías:</span>
+                  <span class="cat-label">Distancias:</span>
                   <div class="cat-tags">
                     @for (c of d.categorias; track c) {
                       <span class="cat-tag">{{ c }}</span>
@@ -348,11 +339,7 @@ export class DisciplinesComponent implements OnInit {
       image: 'running.png',
       color: '#00c853',
       desc:  'Recorre una ruta maravillosa iniciando donde se encuentra la quebrada Agua Blanca y el río Ture, ascendiendo por La Laja hasta finalizar en la Parroquia San Isidro.',
-      categorias: ['Elite', 'Recreativa', 'Niños'],
-      stats: [
-        { value: '6.5km',  label: 'Distancia Máx' },
-        { value: '4',      label: 'Categorías' },
-      ]
+      categorias: ['Élite: 6.5 km', 'Recreativa: 5.5 km', 'Infantil (5 a 9 años): 500 metros', 'Infantil (10 a 15 años): 1 km']
     },
     {
       order: '02',
@@ -361,11 +348,7 @@ export class DisciplinesComponent implements OnInit {
       image: 'ciclismo.png',
       color: '#0047cc',
       desc:  'Desafía las vías secundarias de Sucre, pasando por Casateja y Helechales, hasta la llegada triunfal en la plaza principal.',
-      categorias: ['Elite', 'Recreativa', 'Niños'],
-      stats: [
-        { value: '25km', label: 'Distancia Máx' },
-        { value: '4',    label: 'Categorías' },
-      ]
+      categorias: ['Élite: 25 km', 'Recreativa: 18 km', 'Infantil (5 a 9 años): 500 metros', 'Infantil (10 a 15 años): 1 km']
     },
     {
       order: '03',
@@ -373,12 +356,8 @@ export class DisciplinesComponent implements OnInit {
       name:  'Natación',
       image: 'natacion.png',
       color: '#1a6bff',
-      desc:  'Disfruta nadando en la piscina del centro recreacional de Sucre. Un ambiente inigualable estilo olímpico bajo la atención del equipo local.',
-      categorias: ['Hombres', 'Mujeres', 'Niños'],
-      stats: [
-        { value: '160m', label: 'Hombres' },
-        { value: '150m', label: 'Mujeres' },
-      ]
+      desc:  'Disfruta nadando en la piscina del Centro Recreacional de Sucre, un ambiente inigualable que eleva la experiencia, donde el entusiasmo del público y el calor humano hacen vibrar cada competencia como en los grandes eventos.',
+      categorias: ['Hombres: 160 metros', 'Mujeres: 150 metros', 'Infantil (5 a 9 años): 20 metros', 'Infantil (10 a 15 años): 40 metros']
     },
   ];
 }

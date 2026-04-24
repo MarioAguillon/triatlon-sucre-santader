@@ -65,12 +65,9 @@ CREATE TABLE IF NOT EXISTS admins (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
--- DATOS INICIALES — Patrocinadores de ejemplo
+-- DATOS INICIALES — Patrocinadores de ejemplo (VACIADO)
 -- ============================================================
-INSERT IGNORE INTO patrocinadores (nombre, tipo, sitio_web) VALUES
-  ('Alcaldía de Sucre', 'alcaldia', NULL),
-  ('Gobernación de Santander', 'alcaldia', 'https://santander.gov.co'),
-  ('Deportes Santander', 'empresa', NULL);
+-- Actualmente no hay patrocinadores.
 
 -- ============================================================
 -- ADMIN POR DEFECTO
@@ -82,3 +79,20 @@ INSERT IGNORE INTO patrocinadores (nombre, tipo, sitio_web) VALUES
 INSERT INTO admins (usuario, password_hash, nombre) VALUES
   ('admin', '$2a$10$61OT/u2IKbXni2Trbi1DO.79lxL3w1HjFiELlRmflrqWJUG9TC0WK', 'Administrador')
 ON DUPLICATE KEY UPDATE password_hash = '$2a$10$61OT/u2IKbXni2Trbi1DO.79lxL3w1HjFiELlRmflrqWJUG9TC0WK';
+
+-- ============================================================
+-- TABLA: reservas_camisetas
+-- ============================================================
+CREATE TABLE IF NOT EXISTS reservas_camisetas (
+  id             INT AUTO_INCREMENT PRIMARY KEY,
+  modelo         VARCHAR(100) NOT NULL,
+  nombre         VARCHAR(150) NOT NULL,
+  correo         VARCHAR(150) NOT NULL,
+  celular        VARCHAR(25)  NOT NULL,
+  talla          VARCHAR(10)  NOT NULL,
+  cantidad       INT          NOT NULL,
+  fecha_reserva  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+  INDEX idx_correo (correo),
+  INDEX idx_fecha (fecha_reserva)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

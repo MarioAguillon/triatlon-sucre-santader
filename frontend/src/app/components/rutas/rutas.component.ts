@@ -430,7 +430,9 @@ export class RutasComponent implements OnInit {
         desc: 'Salida desde el nacimiento de la quebrada Agua Blanca, ascendiendo por toda la vereda La Laja hasta el sector del Molino. Continúa por el cerro La Virgen, la piscina y la parte baja del casco urbano. Luego gira a la izquierda en la vivienda de la señora Miriam Ariza, desciende hacia el Camino Real y finaliza con el ascenso hacia la iglesia principal.',
         stats: [
           { label: 'Altitud', value: '1.200m', icon: 'landscape' },
-          { label: 'Terreno', value: 'Mixto', icon: 'terrain' }
+          { label: 'Terreno', value: 'Mixto', icon: 'terrain' },
+          { label: 'Infantil 5-9', value: '500m', icon: 'child_care' },
+          { label: 'Infantil 10-15', value: '1km', icon: 'boy' }
         ]
       },
       back: {
@@ -440,7 +442,9 @@ export class RutasComponent implements OnInit {
         desc: 'Salida desde la vereda La Laja, iniciando el ascenso hasta el sector del Molino. Continúa por la piscina, la feria de ganado y la parte baja de la plaza principal. Luego gira frente al palacio municipal y finaliza nuevamente en la iglesia principal.',
         stats: [
           { label: 'Altitud', value: '1.150m', icon: 'landscape' },
-          { label: 'Esfuerzo', value: 'Medio', icon: 'speed' }
+          { label: 'Esfuerzo', value: 'Medio', icon: 'speed' },
+          { label: 'Infantil 5-9', value: '500m', icon: 'child_care' },
+          { label: 'Infantil 10-15', value: '1km', icon: 'boy' }
         ]
       }
     },
@@ -457,7 +461,9 @@ export class RutasComponent implements OnInit {
         desc: 'Salida desde la iglesia principal en dirección a La 68. Ascenso hasta el punto de hidratación en la loma del Mosco, continuando por Peña de Órganos, Casino y descenso hacia el Cajón. Giro a la izquierda hacia Casa Teja, paso por Lechales y segundo punto de hidratación en Plan de Marines. Luego asciende hasta el pueblo, gira a la izquierda por la vivienda de la señora Miriam, continúa por el Camino Real y finaliza con el ascenso hacia la iglesia principal.',
         stats: [
           { label: 'Elevación', value: '+450m', icon: 'trending_up' },
-          { label: 'Dificultad', value: 'Alta', icon: 'bolt' }
+          { label: 'Dificultad', value: 'Alta', icon: 'bolt' },
+          { label: 'Infantil 5-9', value: '500m', icon: 'child_care' },
+          { label: 'Infantil 10-15', value: '1km', icon: 'boy' }
         ]
       },
       back: {
@@ -467,7 +473,9 @@ export class RutasComponent implements OnInit {
         desc: 'Salida desde la iglesia principal en dirección al cementerio. Giro a la derecha por la vivienda de Ximena Ariza, descenso hacia la quebrada y ascenso por la cascada Los Micos. En Santa Rosa, giro a la izquierda hasta conectar con la vía de Lechales. Luego continúa el ascenso por Plan de Marines, punto de hidratación, y regreso por la entrada al pueblo hasta finalizar nuevamente frente a la iglesia.',
         stats: [
           { label: 'Elevación', value: '+310m', icon: 'trending_up' },
-          { label: 'Dificultad', value: 'Media', icon: 'pedal_bike' }
+          { label: 'Dificultad', value: 'Media', icon: 'pedal_bike' },
+          { label: 'Infantil 5-9', value: '500m', icon: 'child_care' },
+          { label: 'Infantil 10-15', value: '1km', icon: 'boy' }
         ]
       }
     },
@@ -478,13 +486,15 @@ export class RutasComponent implements OnInit {
       isFlippable: false,
       isFlipped: false,
       front: {
-        category: 'Categoría Única',
+        category: '',
         distance: '160 m',
-        mapImg: 'paisaje3.jpg',
+        mapImg: 'natacion.jpg',
         desc: 'Natación en el centro recreacional de Sucre. Una experiencia única con atención VIP y el calor humano del pueblo sucreño animando.',
         stats: [
           { label: 'Hombres', value: '160m', icon: 'man' },
-          { label: 'Mujeres', value: '150m', icon: 'woman' }
+          { label: 'Mujeres', value: '150m', icon: 'woman' },
+          { label: 'Infantil 5-9', value: '20m', icon: 'child_care' },
+          { label: 'Infantil 10-15', value: '40m', icon: 'boy' }
         ]
       }
     }

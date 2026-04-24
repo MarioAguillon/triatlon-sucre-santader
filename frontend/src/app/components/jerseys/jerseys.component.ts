@@ -1,7 +1,9 @@
 // ============================================================
 // components/jerseys/jerseys.component.ts
 // ============================================================
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector:   'app-jerseys',
@@ -34,25 +36,10 @@ import { Component, OnInit } from '@angular/core';
               </video>
             </div>
             <div class="jersey-info">
-              <h3 class="jersey-title">Running Siza</h3>
+              <h3 class="jersey-title">Running Sisa</h3>
               <p class="jersey-desc">Camiseta técnica unisex ideal para largas distancias con máximo confort.</p>
+              <div style="font-family: 'Bebas Neue', cursive; font-size: 2rem; color: #00c853; margin-bottom: 1rem; letter-spacing: 0.05em;">$36.000</div>
               <button class="btn btn-primary btn-jersey" (click)="abrirModal('Running Siza')">
-                <span class="material-symbols-outlined" style="margin-right: 5px; vertical-align: middle;">shopping_cart</span> Reservar
-              </button>
-            </div>
-          </div>
-
-          <!-- Video 2: Ciclismo (Jersey) -->
-          <div class="jersey-card glass">
-            <div class="video-container">
-              <video autoplay loop muted playsinline class="jersey-video">
-                <source src="camisetas/jersey.mp4" type="video/mp4" />
-              </video>
-            </div>
-            <div class="jersey-info">
-              <h3 class="jersey-title">Ciclismo Oficial</h3>
-              <p class="jersey-desc">Jersey aero de secado rápido con ajuste perfecto para ruta.</p>
-              <button class="btn btn-primary btn-jersey" (click)="abrirModal('Ciclismo Oficial')">
                 <span class="material-symbols-outlined" style="margin-right: 5px; vertical-align: middle;">shopping_cart</span> Reservar
               </button>
             </div>
@@ -68,11 +55,12 @@ import { Component, OnInit } from '@angular/core';
             <div class="jersey-info">
               <h3 class="jersey-title">Running Clásica</h3>
               <p class="jersey-desc">Diseño exclusivo y ligero para enfrentar el tramo a pie de Sucre.</p>
+              <div style="font-family: 'Bebas Neue', cursive; font-size: 2rem; color: #00c853; margin-bottom: 1rem; letter-spacing: 0.05em;">$40.000</div>
               <button class="btn btn-primary btn-jersey" (click)="abrirModal('Running Clásica')">
                 <span class="material-symbols-outlined" style="margin-right: 5px; vertical-align: middle;">shopping_cart</span> Reservar
               </button>
             </div>
-          </div>
+          </div>     </div>
         </div>
       </div>
       
@@ -104,7 +92,7 @@ import { Component, OnInit } from '@angular/core';
                 Llena tus datos para reservar tu camiseta oficial del evento.
               </p>
 
-              <form class="modal-form" (submit)="enviarpedido($event, nombre.value, talla.value, cantidad.value)">
+              <form class="modal-form" (submit)="enviarpedido($event, nombre.value, correo.value, celular.value, talla.value, cantidad.value)">
 
                 <div class="form-group">
                   <label>Modelo Seleccionado (Unisex)</label>
@@ -114,6 +102,17 @@ import { Component, OnInit } from '@angular/core';
                 <div class="form-group">
                   <label>Nombre y Apellidos *</label>
                   <input type="text" #nombre class="form-control" placeholder="Ej. Carlos Rodríguez" required />
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group half">
+                    <label>Correo Electrónico *</label>
+                    <input type="email" #correo class="form-control" placeholder="Ej. correo@mail.com" required />
+                  </div>
+                  <div class="form-group half">
+                    <label>Celular / WhatsApp *</label>
+                    <input type="tel" #celular class="form-control" placeholder="Ej. 3001234567" required />
+                  </div>
                 </div>
 
                 <div class="form-row">
@@ -180,7 +179,9 @@ import { Component, OnInit } from '@angular/core';
     /* ── Grid Videos ─────────────────────────── */
     .jerseys-videos-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 1fr);
+      max-width: 800px;
+      margin-inline: auto;
       gap: 2rem;
       margin-bottom: 3rem;
     }
@@ -508,6 +509,9 @@ export class JerseysComponent implements OnInit {
   tallaSeleccionada = '';
   cantidadSeleccionada = '';
 
+  private http = inject(HttpClient);
+  private apiUrl = `${environment.apiUrl}/jerseys/reserve`;
+
   ngOnInit() {
     this.particles = Array.from({ length: 20 }, () => {
       const x = Math.random() * 100;
@@ -535,17 +539,35 @@ export class JerseysComponent implements OnInit {
     document.body.style.overflow = '';
   }
 
-  enviarpedido(event: Event, nombre: string, talla: string, cantidad: string) {
+  enviarpedido(event: Event, nombre: string, correo: string, celular: string, talla: string, cantidad: string) {
     event.preventDefault();
 
-    if (!nombre || !talla || !cantidad) {
+    if (!nombre || !correo || !celular || !talla || !cantidad) {
       alert('Por favor completa todos los campos requeridos.');
       return;
     }
 
-    // Guardar datos de la reserva y mostrar estado de éxito
-    this.tallaSeleccionada = talla;
-    this.cantidadSeleccionada = cantidad;
-    this.reservaExitosa = true;
+    const payload = {
+      modelo: this.modeloSeleccionado,
+      nombre,
+      correo,
+      celular,
+      talla,
+      cantidad
+    };
+
+    // Guardar datos en el backend
+    this.http.post(this.apiUrl, payload).subscribe({
+      next: (response: any) => {
+        // Mostrar estado de éxito y mantener el mismo modal
+        this.tallaSeleccionada = talla;
+        this.cantidadSeleccionada = cantidad;
+        this.reservaExitosa = true;
+      },
+      error: (err) => {
+        console.error('Error al reservar la camiseta', err);
+        alert('Hubo un error al procesar tu reserva. Intenta de nuevo.');
+      }
+    });
   }
 }

@@ -93,6 +93,10 @@ app.use('/api/auth',         authRouter);
 app.use('/api/participants', participantsRouter);
 app.use('/api/sponsors',     sponsorsRouter);
 
+// Ruta para reservas de camisetas con limitador global (100 peticiones / 15 min es suficiente)
+const jerseysRouter = require('./src/routes/jerseys');
+app.use('/api/jerseys',      jerseysRouter);
+
 // Aplicar rate limit estricto solo al POST de registro
 app.use('/api/participants', (req, _res, next) => {
   if (req.method === 'POST' && req.path === '/') {
