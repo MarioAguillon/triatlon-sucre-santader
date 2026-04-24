@@ -3,9 +3,9 @@
 // ============================================================
 export const environment = {
   production: true,
-  // URL de tu backend en Render (render.yaml define el nombre como 'triatlon-backend')
-  // Si Render te asigna un nombre diferente, actualízalo aquí.
-  apiUrl: 'https://triatlon-backend.onrender.com',
+  // URL de tu backend en Render
+  // Asegúrate de que termine en /api
+  apiUrl: 'https://triatlon-backend.onrender.com/api',
   // reCAPTCHA v2 — Reemplazar con tu clave real de producción
   recaptchaSiteKey: '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI',
 };
