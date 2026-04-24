@@ -3,7 +3,7 @@
 // ============================================================
 import { Component, OnInit, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../../environments/environment';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector:   'app-jerseys',
@@ -60,7 +60,7 @@ import { environment } from '../../../../environments/environment';
                 <span class="material-symbols-outlined" style="margin-right: 5px; vertical-align: middle;">shopping_cart</span> Reservar
               </button>
             </div>
-          </div>     </div>
+          </div>
         </div>
       </div>
       
