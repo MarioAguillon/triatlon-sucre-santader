@@ -33,6 +33,10 @@ export class RegistrationService {
     return this.http.get<Sponsor[]>(`${this.api}/sponsors`);
   }
 
+  getPublicParticipants(): Observable<{ data: any[] }> {
+    return this.http.get<{ data: any[] }>(`${this.api}/participants/public`);
+  }
+
   // ── Admin (requiere JWT, manejado por interceptor) ───────
   getParticipants(page = 1, limit = 20, search = ''): Observable<ParticipantsListResponse> {
     return this.http.get<ParticipantsListResponse>(

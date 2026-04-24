@@ -10,7 +10,7 @@ import {
   Participant,
   Disciplina,
   Categoria,
-  CATEGORIAS_POR_DISCIPLINA,
+  CATEGORIAS_GLOBALES,
 } from '../../models/participant.model';
 
 type FormState = 'idle' | 'loading' | 'success' | 'error';
@@ -179,50 +179,42 @@ type FormState = 'idle' | 'loading' | 'success' | 'error';
                     </select>
                   </div>
 
-                  <!-- Disciplina -->
+                  <!-- Disciplina (Múltiple) -->
                   <div class="form-group full">
-                    <label for="reg-disciplina">Disciplina *</label>
-                    <select
-                      id="reg-disciplina"
-                      name="disciplina"
-                      [(ngModel)]="form.disciplina"
-                      required
-                      (ngModelChange)="onDisciplinaChange($event)"
-                    >
-                      <option value="" disabled>Selecciona una disciplina</option>
+                    <label>Disciplina (Puedes elegir varias) *</label>
+                    <div class="checkbox-group">
                       @for (d of disciplinas; track d.value) {
-                        <option [value]="d.value">{{ d.label }}</option>
+                        <label class="checkbox-label">
+                          <input
+                            type="checkbox"
+                            [value]="d.value"
+                            (change)="onDisciplinaToggle(d.value, $event)"
+                            [checked]="selectedDisciplinasSet.has(d.value)"
+                          />
+                          <span class="checkbox-text">{{ d.label }}</span>
+                        </label>
                       }
-                    </select>
+                    </div>
                   </div>
 
-                  <!-- Categoría (dinámica) -->
-                  @if (categoriasDisponibles().length > 1) {
-                    <div class="form-group full">
-                      <label for="reg-categoria">Categoría *</label>
-                      <select
-                        id="reg-categoria"
-                        name="categoria"
-                        [(ngModel)]="form.categoria"
-                        required
-                      >
-                        <option value="" disabled>Selecciona una categoría</option>
-                        @for (c of categoriasDisponibles(); track c.value) {
-                          <option [value]="c.value">{{ c.label }}</option>
-                        }
-                      </select>
-                      <span class="field-hint">
-                        Selecciona tu nivel de competencia
-                      </span>
-                    </div>
-                  } @else if (categoriasDisponibles().length === 1) {
-                    <div class="form-group full">
-                      <div class="category-info-box">
-                        <span class="material-symbols-outlined">info</span>
-                        <span>Disciplina con <strong>Categoría Única</strong></span>
-                      </div>
-                    </div>
-                  }
+                  <!-- Categoría (Global) -->
+                  <div class="form-group full">
+                    <label for="reg-categoria">Categoría (Nivel de competencia) *</label>
+                    <select
+                      id="reg-categoria"
+                      name="categoria"
+                      [(ngModel)]="form.categoria"
+                      required
+                    >
+                      <option value="" disabled>Selecciona una categoría</option>
+                      @for (c of categoriasGlobales; track c.value) {
+                        <option [value]="c.value">{{ c.label }}</option>
+                      }
+                    </select>
+                    <span class="field-hint">
+                      Selecciona tu nivel. Aplicará para todas las disciplinas que elijas.
+                    </span>
+                  </div>
                 </div>
 
                 <!-- Google reCAPTCHA v2 Real -->
@@ -417,6 +409,32 @@ type FormState = 'idle' | 'loading' | 'success' | 'error';
 
     select option { background: #131720; }
 
+    .checkbox-group {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin-top: 0.5rem;
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      font-size: 0.95rem;
+      color: var(--c-white);
+      text-transform: none;
+      letter-spacing: normal;
+      font-weight: 500;
+    }
+
+    .checkbox-label input {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      accent-color: var(--c-blue);
+    }
+
     .field-hint {
       font-size: 0.72rem;
       color: var(--c-muted);
@@ -598,7 +616,7 @@ export class RegistrationComponent implements OnInit, AfterViewInit {
 
   form: Participant = {
     nombre: '', edad: 0, ciudad: '', telefono: '',
-    correo: '', disciplina: '' as Disciplina, categoria: '' as Categoria,
+    correo: '', disciplina: '', categoria: '' as Categoria,
     participo_primera_edicion: '' as any
   };
 
@@ -609,14 +627,9 @@ export class RegistrationComponent implements OnInit, AfterViewInit {
   successMessage = signal('');
   successPrice   = signal(0);
 
-  // Disciplina seleccionada → categorías dinámicas
-  selectedDisciplina = signal<Disciplina | ''>('');
+  selectedDisciplinasSet = new Set<string>();
 
-  categoriasDisponibles = computed(() => {
-    const disc = this.selectedDisciplina();
-    if (!disc) return [];
-    return CATEGORIAS_POR_DISCIPLINA[disc] || [];
-  });
+  categoriasGlobales = CATEGORIAS_GLOBALES;
 
   disciplinas = [
     { value: 'running',  label: 'Running' },
@@ -632,20 +645,26 @@ export class RegistrationComponent implements OnInit, AfterViewInit {
     'Póliza de asistencia',
   ];
 
-  onDisciplinaChange(disc: Disciplina) {
-    this.selectedDisciplina.set(disc);
-    // Reset categoría al cambiar disciplina
-    this.form.categoria = '' as Categoria;
-
-    // Si solo hay una categoría, auto-seleccionarla
-    const cats = CATEGORIAS_POR_DISCIPLINA[disc];
-    if (cats && cats.length === 1) {
-      this.form.categoria = cats[0].value;
+  onDisciplinaToggle(value: string, event: Event) {
+    const isChecked = (event.target as HTMLInputElement).checked;
+    if (isChecked) {
+      this.selectedDisciplinasSet.add(value);
+    } else {
+      this.selectedDisciplinasSet.delete(value);
     }
   }
 
   submit() {
     if (this.formState() === 'loading') return;
+    
+    if (this.selectedDisciplinasSet.size === 0) {
+      this.formState.set('error');
+      this.errorMessage.set('Debes seleccionar al menos una disciplina.');
+      return;
+    }
+
+    this.form.disciplina = Array.from(this.selectedDisciplinasSet).join(', ');
+
     this.formState.set('loading');
     this.errorMessage.set('');
 
@@ -678,10 +697,10 @@ export class RegistrationComponent implements OnInit, AfterViewInit {
   resetForm() {
     this.form = {
       nombre: '', edad: 0, ciudad: '', telefono: '',
-      correo: '', disciplina: '' as Disciplina, categoria: '' as Categoria,
+      correo: '', disciplina: '', categoria: '' as Categoria,
       participo_primera_edicion: '' as any
     };
-    this.selectedDisciplina.set('');
+    this.selectedDisciplinasSet.clear();
     this.formState.set('idle');
     this.resetCaptcha();
   }

@@ -10,11 +10,7 @@ const { enviarCorreoConfirmacion } = require('../services/emailService');
 
 // ── Constantes de validación ────────────────────────────────
 const DISCIPLINAS_VALIDAS = ['running', 'ciclismo', 'natacion'];
-const CATEGORIAS_VALIDAS = {
-  running:  ['elite', 'recreativa', 'ninos'],
-  ciclismo: ['elite', 'recreativa', 'ninos'],
-  natacion: ['natacion'],
-};
+const CATEGORIAS_VALIDAS = ['elite', 'recreativa', 'ninos'];
 
 // ── Calcular precio según fecha ─────────────────────────────
 function calcularPrecio() {
@@ -82,10 +78,16 @@ router.post('/',
   body('disciplina')
     .trim()
     .notEmpty().withMessage('Disciplina es requerida')
-    .isIn(DISCIPLINAS_VALIDAS).withMessage('Disciplina inválida'),
+    .custom((value) => {
+      const parts = value.split(',').map(d => d.trim());
+      const allValid = parts.every(p => DISCIPLINAS_VALIDAS.includes(p));
+      if (!allValid) throw new Error('Contiene disciplinas inválidas');
+      return true;
+    }),
   body('categoria')
     .trim()
-    .notEmpty().withMessage('Categoría es requerida'),
+    .notEmpty().withMessage('Categoría es requerida')
+    .isIn(CATEGORIAS_VALIDAS).withMessage('Categoría inválida'),
   body('participo_primera_edicion')
     .isIn(['SI', 'NO']).withMessage('Respuesta inválida para participación previa'),
   body('captchaToken')
@@ -113,13 +115,7 @@ router.post('/',
       return res.status(400).json({ error: 'Verificación de reCAPTCHA fallida. Intenta de nuevo.' });
     }
 
-    // Validación cruzada: categoría válida para la disciplina seleccionada
-    const categoriasValidas = CATEGORIAS_VALIDAS[disciplina];
-    if (!categoriasValidas || !categoriasValidas.includes(categoria)) {
-      return res.status(400).json({
-        error: `Categoría inválida para ${disciplina}. Opciones: ${categoriasValidas?.join(', ') || 'ninguna'}`
-      });
-    }
+    // Ya no se requiere validación cruzada por disciplina ya que la categoría es global
 
     try {
       // Verificar correo duplicado con prepared statement
@@ -195,6 +191,21 @@ router.get('/count', async (_req, res) => {
     res.json({ total: rows[0].total });
   } catch (err) {
     console.error('Error contando participantes:', err);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
+
+// ────────────────────────────────────────────────────────────
+// GET /api/participants/public — Listar todos (PÚBLICO)
+// ────────────────────────────────────────────────────────────
+router.get('/public', async (req, res) => {
+  try {
+    const [data] = await pool.execute(
+      'SELECT id, nombre, disciplina, ciudad, participo_primera_edicion FROM participantes WHERE activo = 1 ORDER BY fecha_inscripcion DESC'
+    );
+    res.json({ data });
+  } catch (err) {
+    console.error('Error listando participantes públicos:', err);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });

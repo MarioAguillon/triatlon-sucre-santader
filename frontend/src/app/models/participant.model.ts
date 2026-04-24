@@ -5,26 +5,14 @@
 // ── Disciplinas independientes ──────────────────────────────
 export type Disciplina = 'running' | 'ciclismo' | 'natacion';
 
-// ── Categorías por disciplina ───────────────────────────────
-export type Categoria = 'elite' | 'recreativa' | 'ninos' | 'natacion';
+// ── Categorías Globales ───────────────────────────────
+export type Categoria = 'elite' | 'recreativa' | 'ninos';
 
-// Mapa de categorías válidas por disciplina
-// (preparado para agregar nuevas categorías fácilmente)
-export const CATEGORIAS_POR_DISCIPLINA: Record<Disciplina, { value: Categoria; label: string }[]> = {
-  running: [
-    { value: 'elite',      label: 'Elite' },
-    { value: 'recreativa', label: 'Recreativa' },
-    { value: 'ninos',      label: 'Niños' },
-  ],
-  ciclismo: [
-    { value: 'elite',      label: 'Elite' },
-    { value: 'recreativa', label: 'Recreativa' },
-    { value: 'ninos',      label: 'Niños' },
-  ],
-  natacion: [
-    { value: 'natacion',   label: 'Natación' },
-  ],
-};
+export const CATEGORIAS_GLOBALES = [
+  { value: 'elite',      label: 'Élite (Competitivo)' },
+  { value: 'recreativa', label: 'Recreativa (Aficionado)' },
+  { value: 'ninos',      label: 'Infantil / Niños' },
+];
 
 export interface Participant {
   id?:               number;
@@ -33,7 +21,7 @@ export interface Participant {
   ciudad:            string;
   telefono:          string;
   correo:            string;
-  disciplina:        Disciplina;
+  disciplina:        string; // string for multiple e.g., 'running, ciclismo'
   categoria:         Categoria;
   participo_primera_edicion: 'SI' | 'NO';
   precio_aplicado?:  number;

@@ -33,10 +33,17 @@ import { Component, OnInit, OnDestroy, signal } from '@angular/core';
           <div class="carousel-track" [style.transform]="'translateX(-' + currentIndex() * 100 + '%)'">
             @for (img of images; track $index) {
               <div class="carousel-slide">
-                <img [src]="img" 
-                     [alt]="'Primera Edición - Foto ' + ($index + 1)" 
+                <img [src]="img.url" 
+                     [alt]="'Primera Edición - ' + img.credito" 
                      loading="lazy" 
-                     [style.object-position]="$index === 3 ? 'center 15%' : ($index === 14 ? 'center 20%' : 'center center')" />
+                     [style.object-fit]="img.fit || 'cover'"
+                     [style.object-position]="img.position || 'center center'" />
+                @if (img.credito) {
+                  <div class="carousel-caption">
+                    <span class="material-symbols-outlined" style="font-size: 16px; margin-right: 4px;">photo_camera</span>
+                    Foto por: <strong>{{ img.credito }}</strong>
+                  </div>
+                }
               </div>
             }
           </div>
@@ -109,13 +116,30 @@ import { Component, OnInit, OnDestroy, signal } from '@angular/core';
       min-width: 100%;
       aspect-ratio: 16/9;
       overflow: hidden;
+      position: relative;
     }
 
     .carousel-slide img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
       display: block;
+    }
+
+    .carousel-caption {
+      position: absolute;
+      bottom: 2rem;
+      right: 2rem;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(8px);
+      padding: 0.5rem 1rem;
+      border-radius: var(--r-md);
+      color: #fff;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      z-index: 2;
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
 
     /* ── Arrows ─────────────────────── */
@@ -209,16 +233,39 @@ import { Component, OnInit, OnDestroy, signal } from '@angular/core';
   `]
 })
 export class GalleryPrimeraComponent implements OnInit, OnDestroy {
-  // Las imágenes de esta galería se cargan desde /public/primera/
-  images: string[] = [];
+  // Las imágenes de esta galería se cargan desde public/primera/
+  images: { url: string, credito: string, position?: string, fit?: string }[] = [];
   currentIndex = signal(0);
   particles: string[] = [];
   private autoplayTimer: any;
   private autoplayDelay = 4000;
 
   ngOnInit() {
-    // Generar 18 imágenes en orden numérico
-    this.images = Array.from({ length: 18 }, (_, i) => `primera/primera${i + 1}.jpg`);
+    // Lista de fotos existentes de la edición pasada.
+    // Aquí es donde agregarás nuevas líneas cuando te envíen fotos.
+    this.images = [
+      { url: 'primera/primera1.jpg', credito: 'Archivo Oficial' },
+      { url: 'primera/primera2.jpg', credito: 'Archivo Oficial' },
+      { url: 'primera/primera3.jpg', credito: 'Archivo Oficial' },
+      { url: 'primera/primera4.jpg', credito: 'Archivo Oficial', position: 'center 15%', fit: 'contain' },
+      { url: 'primera/primera5.jpg', credito: 'Archivo Oficial' },
+      { url: 'primera/primera6.jpg', credito: 'Archivo Oficial' },
+      { url: 'primera/primera7.jpg', credito: 'Archivo Oficial' },
+      { url: 'primera/primera8.jpg', credito: 'Archivo Oficial' },
+      { url: 'primera/primera9.jpg', credito: 'Archivo Oficial' },
+      { url: 'primera/primera10.jpg', credito: 'Archivo Oficial' },
+      { url: 'primera/primera11.jpg', credito: 'Archivo Oficial' },
+      { url: 'primera/primera12.jpg', credito: 'Archivo Oficial' },
+      { url: 'primera/primera13.jpg', credito: 'Archivo Oficial' },
+      { url: 'primera/primera14.jpg', credito: 'Archivo Oficial' },
+      { url: 'primera/primera15.jpg', credito: 'Archivo Oficial', position: 'center 20%', fit: 'contain' },
+      { url: 'primera/primera16.jpg', credito: 'Archivo Oficial' },
+      { url: 'primera/primera17.jpg', credito: 'Archivo Oficial', fit: 'contain' },
+      { url: 'primera/primera18.jpg', credito: 'Archivo Oficial' },
+      { url: 'primera/foto_fernanda_Camargo.webp', credito: 'Fernanda Camargo', fit: 'contain' },
+      // ¡AÑADE NUEVAS FOTOS DEBAJO DE ESTA LÍNEA!
+      // Ejemplo: { url: 'primera/foto_alejandra_camargo.webp', credito: 'Alejandra Camargo' },
+    ];
 
     // Partículas
     this.particles = Array.from({ length: 15 }, () => {

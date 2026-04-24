@@ -19,10 +19,10 @@ import { Component, OnInit, OnDestroy, signal } from '@angular/core';
 
       <div class="container">
         <div class="section-header">
-          <p class="section-label">Descubre el paraíso</p>
-          <h2 class="section-title">Paisajes de Sucre</h2>
+          <p class="section-label">Comparte la Belleza</p>
+          <h2 class="section-title">Magia de Sucre</h2>
           <p class="section-subtitle section-invite">
-            ¿Quieres que tu paisaje aparezca aquí?
+            ¿Tienes una foto de un paisaje o lugar hermoso de Sucre? ¡Queremos que aparezca aquí!
           </p>
           <a href="mailto:triatlonsucresantander@gmail.com?subject=Quiero%20compartir%20un%20paisaje%20para%20la%20Triatl%C3%B3n%20Sucre%20Santander&body=Hola,%20quiero%20compartir%20una%20fotograf%C3%ADa%20o%20paisaje%20para%20la%20Triatl%C3%B3n%20Sucre%20Santander." class="btn btn-outline paisaje-contact-btn">
             📸 Contáctame
@@ -37,7 +37,11 @@ import { Component, OnInit, OnDestroy, signal } from '@angular/core';
             @for (item of mediaItems; track $index) {
               <div class="carousel-slide">
                 @if (item.type === 'image') {
-                  <img [src]="item.src" [alt]="'Paisaje de Sucre ' + ($index + 1)" loading="lazy" [style.object-position]="item.position || 'center'" />
+                  <img [src]="item.src" 
+                       [alt]="'Magia de Sucre - ' + (item.credito || 'Foto')" 
+                       loading="lazy" 
+                       [style.object-fit]="item.fit || 'cover'"
+                       [style.object-position]="item.position || 'center'" />
                 }
                 @if (item.type === 'video') {
                   <video [src]="item.src"
@@ -47,6 +51,12 @@ import { Component, OnInit, OnDestroy, signal } from '@angular/core';
                          autoplay
                          class="carousel-video">
                   </video>
+                }
+                @if (item.credito) {
+                  <div class="carousel-caption">
+                    <span class="material-symbols-outlined" style="font-size: 16px; margin-right: 4px;">photo_camera</span>
+                    Foto por: <strong>{{ item.credito }}</strong>
+                  </div>
                 }
               </div>
             }
@@ -135,14 +145,31 @@ import { Component, OnInit, OnDestroy, signal } from '@angular/core';
       aspect-ratio: 16/9;
       overflow: hidden;
       background: #000;
+      position: relative;
     }
 
     .carousel-slide img,
     .carousel-video {
       width: 100%;
       height: 100%;
-      object-fit: cover;
       display: block;
+    }
+
+    .carousel-caption {
+      position: absolute;
+      bottom: 2rem;
+      right: 2rem;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(8px);
+      padding: 0.5rem 1rem;
+      border-radius: var(--r-md);
+      color: #fff;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      z-index: 2;
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
 
     /* ── Arrows ─────────────────────── */
@@ -229,7 +256,7 @@ import { Component, OnInit, OnDestroy, signal } from '@angular/core';
 })
 export class GalleryPaisajesComponent implements OnInit, OnDestroy {
   // Las imágenes de esta galería se cargan desde /public/paisajes/
-  mediaItems: { src: string; type: 'image' | 'video', position?: string }[] = [];
+  mediaItems: { src: string; type: 'image' | 'video', position?: string, credito?: string, fit?: string }[] = [];
   currentIndex = signal(0);
   particles: string[] = [];
   private autoplayTimer: any;
@@ -238,14 +265,13 @@ export class GalleryPaisajesComponent implements OnInit, OnDestroy {
   ngOnInit() {
     // Cargar fotografías
     this.mediaItems = [
-      { src: 'paisajes/paisaje1.jpg', type: 'image' },
-      { src: 'paisajes/paisaje2.jpg', type: 'image' },
-      { src: 'paisajes/paisaje3.jpg', type: 'image' },
-      { src: 'paisajes/paisaje4.jpg', type: 'image', position: 'center 20%' },
-      { src: 'paisajes/paisaje5.jpg', type: 'image', position: 'center 10%' },
-      // Cargar videos si existen
-      { src: 'paisajes/video1.mp4', type: 'video' },
-      { src: 'paisajes/video2.mp4', type: 'video' },
+      { src: 'paisajes/paisaje1.jpg', type: 'image', credito: 'Archivo Oficial' },
+      { src: 'paisajes/paisaje2.jpg', type: 'image', credito: 'Armando Marin' },
+      { src: 'paisajes/paisaje3.jpg', type: 'image', credito: 'Archivo Oficial' },
+      { src: 'paisajes/paisaje4.jpg', type: 'image', position: 'center 20%', credito: 'Archivo Oficial', fit: 'contain' },
+      { src: 'paisajes/paisaje5.jpg', type: 'image', position: 'center 10%', credito: 'Archivo Oficial', fit: 'contain' },
+      // ¡AÑADE NUEVAS FOTOS DE PAISAJES DEBAJO DE ESTA LÍNEA!
+      // Ejemplo: { src: 'paisajes/foto_carlos_gomez.webp', type: 'image', credito: 'Carlos Gómez' },
     ];
 
     // Partículas

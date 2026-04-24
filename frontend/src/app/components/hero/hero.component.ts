@@ -82,9 +82,12 @@ import { RegistrationService }       from '../../services/registration.service';
         </div>
 
         <div class="hero-stats animate-fade-up" style="animation-delay:0.7s">
-          <button class="stat stat-btn" (click)="abrirModalInscritos()" aria-label="Ver lista de inscritos">
+          <button class="stat stat-btn glow-effect" (click)="abrirModalInscritos()" aria-label="Ver lista de inscritos">
             <span class="stat-num">{{ count() }}+</span>
-            <span class="stat-label">Inscritos</span>
+            <div class="stat-label-interactive">
+              <span class="material-symbols-outlined" style="font-size: 14px; margin-right: 4px;">visibility</span>
+              <span class="stat-label">Ver Inscritos</span>
+            </div>
           </button>
           <div class="stat-divider"></div>
           <div class="stat">
@@ -379,18 +382,44 @@ import { RegistrationService }       from '../../services/registration.service';
     }
     
     .stat-btn {
-      background: none;
-      border: none;
-      padding: 0.5rem;
+      background: rgba(26,107,255,0.05);
+      border: 1px solid rgba(26,107,255,0.2);
+      padding: 0.8rem 1.2rem;
       cursor: pointer;
       border-radius: var(--r-md);
       transition: all 0.3s ease;
+      position: relative;
+    }
+    
+    .stat-btn.glow-effect::after {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: calc(var(--r-md) + 2px);
+      background: linear-gradient(45deg, rgba(26,107,255,0.5), rgba(0,200,83,0.5));
+      z-index: -1;
+      opacity: 0.5;
+      animation: pulseGlow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes pulseGlow {
+      from { opacity: 0.2; transform: scale(0.98); }
+      to { opacity: 0.6; transform: scale(1.02); }
     }
     
     .stat-btn:hover {
       background: rgba(26,107,255,0.15);
       transform: translateY(-3px);
-      box-shadow: 0 5px 15px rgba(26,107,255,0.3);
+      box-shadow: 0 5px 20px rgba(26,107,255,0.4);
+      border-color: rgba(26,107,255,0.5);
+    }
+    
+    .stat-label-interactive {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 0.3rem;
+      color: var(--c-blue-light);
     }
 
     .stat-num {
@@ -665,6 +694,7 @@ export class HeroComponent implements OnInit, OnDestroy {
   inscritosList      = signal<any[]>([]);
 
   private countdownInterval: any;
+  private countPollingInterval: any;
 
   constructor(private regSvc: RegistrationService) {}
 
@@ -678,14 +708,11 @@ export class HeroComponent implements OnInit, OnDestroy {
       return `left:${x}%;width:${size}px;height:${size}px;animation-duration:${dur}s;animation-delay:${del}s`;
     });
 
-    // Contar inscritos
-    this.regSvc.getCount().subscribe({
-      next: res => this.count.set(res.total),
-      error: ()  => {
-        console.warn('Backend no disponible, contador en 0 hasta conexión con TiDB Cloud');
-        this.count.set(0);
-      }
-    });
+    // Contar inscritos inicial
+    this.updateCount();
+
+    // Polling de inscritos cada 10 segundos para actualizar en vivo
+    this.countPollingInterval = setInterval(() => this.updateCount(), 10000);
 
     // Countdown — 18 de julio de 2026 a las 8:00 AM
     this.updateCountdown();
@@ -696,6 +723,20 @@ export class HeroComponent implements OnInit, OnDestroy {
     if (this.countdownInterval) {
       clearInterval(this.countdownInterval);
     }
+    if (this.countPollingInterval) {
+      clearInterval(this.countPollingInterval);
+    }
+  }
+
+  private updateCount() {
+    this.regSvc.getCount().subscribe({
+      next: res => this.count.set(res.total),
+      error: ()  => {
+        if (this.count() === 0) {
+          console.warn('Backend no disponible, contador en 0 hasta conexión con TiDB Cloud');
+        }
+      }
+    });
   }
 
   private updateCountdown() {
@@ -721,7 +762,7 @@ export class HeroComponent implements OnInit, OnDestroy {
     
     if (this.inscritosList().length === 0) {
       this.loadingInscritos.set(true);
-      this.regSvc.getParticipants(1, 1000).subscribe({
+      this.regSvc.getPublicParticipants().subscribe({
         next: (res: any) => {
           if (!res.data || res.data.length === 0) {
             this.cargarEstacionRespaldo();
