@@ -247,18 +247,18 @@ import { Component, OnInit, OnDestroy, signal } from '@angular/core';
 
     /* ── Responsive ────────────────── */
     @media (max-width: 768px) {
-      .carousel-arrow { width: 40px; height: 40px; }
-      .carousel-arrow svg { width: 18px; height: 18px; }
-      .arrow-left  { left: 0.5rem; }
-      .arrow-right { right: 0.5rem; }
+      .carousel-arrow { width: 32px; height: 32px; }
+      .carousel-arrow svg { width: 14px; height: 14px; }
+      .arrow-left  { left: 0.3rem; }
+      .arrow-right { right: 0.3rem; }
       .carousel-caption {
-        bottom: 3.5rem;
-        right: 1rem;
-        left: 1rem;
-        font-size: 0.7rem;
-        padding: 0.4rem;
-        justify-content: center;
+        bottom: 1.5rem;
+        right: 0.5rem;
+        left: auto;
+        font-size: 0.55rem;
+        padding: 0.2rem 0.4rem;
       }
+      .carousel-caption span { display: none; } /* Ocultar icono cámara en móvil */
     }
   `]
 })

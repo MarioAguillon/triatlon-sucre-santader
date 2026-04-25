@@ -556,8 +556,14 @@ type FormState = 'idle' | 'loading' | 'success' | 'error';
     }
 
     @media (max-width: 900px) {
-      .reg-grid      { grid-template-columns: 1fr; }
+      .reg-grid      { grid-template-columns: 1fr; gap: 2rem; }
       .form-grid     { grid-template-columns: 1fr; }
+      .reg-form      { padding: 1.5rem; }
+      .captcha-wrapper { transform: scale(0.85); transform-origin: center; margin-bottom: 0.5rem; }
+    }
+    @media (max-width: 400px) {
+      .reg-form      { padding: 1.2rem; }
+      .captcha-wrapper { transform: scale(0.75); }
     }
   `]
 })
