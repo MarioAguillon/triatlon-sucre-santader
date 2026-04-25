@@ -178,6 +178,8 @@ import { CommonModule } from '@angular/common';
         padding: 2rem;
         gap: 1.5rem;
         border-bottom: 1px solid rgba(255,255,255,0.07);
+        max-height: calc(100vh - 70px);
+        overflow-y: auto;
       }
 
       .nav-links.open { display: flex; }

@@ -251,6 +251,14 @@ import { Component, OnInit, OnDestroy, signal } from '@angular/core';
       .carousel-arrow svg { width: 18px; height: 18px; }
       .arrow-left  { left: 0.5rem; }
       .arrow-right { right: 0.5rem; }
+      .carousel-caption {
+        bottom: 3.5rem;
+        right: 1rem;
+        left: 1rem;
+        font-size: 0.7rem;
+        padding: 0.4rem;
+        justify-content: center;
+      }
     }
   `]
 })

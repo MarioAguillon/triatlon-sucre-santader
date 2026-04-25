@@ -229,6 +229,14 @@ import { Component, OnInit, OnDestroy, signal } from '@angular/core';
       .arrow-right { right: 0.5rem; }
       .carousel-dots { gap: 0.3rem; }
       .carousel-dot  { width: 8px; height: 8px; }
+      .carousel-caption {
+        bottom: 3.5rem;
+        right: 1rem;
+        left: 1rem;
+        font-size: 0.7rem;
+        padding: 0.4rem;
+        justify-content: center;
+      }
     }
   `]
 })
