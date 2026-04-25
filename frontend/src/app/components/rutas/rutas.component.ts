@@ -492,7 +492,7 @@ export class RutasComponent implements OnInit {
         desc: 'Natación en el centro recreacional de Sucre. Una experiencia única con atención VIP y el calor humano del pueblo sucreño animando.',
         stats: [
           { label: 'Hombres', value: '160m', icon: 'man' },
-          { label: 'Mujeres', value: '150m', icon: 'woman' },
+          { label: 'Mujeres', value: '160m', icon: 'woman' },
           { label: 'Infantil 5-9', value: '20m', icon: 'child_care' },
           { label: 'Infantil 10-15', value: '40m', icon: 'boy' }
         ]

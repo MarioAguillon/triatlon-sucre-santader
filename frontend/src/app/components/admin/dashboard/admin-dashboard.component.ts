@@ -132,10 +132,12 @@ type DashView = 'list' | 'edit';
                       <td>{{ p.ciudad }}</td>
                       <td>{{ p.telefono }}</td>
                       <td class="td-email">{{ p.correo }}</td>
-                      <td>
-                        <span class="tipo-badge" [class]="'disc-' + p.disciplina">
-                          {{ disciplinaLabels[p.disciplina] }}
-                        </span>
+                      <td class="td-disc">
+                        @for (d of splitDisciplinas(p.disciplina); track d) {
+                          <span [class]="'tipo-badge disc-' + d.trim()">
+                            {{ disciplinaLabels[d.trim()] || d.trim() }}
+                          </span>
+                        }
                       </td>
                       <td>
                         <span class="cat-badge">
@@ -195,13 +197,18 @@ type DashView = 'list' | 'edit';
                 <label>Correo</label>
                 <input type="email" [(ngModel)]="editingParticipant()!.correo" />
               </div>
-              <div class="form-group">
-                <label>Disciplina</label>
-                <select [(ngModel)]="editingParticipant()!.disciplina">
+              <div class="form-group form-group-full">
+                <label>Disciplinas (selecciona una o más)</label>
+                <div class="checkbox-group">
                   @for (d of disciplinaOptions; track d.value) {
-                    <option [value]="d.value">{{ d.label }}</option>
+                    <label class="checkbox-item" [class.checked]="isDisciplinaSelected(d.value)">
+                      <input type="checkbox"
+                             [checked]="isDisciplinaSelected(d.value)"
+                             (change)="toggleDisciplina(d.value)" />
+                      <span class="checkbox-label">{{ d.label }}</span>
+                    </label>
                   }
-                </select>
+                </div>
               </div>
               <div class="form-group">
                 <label>Categoría</label>
@@ -538,6 +545,7 @@ type DashView = 'list' | 'edit';
     }
 
     /* Action buttons */
+    .td-disc { display: flex; gap: 4px; flex-wrap: wrap; }
     .td-actions { display: flex; gap: 0.4rem; white-space: nowrap; }
 
     .action-btn {
@@ -709,6 +717,53 @@ type DashView = 'list' | 'edit';
       .table-wrap    { padding: 1rem; }
       .edit-grid     { grid-template-columns: 1fr; }
     }
+
+    /* ── Checkbox Group (Disciplinas) ── */
+    .form-group-full {
+      grid-column: 1 / -1;
+    }
+
+    .checkbox-group {
+      display: flex;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--c-border);
+      border-radius: var(--r-sm);
+      padding: 0.6rem 1rem;
+      cursor: pointer;
+      transition: all var(--tr-fast);
+      font-size: 0.9rem;
+      color: var(--c-text);
+      text-transform: none;
+      font-weight: 400;
+      letter-spacing: 0;
+    }
+
+    .checkbox-item:hover {
+      border-color: var(--c-blue);
+      background: rgba(26,107,255,0.08);
+    }
+
+    .checkbox-item.checked {
+      border-color: var(--c-blue);
+      background: rgba(26,107,255,0.15);
+      color: var(--c-blue-light);
+      font-weight: 600;
+    }
+
+    .checkbox-item input[type="checkbox"] {
+      accent-color: var(--c-blue);
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
   `]
 })
 export class AdminDashboardComponent implements OnInit {
@@ -733,9 +788,9 @@ export class AdminDashboardComponent implements OnInit {
   });
 
   disciplinaLabels: Record<string, string> = {
-    running:  '🏃 Running',
-    ciclismo: '🚴 Ciclismo',
-    natacion: '🏊 Natación',
+    running:  'Running',
+    ciclismo: 'Ciclismo',
+    natacion: 'Natación',
   };
 
   categoriaLabels: Record<string, string> = {
@@ -812,6 +867,13 @@ export class AdminDashboardComponent implements OnInit {
   saveEdit() {
     const p = this.editingParticipant();
     if (!p || !p.id) return;
+
+    // Validar que al menos una disciplina esté seleccionada
+    if (!p.disciplina || p.disciplina.trim() === '') {
+      this.editError.set('Debes seleccionar al menos una disciplina');
+      return;
+    }
+
     this.saving.set(true);
     this.editError.set('');
 
@@ -845,6 +907,31 @@ export class AdminDashboardComponent implements OnInit {
         alert(err.error?.error || 'Error al eliminar');
       }
     });
+  }
+
+  // ── Helpers ──────────────────────────────────────────────
+  splitDisciplinas(disc: string): string[] {
+    if (!disc) return [];
+    return disc.split(',').map(d => d.trim());
+  }
+
+  isDisciplinaSelected(value: string): boolean {
+    const p = this.editingParticipant();
+    if (!p || !p.disciplina) return false;
+    return p.disciplina.split(',').map(d => d.trim()).includes(value);
+  }
+
+  toggleDisciplina(value: string) {
+    const p = this.editingParticipant();
+    if (!p) return;
+    const current = p.disciplina ? p.disciplina.split(',').map(d => d.trim()).filter(d => d) : [];
+    const idx = current.indexOf(value);
+    if (idx >= 0) {
+      current.splice(idx, 1);
+    } else {
+      current.push(value);
+    }
+    this.editingParticipant.set({ ...p, disciplina: current.join(', ') });
   }
 
   logout() { this.auth.logout(); }

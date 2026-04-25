@@ -357,7 +357,7 @@ export class DisciplinesComponent implements OnInit {
       image: 'natacion.png',
       color: '#1a6bff',
       desc:  'Disfruta nadando en la piscina del Centro Recreacional de Sucre, un ambiente inigualable que eleva la experiencia, donde el entusiasmo del público y el calor humano hacen vibrar cada competencia como en los grandes eventos.',
-      categorias: ['Hombres: 160 metros', 'Mujeres: 150 metros', 'Infantil (5 a 9 años): 20 metros', 'Infantil (10 a 15 años): 40 metros']
+      categorias: ['Hombres: 160 metros', 'Mujeres: 160 metros', 'Infantil (5 a 9 años): 20 metros', 'Infantil (10 a 15 años): 40 metros']
     },
   ];
 }

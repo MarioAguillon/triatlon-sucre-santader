@@ -69,8 +69,13 @@ type FormState = 'idle' | 'loading' | 'success' | 'error';
                 <div class="success-icon">🎉</div>
                 <h3>¡Inscripción exitosa!</h3>
                 <p>{{ successMessage() }}</p>
-                <div class="success-price">
-                  Precio aplicado: <strong>{{ successPrice() | currency:'COP':'symbol':'1.0-0' }}</strong>
+                <div class="success-details">
+                  <div class="success-price">
+                    Precio aplicado: <strong>{{ successPrice() | currency:'COP':'symbol':'1.0-0' }}</strong>
+                  </div>
+                  <div class="success-disc">
+                    Disciplina(s): <strong>{{ successDisciplina() }}</strong>
+                  </div>
                 </div>
                 <p class="success-next-step">
                   Por favor, revisa tu bandeja de entrada (o carpeta de spam). Ahora puedes continuar con el pago para completar tu registro.
@@ -626,6 +631,7 @@ export class RegistrationComponent implements OnInit, AfterViewInit {
   errorMessage   = signal('');
   successMessage = signal('');
   successPrice   = signal(0);
+  successDisciplina = signal('');
 
   selectedDisciplinasSet = new Set<string>();
 
@@ -673,6 +679,10 @@ export class RegistrationComponent implements OnInit, AfterViewInit {
         this.formState.set('success');
         this.successMessage.set(res.message);
         this.successPrice.set(res.precio);
+        // Formatear disciplinas para mostrar en el modal
+        const discMap: Record<string, string> = { running: 'Running', ciclismo: 'Ciclismo', natacion: 'Natación' };
+        const discFormatted = (res.disciplina || '').split(',').map((d: string) => discMap[d.trim()] || d.trim()).join(', ');
+        this.successDisciplina.set(discFormatted);
       },
       error: err => {
         this.formState.set('error');
