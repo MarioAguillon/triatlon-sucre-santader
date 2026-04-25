@@ -7,5 +7,5 @@ export const environment = {
   // Asegúrate de que termine en /api
   apiUrl: 'https://triatlon-backend.onrender.com/api',
   // reCAPTCHA v2 — Reemplazar con tu clave real de producción
-  recaptchaSiteKey: '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI',
+  recaptchaSiteKey: '6LegJ8osAAAAAFHrEvcU6mai6jh7ZvJOdTOuQw8o',
 };
