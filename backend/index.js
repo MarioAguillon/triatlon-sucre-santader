@@ -16,6 +16,8 @@ const sponsorsRouter     = require('./src/routes/sponsors');
 const authRouter         = require('./src/routes/auth');
 
 const app  = express();
+// ── Confianza en Proxy (Obligatorio para Render) ────────────
+app.set('trust proxy', 1);
 const PORT = process.env.PORT || 3000;
 
 // ── Seguridad: Cabeceras HTTP ───────────────────────────────
