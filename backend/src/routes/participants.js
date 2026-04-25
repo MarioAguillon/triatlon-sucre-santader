@@ -181,6 +181,50 @@ router.post('/',
 );
 
 // ────────────────────────────────────────────────────────────
+// POST /api/participants/resend-all-emails — [ADMIN - JWT]
+// Reenvía correos de confirmación con PDF a todos los activos
+// ────────────────────────────────────────────────────────────
+router.post('/resend-all-emails', verifyToken, async (_req, res) => {
+  try {
+    const [participants] = await pool.execute(
+      'SELECT id, nombre, correo, disciplina, categoria FROM participantes WHERE activo = 1'
+    );
+
+    if (participants.length === 0) {
+      return res.json({ message: 'No hay participantes activos', enviados: 0, errores: 0 });
+    }
+
+    let enviados = 0;
+    let errores = 0;
+    const detalles = [];
+
+    for (const p of participants) {
+      try {
+        const pdfBuffer = await generarPDFConfirmacion(p);
+        await enviarCorreoConfirmacion(p, pdfBuffer);
+        enviados++;
+        detalles.push({ nombre: p.nombre, correo: p.correo, estado: '✅ Enviado' });
+        console.log(`✅ Correo reenviado a ${p.correo}`);
+      } catch (err) {
+        errores++;
+        detalles.push({ nombre: p.nombre, correo: p.correo, estado: '❌ Error: ' + err.message });
+        console.error(`❌ Error reenviando a ${p.correo}:`, err.message);
+      }
+    }
+
+    res.json({
+      message: `Proceso completado: ${enviados} enviados, ${errores} errores`,
+      enviados,
+      errores,
+      detalles
+    });
+  } catch (err) {
+    console.error('Error reenviando correos:', err);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
+
+// ────────────────────────────────────────────────────────────
 // GET /api/participants/count — Contador público
 // ────────────────────────────────────────────────────────────
 router.get('/count', async (_req, res) => {
