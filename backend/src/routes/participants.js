@@ -232,15 +232,16 @@ router.get('/', verifyToken, async (req, res) => {
       params.push(searchParam, searchParam, searchParam);
     }
 
-    dataQuery += ' ORDER BY fecha_inscripcion DESC LIMIT ? OFFSET ?';
+    // NOTA: TiDB no soporta placeholders (?) en LIMIT/OFFSET con execute().
+    // Se inyectan como enteros ya validados por parseInt() arriba.
+    dataQuery += ` ORDER BY fecha_inscripcion DESC LIMIT ${limit} OFFSET ${offset}`;
 
     // Ejecutar count
     const [countRows] = await pool.execute(countQuery, params);
     const total = countRows[0].total;
 
-    // Ejecutar data (con limit/offset como números)
-    const dataParams = [...params, String(limit), String(offset)];
-    const [data] = await pool.execute(dataQuery, dataParams);
+    // Ejecutar data
+    const [data] = await pool.execute(dataQuery, params);
 
     res.json({ data, total, page, limit });
   } catch (err) {
