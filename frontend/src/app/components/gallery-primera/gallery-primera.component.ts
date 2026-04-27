@@ -271,6 +271,12 @@ export class GalleryPrimeraComponent implements OnInit, OnDestroy {
       { url: 'primera/primera17.jpg', credito: 'Archivo Oficial', fit: 'contain' },
       { url: 'primera/primera18.jpg', credito: 'Archivo Oficial' },
       { url: 'primera/foto_fernanda_Camargo.webp', credito: 'Fernanda Camargo', fit: 'contain' },
+      { url: 'primera/foto_sergio_diaz.webp', credito: 'Sergio Díaz', fit: 'contain' },
+      { url: 'primera/foto_sergio_diaz1.webp', credito: 'Sergio Díaz', fit: 'contain' },
+      { url: 'primera/foto_sergio_diaz2.webp', credito: 'Sergio Díaz', fit: 'contain' },
+      { url: 'primera/foto_sergio_diaz3.webp', credito: 'Sergio Díaz', fit: 'contain' },
+      { url: 'primera/foto_sergio_diaz4.webp', credito: 'Sergio Díaz', fit: 'contain' },
+      { url: 'primera/foto_sergio_diaz5.webp', credito: 'Sergio Díaz', fit: 'contain' },
       // ¡AÑADE NUEVAS FOTOS DEBAJO DE ESTA LÍNEA!
       // Ejemplo: { url: 'primera/foto_alejandra_camargo.webp', credito: 'Alejandra Camargo' },
     ];

@@ -32,38 +32,37 @@ import { Sponsor }                   from '../../models/participant.model';
         <!-- Categories -->
         <div class="sponsor-categories">
           @for (cat of categories; track cat.tipo) {
-            @if (getSponsorsByType(cat.tipo).length > 0) {
-              <div class="sponsor-category">
-                <div class="cat-label">
-                  <span class="material-symbols-outlined">{{ cat.icon }}</span>
-                  <span>{{ cat.label }}</span>
-                </div>
-                <div class="sponsor-grid">
-                  @for (s of getSponsorsByType(cat.tipo); track s.id) {
-                    <div class="sponsor-card" [class]="'cat-' + cat.tipo">
-                      @if (s.logo_url) {
-                        <img [src]="s.logo_url" [alt]="s.nombre" class="sponsor-logo" />
-                      } @else {
-                        <div class="sponsor-placeholder">
-                          <span class="material-symbols-outlined">{{ cat.icon }}</span>
-                        </div>
-                      }
-                      <div class="sponsor-name">{{ s.nombre }}</div>
-                    </div>
-                  }
+            <div class="sponsor-category">
+              <div class="cat-label">
+                <span class="material-symbols-outlined">{{ cat.icon }}</span>
+                <span>{{ cat.label }}</span>
+              </div>
+              <div class="sponsor-grid">
+                @for (s of getSponsorsByType(cat.tipo); track s.id) {
+                  <div class="sponsor-card" [class]="'cat-' + cat.tipo">
+                    @if (s.logo_url) {
+                      <img [src]="s.logo_url" [alt]="s.nombre" class="sponsor-logo" />
+                    } @else {
+                      <div class="sponsor-placeholder">
+                        <span class="material-symbols-outlined">{{ cat.icon }}</span>
+                      </div>
+                    }
+                    <div class="sponsor-name">{{ s.nombre }}</div>
+                  </div>
+                }
+                
+                <!-- Tarjeta placeholder para invitar a patrocinadores -->
+                <div class="sponsor-card" style="border-style: dashed; cursor: pointer; border-color: rgba(255,255,255,0.3);" onclick="window.open('https://wa.me/573102198939?text=Hola,%20quiero%20contactarme%20para%20realizar%20un%20aporte%20a%20la%20Triatl%C3%B3n%20Sucre%20Santander.', '_blank')">
+                  <div class="sponsor-placeholder" style="opacity: 0.8;">
+                    <span class="material-symbols-outlined" style="font-size: 3rem; color: var(--c-muted);">add_photo_alternate</span>
+                  </div>
+                  <div class="sponsor-name" style="color: var(--c-white); font-size: 0.95rem; margin-top: 0.5rem;">Tu logo aquí</div>
+                  <div style="font-size: 0.75rem; color: var(--c-muted); text-align: center; margin-top: 4px;">Espacio para patrocinadores</div>
                 </div>
               </div>
-            }
+            </div>
           }
         </div>
-
-        <!-- Empty state -->
-        @if (sponsors().length === 0 && !loading()) {
-          <div class="sponsors-empty">
-            <p>Pronto anunciaremos nuestros patrocinadores <span class="material-symbols-outlined" style="vertical-align: middle;">emoji_events</span></p>
-            <p class="sponsors-contact">¿Deseas patrocinar el evento? Contáctanos.</p>
-          </div>
-        }
 
         <!-- Loading -->
         @if (loading()) {
@@ -253,9 +252,7 @@ export class SponsorsComponent implements OnInit {
   loading  = signal(true);
 
   categories = [
-    { tipo: 'alcaldia', label: 'Alcaldías y Entidades Públicas', icon: 'account_balance' },
-    { tipo: 'empresa',  label: 'Empresas Patrocinadoras',        icon: 'domain' },
-    { tipo: 'persona',  label: 'Patrocinadores Particulares',    icon: 'handshake' },
+    { tipo: 'titulo', label: 'Patrocinadores de Título', icon: 'workspace_premium' },
   ];
 
   constructor(private regSvc: RegistrationService) {}
