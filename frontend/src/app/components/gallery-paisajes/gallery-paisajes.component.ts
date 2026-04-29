@@ -278,6 +278,13 @@ export class GalleryPaisajesComponent implements OnInit, OnDestroy {
       { src: 'paisajes/paisaje3.jpg', type: 'image', credito: 'Archivo Oficial' },
       { src: 'paisajes/paisaje4.jpg', type: 'image', position: 'center 20%', credito: 'Archivo Oficial', fit: 'contain' },
       { src: 'paisajes/paisaje5.jpg', type: 'image', position: 'center 10%', credito: 'Archivo Oficial', fit: 'contain' },
+      { src: 'paisajes/foto_armando1.webp', type: 'image', credito: 'Armando Marin', fit: 'contain' },
+      { src: 'paisajes/foto_armando2.webp', type: 'image', credito: 'Armando Marin', fit: 'contain' },
+      { src: 'paisajes/foto_armando3.webp', type: 'image', credito: 'Armando Marin', fit: 'contain' },
+      { src: 'paisajes/foto_armando4.webp', type: 'image', credito: 'Armando Marin', fit: 'contain' },
+
+
+
       // ¡AÑADE NUEVAS FOTOS DE PAISAJES DEBAJO DE ESTA LÍNEA!
       // Ejemplo: { src: 'paisajes/foto_carlos_gomez.webp', type: 'image', credito: 'Carlos Gómez' },
     ];

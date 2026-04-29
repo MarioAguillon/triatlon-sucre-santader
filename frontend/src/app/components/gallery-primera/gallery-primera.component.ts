@@ -277,6 +277,12 @@ export class GalleryPrimeraComponent implements OnInit, OnDestroy {
       { url: 'primera/foto_sergio_diaz3.webp', credito: 'Sergio Díaz', fit: 'contain' },
       { url: 'primera/foto_sergio_diaz4.webp', credito: 'Sergio Díaz', fit: 'contain' },
       { url: 'primera/foto_sergio_diaz5.webp', credito: 'Sergio Díaz', fit: 'contain' },
+      { url: 'primera/foto_katika.webp', credito: 'Katherine Escamilla', fit: 'contain' },
+      { url: 'primera/foto_katika1.webp', credito: 'Katherine Escamilla', fit: 'contain' },
+      { url: 'primera/foto_katika2.webp', credito: 'Katherine Escamilla', fit: 'contain' },
+      { url: 'primera/foto_katika3.webp', credito: 'Katherine Escamilla', fit: 'contain' },
+      { url: 'primera/foto_armando.webp', credito: 'Armando Marin', fit: 'contain' },
+
       // ¡AÑADE NUEVAS FOTOS DEBAJO DE ESTA LÍNEA!
       // Ejemplo: { url: 'primera/foto_alejandra_camargo.webp', credito: 'Alejandra Camargo' },
     ];
