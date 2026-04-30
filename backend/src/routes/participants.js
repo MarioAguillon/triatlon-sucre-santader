@@ -388,7 +388,7 @@ router.put('/:id',
 );
 
 // ────────────────────────────────────────────────────────────
-// DELETE /api/participants/:id — Eliminar soft [ADMIN - JWT]
+// DELETE /api/participants/:id — Eliminar definitivamente [ADMIN - JWT]
 // ────────────────────────────────────────────────────────────
 router.delete('/:id',
   verifyToken,
@@ -401,7 +401,7 @@ router.delete('/:id',
 
     try {
       const [result] = await pool.execute(
-        'UPDATE participantes SET activo = 0 WHERE id = ? AND activo = 1',
+        'DELETE FROM participantes WHERE id = ?',
         [req.params.id]
       );
 
