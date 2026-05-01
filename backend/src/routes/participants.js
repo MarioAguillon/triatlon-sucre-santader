@@ -14,8 +14,8 @@ const CATEGORIAS_VALIDAS = ['elite', 'recreativa', 'ninos'];
 
 // ── Calcular precio según fecha ─────────────────────────────
 function calcularPrecio() {
-  const FECHA_LIMITE  = new Date('2026-04-30T23:59:59-05:00');
-  const PRECIO_TEMP   = 15000;
+  const FECHA_LIMITE = new Date('2026-04-30T23:59:59-05:00');
+  const PRECIO_TEMP = 15000;
   const PRECIO_NORMAL = 30000;
   return new Date() <= FECHA_LIMITE ? PRECIO_TEMP : PRECIO_NORMAL;
 }
@@ -150,21 +150,21 @@ router.post('/',
 
       const insertId = result.insertId;
 
-      // ── Generar PDF y Enviar Correo ─────────────────────────
-      try {
-        const participantData = {
-          id: insertId,
-          nombre: nombre.trim(),
-          correo: correo.trim().toLowerCase(),
-          disciplina,
-          categoria
-        };
-        const pdfBuffer = await generarPDFConfirmacion(participantData);
-        await enviarCorreoConfirmacion(participantData, pdfBuffer);
-      } catch (emailError) {
-        console.error('Error al generar PDF o enviar correo de confirmación:', emailError);
-        // NOTA: No retornamos error HTTP aquí porque la inscripción en BD ya fue exitosa.
-      }
+      // ── Generar PDF y Enviar Correo en segundo plano ───────────
+      // Ejecutamos esto sin 'await' para no bloquear la respuesta HTTP
+      const participantData = {
+        id: insertId,
+        nombre: nombre.trim(),
+        correo: correo.trim().toLowerCase(),
+        disciplina,
+        categoria
+      };
+
+      generarPDFConfirmacion(participantData)
+        .then(pdfBuffer => enviarCorreoConfirmacion(participantData, pdfBuffer))
+        .catch(emailError => {
+          console.error('Error al generar PDF o enviar correo de confirmación:', emailError);
+        });
 
       res.status(201).json({
         message: 'Tu inscripción fue exitosa. Hemos enviado una confirmación a tu correo electrónico.',
@@ -259,20 +259,20 @@ router.get('/public', async (req, res) => {
 // ────────────────────────────────────────────────────────────
 router.get('/', verifyToken, async (req, res) => {
   try {
-    const page   = Math.max(parseInt(req.query.page  || '1'), 1);
-    const limit  = Math.min(Math.max(parseInt(req.query.limit || '50'), 1), 100);
+    const page = Math.max(parseInt(req.query.page || '1'), 1);
+    const limit = Math.min(Math.max(parseInt(req.query.limit || '50'), 1), 100);
     const search = (req.query.search || '').trim();
     const offset = (page - 1) * limit;
 
     let countQuery = 'SELECT COUNT(*) as total FROM participantes WHERE activo = 1';
-    let dataQuery  = 'SELECT * FROM participantes WHERE activo = 1';
-    const params   = [];
+    let dataQuery = 'SELECT * FROM participantes WHERE activo = 1';
+    const params = [];
 
     if (search) {
       const searchFilter = ' AND (nombre LIKE ? OR ciudad LIKE ? OR correo LIKE ?)';
-      const searchParam  = `%${search}%`;
+      const searchParam = `%${search}%`;
       countQuery += searchFilter;
-      dataQuery  += searchFilter;
+      dataQuery += searchFilter;
       params.push(searchParam, searchParam, searchParam);
     }
 
