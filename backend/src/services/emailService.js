@@ -87,7 +87,7 @@ async function enviarCorreoConfirmacion(data, pdfBuffer) {
     htmlContent: generarTemplateHTML(data),
     attachment: [
       {
-        name: \`Inscripcion_Triatlon_\${String(data.id).padStart(4, '0')}.pdf\`,
+        name: `Inscripcion_Triatlon_${String(data.id).padStart(4, '0')}.pdf`,
         content: pdfBuffer.toString('base64')
       }
     ]
@@ -111,10 +111,10 @@ async function enviarCorreoConfirmacion(data, pdfBuffer) {
     }
 
     const info = await response.json();
-    console.log(\`✅ Correo enviado a \${data.correo} [ID: \${info.messageId}]\`);
+    console.log(`✅ Correo enviado a ${data.correo} [ID: ${info.messageId}]`);
     return info;
   } catch (error) {
-    console.error(\`❌ Error enviando correo a \${data.correo}:\`, error.message);
+    console.error(`❌ Error enviando correo a ${data.correo}:`, error.message);
     throw error;
   }
 }
