@@ -1,18 +1,6 @@
 // ============================================================
-// services/emailService.js — Envío de correos transaccionales
+// services/emailService.js — Envío de correos transaccionales (Brevo API)
 // ============================================================
-const nodemailer = require('nodemailer');
-
-// Configuración del transporte reutilizable
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST || 'smtp.gmail.com',
-  port: parseInt(process.env.SMTP_PORT || '465'),
-  secure: process.env.SMTP_SECURE ? process.env.SMTP_SECURE === 'true' : true, // true para 465, false para 587
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
-});
 
 /**
  * Genera el cuerpo en HTML del correo con estilos integrados
@@ -74,38 +62,59 @@ function generarTemplateHTML(data) {
 
 /**
  * Envía el correo de confirmación con el PDF adjunto
- * @param {Object} data - Datos del participante
- * @param {Buffer} pdfBuffer - Buffer del documento PDF generado
+ * Usando la API REST de Brevo en lugar de SMTP
  */
 async function enviarCorreoConfirmacion(data, pdfBuffer) {
-  // Verificar que SMTP_USER esté configurado
-  if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
-    console.warn('⚠️ Credenciales SMTP no configuradas. Simulando envío de correo.');
+  const apiKey = process.env.BREVO_API_KEY;
+
+  if (!apiKey) {
+    console.warn('⚠️ BREVO_API_KEY no configurada. Simulando envío de correo.');
     return;
   }
 
-  const mailOptions = {
-    from: `"Triatlón Sucre" <${process.env.SMTP_USER}>`,
-    to: data.correo,
-    subject: 'Bienvenido a la Segunda Edición de la Triatlón – Inscripción Confirmada',
-    html: generarTemplateHTML(data),
-    attachments: [
+  const payload = {
+    sender: {
+      name: "Triatlón Sucre",
+      email: "triatlonsucresantander@gmail.com"
+    },
+    to: [
       {
-        filename: `Inscripcion_Triatlon_${String(data.id).padStart(4, '0')}.pdf`,
-        content: pdfBuffer,
-        contentType: 'application/pdf'
+        email: data.correo,
+        name: data.nombre
+      }
+    ],
+    subject: "Bienvenido a la Segunda Edición de la Triatlón – Inscripción Confirmada",
+    htmlContent: generarTemplateHTML(data),
+    attachment: [
+      {
+        name: \`Inscripcion_Triatlon_\${String(data.id).padStart(4, '0')}.pdf\`,
+        content: pdfBuffer.toString('base64')
       }
     ]
   };
 
   try {
-    const info = await transporter.sendMail(mailOptions);
-    console.log(`✅ Correo enviado a ${data.correo} [ID: ${info.messageId}]`);
+    // La API de Brevo usa el puerto 443 (HTTPS), por lo que Render NO lo bloquea
+    const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+      method: 'POST',
+      headers: {
+        'accept': 'application/json',
+        'api-key': apiKey,
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      const errData = await response.json();
+      throw new Error(JSON.stringify(errData));
+    }
+
+    const info = await response.json();
+    console.log(\`✅ Correo enviado a \${data.correo} [ID: \${info.messageId}]\`);
     return info;
   } catch (error) {
-    console.error(`❌ Error enviando correo a ${data.correo}:`, error.message);
-    // Lanzar el error o manejarlo silenciosamente dependiendo de las políticas
-    // Lo manejaremos silenciosamente aquí para no romper el registro si falla el correo
+    console.error(\`❌ Error enviando correo a \${data.correo}:\`, error.message);
     throw error;
   }
 }
