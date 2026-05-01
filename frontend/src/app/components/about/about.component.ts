@@ -2,6 +2,7 @@
 // components/about/about.component.ts
 // ============================================================
 import { Component, OnInit } from '@angular/core';
+import { isEarlyBirdActive } from '../../utils/pricing';
 
 @Component({
   selector:   'app-about',
@@ -70,10 +71,17 @@ import { Component, OnInit } from '@angular/core';
             </div>
 
             <!-- Floating badge -->
-            <div class="floating-badge">
-              <span class="badge-price">$15.000</span>
-              <span class="badge-label">Hasta el 30 de abril</span>
-            </div>
+            @if (isEarlyBirdActive()) {
+              <div class="floating-badge">
+                <span class="badge-price">$15.000</span>
+                <span class="badge-label">Hasta el 30 de abril</span>
+              </div>
+            } @else {
+              <div class="floating-badge" style="background: linear-gradient(135deg, #1a6bff, #004ecc); box-shadow: 0 8px 32px rgba(26,107,255,0.4);">
+                <span class="badge-price">$30.000</span>
+                <span class="badge-label">Inscripción General</span>
+              </div>
+            }
           </div>
         </div>
       </div>
@@ -240,6 +248,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AboutComponent implements OnInit {
   particles: string[] = [];
+  isEarlyBirdActive = isEarlyBirdActive;
+
   ngOnInit() {
     this.particles = Array.from({ length: 20 }, () => {
       const x = Math.random() * 100;
@@ -256,10 +266,12 @@ export class AboutComponent implements OnInit {
     { icon: 'group', label: 'Abierto a todos',        value: 'Individual y por categorías' },
   ];
 
-  details = [
-    { icon: 'calendar_month', label: 'Fecha del evento', value: '18 de julio de 2026' },
-    { icon: 'location_on', label: 'Ubicación',        value: 'Sucre, Santander, Colombia' },
-    { icon: 'sprint', label: 'Modalidades',      value: 'Running · Ciclismo · Natación' },
-    { icon: 'payments', label: 'Inscripción',      value: '$15.000 antes del 30 de abril' },
-  ];
+  get details() {
+    return [
+      { icon: 'calendar_month', label: 'Fecha del evento', value: '18 de julio de 2026' },
+      { icon: 'location_on', label: 'Ubicación',        value: 'Sucre, Santander, Colombia' },
+      { icon: 'sprint', label: 'Modalidades',      value: 'Running · Ciclismo · Natación' },
+      { icon: 'payments', label: 'Inscripción',      value: isEarlyBirdActive() ? '$15.000 antes del 30 de abril' : '$30.000 General' },
+    ];
+  }
 }

@@ -55,4 +55,8 @@ export class RegistrationService {
   deleteParticipant(id: number): Observable<{ message: string }> {
     return this.http.delete<{ message: string }>(`${this.api}/participants/${id}`);
   }
+
+  togglePaymentStatus(id: number, status: 'pendiente' | 'pagado'): Observable<{ message: string }> {
+    return this.http.patch<{ message: string }>(`${this.api}/participants/${id}/pago`, { estado_pago: status });
+  }
 }

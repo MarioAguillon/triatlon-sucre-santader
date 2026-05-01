@@ -25,6 +25,7 @@ export interface Participant {
   categoria:         Categoria;
   participo_primera_edicion: 'SI' | 'NO';
   precio_aplicado?:  number;
+  estado_pago?:      'pendiente' | 'pagado';
   fecha_inscripcion?: string;
 }
 

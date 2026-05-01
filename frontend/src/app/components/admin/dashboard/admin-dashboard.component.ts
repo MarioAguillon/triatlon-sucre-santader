@@ -119,6 +119,7 @@ type DashView = 'list' | 'edit';
                     <th>Disciplina</th>
                     <th>Categoría</th>
                     <th>Precio</th>
+                    <th>Pago</th>
                     <th>Fecha</th>
                     <th>Acciones</th>
                   </tr>
@@ -145,8 +146,16 @@ type DashView = 'list' | 'edit';
                         </span>
                       </td>
                       <td class="td-price">{{ p.precio_aplicado | currency:'COP':'symbol':'1.0-0' }}</td>
+                      <td class="td-pago">
+                        <span class="pago-badge" [class.pagado]="p.estado_pago === 'pagado'">
+                          {{ p.estado_pago === 'pagado' ? 'Pagado' : 'Pendiente' }}
+                        </span>
+                      </td>
                       <td class="td-date">{{ p.fecha_inscripcion | date:'dd/MM/yy HH:mm' }}</td>
                       <td class="td-actions">
+                        <button class="action-btn toggle-pago" (click)="togglePago(p)" [title]="p.estado_pago === 'pagado' ? 'Marcar como Pendiente' : 'Validar Pago'">
+                          {{ p.estado_pago === 'pagado' ? '❌' : '💰' }}
+                        </button>
                         <button class="action-btn edit" (click)="startEdit(p)" title="Editar">✏️</button>
                         <button class="action-btn delete" (click)="confirmDelete(p)" title="Eliminar">🗑️</button>
                       </td>
@@ -563,6 +572,25 @@ type DashView = 'list' | 'edit';
 
     .action-btn.edit:hover   { background: rgba(26,107,255,0.15); border-color: var(--c-blue); }
     .action-btn.delete:hover { background: rgba(255,50,50,0.15); border-color: #ff5050; }
+    .action-btn.toggle-pago:hover { background: rgba(0,200,83,0.15); border-color: #00c853; }
+
+    .pago-badge {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: rgba(239,68,68,0.1);
+      color: #ef4444;
+      border: 1px solid rgba(239,68,68,0.3);
+    }
+    .pago-badge.pagado {
+      background: rgba(0,200,83,0.1);
+      color: var(--c-green);
+      border-color: rgba(0,200,83,0.3);
+    }
 
     /* Pagination */
     .pagination {
@@ -907,6 +935,24 @@ export class AdminDashboardComponent implements OnInit {
         alert(err.error?.error || 'Error al eliminar');
       }
     });
+  }
+
+  // ── Pago ─────────────────────────────────────────────────
+  togglePago(p: Participant) {
+    if (!p.id) return;
+    const newStatus: 'pendiente' | 'pagado' = p.estado_pago === 'pagado' ? 'pendiente' : 'pagado';
+    const msg = `¿Marcar a ${p.nombre} como ${newStatus.toUpperCase()}?`;
+    if (confirm(msg)) {
+      this.regSvc.togglePaymentStatus(p.id, newStatus).subscribe({
+        next: () => {
+          // Actualizar estado local
+          const current = this.participants();
+          const updated = current.map(pt => pt.id === p.id ? { ...pt, estado_pago: newStatus } : pt);
+          this.participants.set(updated);
+        },
+        error: (err) => alert('Error: ' + (err.error?.error || 'No se pudo actualizar el pago'))
+      });
+    }
   }
 
   // ── Helpers ──────────────────────────────────────────────

@@ -2,6 +2,7 @@
 // components/registration/registration.component.ts
 // ============================================================
 import { Component, OnInit, AfterViewInit, ElementRef, NgZone, signal, computed } from '@angular/core';
+import { isEarlyBirdActive } from '../../utils/pricing';
 import { CommonModule }                from '@angular/common';
 import { FormsModule }                 from '@angular/forms';
 import { environment }                 from '../../../environments/environment';
@@ -41,14 +42,21 @@ type FormState = 'idle' | 'loading' | 'success' | 'error';
             </p>
 
             <div class="countdown-box glass">
-              <div class="price-featured">
-                <span class="pf-label">Precio Preferencial</span>
-                <span class="pf-price">$15.000</span>
-                <span class="pf-date">Hasta el 30 de abril de 2026</span>
-              </div>
-              <div class="price-normal">
-                <span class="pn-label">Después: <strong>$30.000</strong></span>
-              </div>
+              @if (isEarlyBirdActive()) {
+                <div class="price-featured">
+                  <span class="pf-label">Precio Preferencial</span>
+                  <span class="pf-price">$15.000</span>
+                  <span class="pf-date">Hasta el 30 de abril de 2026</span>
+                </div>
+                <div class="price-normal">
+                  <span class="pn-label">Después: <strong>$30.000</strong></span>
+                </div>
+              } @else {
+                <div class="price-featured" style="background: linear-gradient(135deg, rgba(26,107,255,0.12), rgba(0,78,204,0.08)); border-color: rgba(26,107,255,0.25);">
+                  <span class="pf-label" style="color: var(--c-blue-light);">Inscripción General</span>
+                  <span class="pf-price" style="color: var(--c-blue-light);">$30.000</span>
+                </div>
+              }
             </div>
 
             <div class="reg-features">
@@ -569,6 +577,7 @@ type FormState = 'idle' | 'loading' | 'success' | 'error';
 })
 export class RegistrationComponent implements OnInit, AfterViewInit {
   particles: string[] = [];
+  isEarlyBirdActive = isEarlyBirdActive;
   private recaptchaWidgetId: number | null = null;
   private captchaToken = '';
 

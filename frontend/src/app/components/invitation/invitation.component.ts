@@ -2,6 +2,7 @@
 // components/invitation/invitation.component.ts
 // ============================================================
 import { Component, OnInit } from '@angular/core';
+import { isEarlyBirdActive } from '../../utils/pricing';
 
 @Component({
   selector:   'app-invitation',
@@ -59,20 +60,29 @@ import { Component, OnInit } from '@angular/core';
             <div class="info-card price-card">
               <h3 class="info-card-title"><span class="material-symbols-outlined" style="vertical-align:-4px; margin-right:4px;">payments</span> Costos de Inscripción</h3>
               <div class="price-options">
-                <div class="price-option featured">
-                  <div class="price-badge"><span class="material-symbols-outlined" style="vertical-align:-4px; font-size:inherit; margin-right:2px;">star</span> PREFERENCIAL</div>
-                  <div class="price-amount">$15.000</div>
-                  <div class="price-condition">Hasta el 30 de abril de 2026</div>
-                </div>
-                <div class="price-divider">o</div>
-                <div class="price-option">
-                  <div class="price-amount normal">$30.000</div>
-                  <div class="price-condition">Después del 30 de abril</div>
-                </div>
+                @if (isEarlyBirdActive()) {
+                  <div class="price-option featured">
+                    <div class="price-badge"><span class="material-symbols-outlined" style="vertical-align:-4px; font-size:inherit; margin-right:2px;">star</span> PREFERENCIAL</div>
+                    <div class="price-amount">$15.000</div>
+                    <div class="price-condition">Hasta el 30 de abril de 2026</div>
+                  </div>
+                  <div class="price-divider">o</div>
+                  <div class="price-option">
+                    <div class="price-amount normal">$30.000</div>
+                    <div class="price-condition">Después del 30 de abril</div>
+                  </div>
+                } @else {
+                  <div class="price-option featured" style="width: 100%;">
+                    <div class="price-badge"><span class="material-symbols-outlined" style="vertical-align:-4px; font-size:inherit; margin-right:2px;">star</span> INSCRIPCIÓN GENERAL</div>
+                    <div class="price-amount">$30.000</div>
+                  </div>
+                }
               </div>
-              <div class="early-bird-alert">
-                <span class="material-symbols-outlined" style="vertical-align:-4px; margin-right:4px;">alarm</span> ¡No dejes pasar el precio preferencial!
-              </div>
+              @if (isEarlyBirdActive()) {
+                <div class="early-bird-alert">
+                  <span class="material-symbols-outlined" style="vertical-align:-4px; margin-right:4px;">alarm</span> ¡No dejes pasar el precio preferencial!
+                </div>
+              }
             </div>
 
             <!-- Detalles -->
@@ -363,6 +373,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class InvitationComponent implements OnInit {
   particles: string[] = [];
+  isEarlyBirdActive = isEarlyBirdActive;
+
   ngOnInit() {
     this.particles = Array.from({ length: 20 }, () => {
       const x = Math.random() * 100;

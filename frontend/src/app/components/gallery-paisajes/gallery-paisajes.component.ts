@@ -282,7 +282,20 @@ export class GalleryPaisajesComponent implements OnInit, OnDestroy {
       { src: 'paisajes/foto_armando2.webp', type: 'image', credito: 'Armando Marin', fit: 'contain' },
       { src: 'paisajes/foto_armando3.webp', type: 'image', credito: 'Armando Marin', fit: 'contain' },
       { src: 'paisajes/foto_armando4.webp', type: 'image', credito: 'Armando Marin', fit: 'contain' },
-
+      { src: 'paisajes/paisaje_javier.webp', type: 'image', credito: 'Javier Forero', fit: 'contain' },
+      { src: 'paisajes/paisaje_javier0.webp', type: 'image', credito: 'Javier Forero', fit: 'contain' },
+      { src: 'paisajes/paisaje_javier1.webp', type: 'image', credito: 'Javier Forero', fit: 'contain' },
+      { src: 'paisajes/paisaje_javier2.webp', type: 'image', credito: 'Javier Forero', fit: 'contain' },
+      { src: 'paisajes/paisaje_javier3.webp', type: 'image', credito: 'Javier Forero', fit: 'contain' },
+      { src: 'paisajes/paisaje_javier4.webp', type: 'image', credito: 'Javier Forero', fit: 'contain' },
+      { src: 'paisajes/paisaje_javier5.webp', type: 'image', credito: 'Javier Forero', fit: 'contain' },
+      { src: 'paisajes/paisaje_javier6.webp', type: 'image', credito: 'Javier Forero', fit: 'contain' },
+      { src: 'paisajes/paisaje_javier7.webp', type: 'image', credito: 'Javier Forero', fit: 'contain' },
+      { src: 'paisajes/paisaje_javier8.webp', type: 'image', credito: 'Javier Forero', fit: 'contain' },
+      { src: 'paisajes/paisaje_javier9.webp', type: 'image', credito: 'Javier Forero', fit: 'contain' },
+      { src: 'paisajes/paisaje_javier10.webp', type: 'image', credito: 'Javier Forero', fit: 'contain' },
+      { src: 'paisajes/paisaje_javier11.webp', type: 'image', credito: 'Javier Forero', fit: 'contain' },
+      { src: 'paisajes/paisaje_javier12.webp', type: 'image', credito: 'Javier Forero', fit: 'contain' },
 
 
       // ¡AÑADE NUEVAS FOTOS DE PAISAJES DEBAJO DE ESTA LÍNEA!

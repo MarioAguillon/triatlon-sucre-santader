@@ -388,6 +388,37 @@ router.put('/:id',
 );
 
 // ────────────────────────────────────────────────────────────
+// PATCH /api/participants/:id/pago — Actualizar Pago [ADMIN - JWT]
+// ────────────────────────────────────────────────────────────
+router.patch('/:id/pago',
+  verifyToken,
+  param('id').isInt({ min: 1 }).withMessage('ID inválido'),
+  body('estado_pago').isIn(['pendiente', 'pagado']).withMessage('Estado inválido'),
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ error: errors.array()[0].msg });
+    }
+
+    try {
+      const [result] = await pool.execute(
+        'UPDATE participantes SET estado_pago = ? WHERE id = ? AND activo = 1',
+        [req.body.estado_pago, req.params.id]
+      );
+
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ error: 'Participante no encontrado' });
+      }
+
+      res.json({ message: 'Estado de pago actualizado correctamente' });
+    } catch (err) {
+      console.error('Error actualizando pago:', err);
+      res.status(500).json({ error: 'Error interno del servidor' });
+    }
+  }
+);
+
+// ────────────────────────────────────────────────────────────
 // DELETE /api/participants/:id — Eliminar definitivamente [ADMIN - JWT]
 // ────────────────────────────────────────────────────────────
 router.delete('/:id',

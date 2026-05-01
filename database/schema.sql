@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS participantes (
     'relevo_running'
   ) NOT NULL DEFAULT 'individual',
   precio_aplicado  DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+  estado_pago      ENUM('pendiente', 'pagado') NOT NULL DEFAULT 'pendiente',
   activo           TINYINT(1)    NOT NULL DEFAULT 1,
   fecha_inscripcion TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
   actualizado_en   TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
