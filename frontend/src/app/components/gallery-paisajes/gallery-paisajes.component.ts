@@ -296,6 +296,14 @@ export class GalleryPaisajesComponent implements OnInit, OnDestroy {
       { src: 'paisajes/paisaje_javier10.webp', type: 'image', credito: 'Javier Forero', fit: 'contain' },
       { src: 'paisajes/paisaje_javier11.webp', type: 'image', credito: 'Javier Forero', fit: 'contain' },
       { src: 'paisajes/paisaje_javier12.webp', type: 'image', credito: 'Javier Forero', fit: 'contain' },
+      { src: 'paisajes/paisaje_javier20.webp', type: 'image', credito: 'Javier Forero', fit: 'contain' },
+      { src: 'paisajes/paisaje_javier21.webp', type: 'image', credito: 'Javier Forero', fit: 'contain' },
+      { src: 'paisajes/paisaje_javier22.webp', type: 'image', credito: 'Javier Forero', fit: 'contain' },
+      { src: 'paisajes/paisaje_javier23.webp', type: 'image', credito: 'Javier Forero', fit: 'contain' },
+      { src: 'paisajes/paisaje_javier24.webp', type: 'image', credito: 'Javier Forero', fit: 'contain' },
+      { src: 'paisajes/paisaje_javier25.webp', type: 'image', credito: 'Javier Forero', fit: 'contain' },
+      { src: 'paisajes/paisaje_javier26.webp', type: 'image', credito: 'Javier Forero', fit: 'contain' },
+
 
 
       // ¡AÑADE NUEVAS FOTOS DE PAISAJES DEBAJO DE ESTA LÍNEA!
