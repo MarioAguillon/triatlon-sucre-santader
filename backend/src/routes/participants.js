@@ -14,10 +14,18 @@ const CATEGORIAS_VALIDAS = ['elite', 'recreativa', 'ninos'];
 
 // ── Calcular precio según fecha ─────────────────────────────
 function calcularPrecio() {
-  const FECHA_LIMITE = new Date('2026-04-30T23:59:59-05:00');
-  const PRECIO_TEMP = 15000;
-  const PRECIO_NORMAL = 30000;
-  return new Date() <= FECHA_LIMITE ? PRECIO_TEMP : PRECIO_NORMAL;
+  const now = new Date();
+
+  // Early bird: hasta el 30 de abril de 2026
+  const FECHA_EARLY = new Date('2026-04-30T23:59:59-05:00');
+  if (now <= FECHA_EARLY) return 15000;
+
+  // Promoción 48 horas: hasta el 20 de mayo de 2026
+  const FECHA_PROMO_48H = new Date('2026-05-20T23:59:59-05:00');
+  if (now <= FECHA_PROMO_48H) return 20000;
+
+  // Precio normal
+  return 30000;
 }
 
 // ── Verificar reCAPTCHA con Google ──────────────────────────

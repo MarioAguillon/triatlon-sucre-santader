@@ -2,7 +2,7 @@
 // components/registration/registration.component.ts
 // ============================================================
 import { Component, OnInit, AfterViewInit, ElementRef, NgZone, signal, computed } from '@angular/core';
-import { isEarlyBirdActive } from '../../utils/pricing';
+import { isEarlyBirdActive, isPromo48hActive } from '../../utils/pricing';
 import { CommonModule }                from '@angular/common';
 import { FormsModule }                 from '@angular/forms';
 import { environment }                 from '../../../environments/environment';
@@ -100,6 +100,14 @@ type FormState = 'idle' | 'loading' | 'success' | 'error';
 
             <!-- Form -->
             @if (formState() !== 'success') {
+              @if (isPromo48hActive()) {
+                <div class="promo-info-banner">
+                  <span class="promo-info-icon">🔥</span>
+                  <div class="promo-info-text">
+                    <strong>TARIFA ESPECIAL 48H</strong> — Inscripción a <strong>$20.000</strong> — Hasta el 20 de mayo
+                  </div>
+                </div>
+              }
               <form class="reg-form glass" (ngSubmit)="submit()" #regForm="ngForm">
                 <h3 class="form-title">Formulario de Inscripción</h3>
 
@@ -573,11 +581,46 @@ type FormState = 'idle' | 'loading' | 'success' | 'error';
       .reg-form      { padding: 1.2rem; }
       .captcha-wrapper { transform: scale(0.75); }
     }
+
+    /* ── Promo 48h Info Banner ───────────── */
+    .promo-info-banner {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 0.8rem 1.2rem;
+      background: linear-gradient(135deg, rgba(255,107,0,0.1), rgba(255,140,56,0.06));
+      border: 1px solid rgba(255,107,0,0.3);
+      border-radius: var(--r-md);
+      margin-bottom: 1rem;
+      animation: promoBannerPulse 3s ease-in-out infinite;
+    }
+
+    .promo-info-icon {
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+
+    .promo-info-text {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.85);
+      line-height: 1.4;
+    }
+
+    .promo-info-text strong {
+      color: var(--c-orange, #ff6b00);
+      font-weight: 700;
+    }
+
+    @keyframes promoBannerPulse {
+      0%, 100% { border-color: rgba(255,107,0,0.3); }
+      50% { border-color: rgba(255,107,0,0.5); }
+    }
   `]
 })
 export class RegistrationComponent implements OnInit, AfterViewInit {
   particles: string[] = [];
   isEarlyBirdActive = isEarlyBirdActive;
+  isPromo48hActive = isPromo48hActive;
   private recaptchaWidgetId: number | null = null;
   private captchaToken = '';
 

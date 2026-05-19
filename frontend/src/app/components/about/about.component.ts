@@ -2,7 +2,7 @@
 // components/about/about.component.ts
 // ============================================================
 import { Component, OnInit } from '@angular/core';
-import { isEarlyBirdActive } from '../../utils/pricing';
+import { isEarlyBirdActive, isPromo48hActive } from '../../utils/pricing';
 
 @Component({
   selector:   'app-about',
@@ -75,6 +75,12 @@ import { isEarlyBirdActive } from '../../utils/pricing';
               <div class="floating-badge">
                 <span class="badge-price">$15.000</span>
                 <span class="badge-label">Hasta el 30 de abril</span>
+              </div>
+            } @else if (isPromo48hActive()) {
+              <div class="floating-badge" style="background: linear-gradient(135deg, #ff6b00, #ff8c38); box-shadow: 0 8px 32px rgba(255,107,0,0.4);">
+                <span class="badge-sublabel">TARIFA ESPECIAL 48H</span>
+                <span class="badge-price">$20.000</span>
+                <span class="badge-label">Hasta el 20 de mayo</span>
               </div>
             } @else {
               <div class="floating-badge" style="background: linear-gradient(135deg, #1a6bff, #004ecc); box-shadow: 0 8px 32px rgba(26,107,255,0.4);">
@@ -240,6 +246,15 @@ import { isEarlyBirdActive } from '../../utils/pricing';
       font-weight: 600;
     }
 
+    .badge-sublabel {
+      display: block;
+      font-size: 0.55rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.9);
+      margin-bottom: 0.1rem;
+    }
+
     @media (max-width: 900px) {
       .about-grid { grid-template-columns: 1fr; }
       .floating-badge { top: -15px; right: 10px; }
@@ -249,6 +264,7 @@ import { isEarlyBirdActive } from '../../utils/pricing';
 export class AboutComponent implements OnInit {
   particles: string[] = [];
   isEarlyBirdActive = isEarlyBirdActive;
+  isPromo48hActive = isPromo48hActive;
 
   ngOnInit() {
     this.particles = Array.from({ length: 20 }, () => {
@@ -271,7 +287,7 @@ export class AboutComponent implements OnInit {
       { icon: 'calendar_month', label: 'Fecha del evento', value: '18 de julio de 2026' },
       { icon: 'location_on', label: 'Ubicación',        value: 'Sucre, Santander, Colombia' },
       { icon: 'sprint', label: 'Modalidades',      value: 'Running · Ciclismo · Natación' },
-      { icon: 'payments', label: 'Inscripción',      value: isEarlyBirdActive() ? '$15.000 antes del 30 de abril' : '$30.000 General' },
+      { icon: 'payments', label: 'Inscripción',      value: isEarlyBirdActive() ? '$15.000 antes del 30 de abril' : isPromo48hActive() ? '$20.000 Tarifa Especial 48h' : '$30.000 General' },
     ];
   }
 }

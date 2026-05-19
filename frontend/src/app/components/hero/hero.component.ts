@@ -4,6 +4,7 @@
 import { Component, OnInit, OnDestroy, signal } from '@angular/core';
 import { CommonModule }              from '@angular/common';
 import { RegistrationService }       from '../../services/registration.service';
+import { isPromo48hActive }          from '../../utils/pricing';
 
 @Component({
   selector:   'app-hero',
@@ -99,6 +100,14 @@ import { RegistrationService }       from '../../services/registration.service';
             <span class="stat-num">2ª</span>
             <span class="stat-label">Edición</span>
           </div>
+          @if (isPromo48hActive()) {
+            <div class="stat-divider"></div>
+            <a href="#inscripcion" class="promo-badge-hero">
+              <span class="promo-badge-line1">🔥 TARIFA ESPECIAL 48H</span>
+              <span class="promo-badge-line2">INSCRIPCIÓN $20.000</span>
+              <span class="promo-badge-line3">Hasta el 20 de mayo</span>
+            </a>
+          }
         </div>
       </div>
 
@@ -443,6 +452,55 @@ import { RegistrationService }       from '../../services/registration.service';
       background: rgba(255,255,255,0.15);
     }
 
+    /* ── Promo 48h Badge ────────────────────── */
+    .promo-badge-hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      text-decoration: none;
+      padding: 0.7rem 1.2rem;
+      background: linear-gradient(135deg, rgba(255,107,0,0.12), rgba(0,200,83,0.08));
+      border: 1px solid rgba(255,107,0,0.35);
+      border-radius: var(--r-md);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      animation: promoPulse 2.5s ease-in-out infinite;
+    }
+
+    .promo-badge-hero:hover {
+      background: linear-gradient(135deg, rgba(255,107,0,0.2), rgba(0,200,83,0.15));
+      transform: translateY(-3px);
+      box-shadow: 0 5px 20px rgba(255,107,0,0.3);
+      border-color: rgba(255,107,0,0.5);
+    }
+
+    .promo-badge-line1 {
+      font-size: 0.65rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      color: var(--c-orange, #ff6b00);
+    }
+
+    .promo-badge-line2 {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 1.5rem;
+      color: #fff;
+      line-height: 1;
+      margin: 0.2rem 0;
+    }
+
+    .promo-badge-line3 {
+      font-size: 0.6rem;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: 0.05em;
+    }
+
+    @keyframes promoPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(255,107,0,0.15); }
+      50% { box-shadow: 0 0 15px 3px rgba(255,107,0,0.2); }
+    }
+
     /* ── Scroll indicator ───────────────────── */
     .scroll-indicator {
       position: absolute;
@@ -682,6 +740,7 @@ import { RegistrationService }       from '../../services/registration.service';
   `]
 })
 export class HeroComponent implements OnInit, OnDestroy {
+  isPromo48hActive = isPromo48hActive;
   count    = signal(0);
   days     = signal('00');
   hours    = signal('00');

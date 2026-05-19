@@ -3,6 +3,7 @@
 // ============================================================
 import { Component, OnInit } from '@angular/core';
 import { isEarlyBirdActive } from '../../utils/pricing';
+import { isPromo48hActive }  from '../../utils/pricing';
 
 @Component({
   selector:   'app-invitation',
@@ -58,6 +59,13 @@ import { isEarlyBirdActive } from '../../utils/pricing';
           <div class="inv-cards">
             <!-- Precio -->
             <div class="info-card price-card">
+              @if (isPromo48hActive()) {
+                <div class="promo-ribbon">
+                  <span class="promo-ribbon-line1">🔥 TARIFA ESPECIAL 48H</span>
+                  <span class="promo-ribbon-line2">Inscripción a $20.000</span>
+                  <span class="promo-ribbon-line3">Hasta el 20 de mayo</span>
+                </div>
+              }
               <h3 class="info-card-title"><span class="material-symbols-outlined" style="vertical-align:-4px; margin-right:4px;">payments</span> Costos de Inscripción</h3>
               <div class="price-options">
                 @if (isEarlyBirdActive()) {
@@ -251,7 +259,49 @@ import { isEarlyBirdActive } from '../../utils/pricing';
     }
 
     /* Precio card */
-    .price-card { border-color: rgba(255,107,0,0.25); }
+    .price-card { border-color: rgba(255,107,0,0.25); position: relative; overflow: visible; }
+
+    /* ── Promo 48h Ribbon ───────────────── */
+    .promo-ribbon {
+      position: absolute;
+      top: -12px;
+      right: -8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0.5rem 0.8rem;
+      background: linear-gradient(135deg, rgba(255,107,0,0.9), rgba(255,140,56,0.85));
+      border-radius: var(--r-sm);
+      box-shadow: 0 4px 15px rgba(255,107,0,0.4);
+      z-index: 2;
+      animation: promoRibbonPulse 3s ease-in-out infinite;
+    }
+
+    .promo-ribbon-line1 {
+      font-size: 0.6rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      color: #fff;
+    }
+
+    .promo-ribbon-line2 {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 1rem;
+      color: #fff;
+      line-height: 1;
+      margin: 0.15rem 0;
+    }
+
+    .promo-ribbon-line3 {
+      font-size: 0.55rem;
+      color: rgba(255,255,255,0.85);
+      letter-spacing: 0.04em;
+    }
+
+    @keyframes promoRibbonPulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 4px 15px rgba(255,107,0,0.4); }
+      50% { transform: scale(1.03); box-shadow: 0 6px 20px rgba(255,107,0,0.5); }
+    }
 
     .price-options {
       display: flex;
@@ -374,6 +424,7 @@ import { isEarlyBirdActive } from '../../utils/pricing';
 export class InvitationComponent implements OnInit {
   particles: string[] = [];
   isEarlyBirdActive = isEarlyBirdActive;
+  isPromo48hActive = isPromo48hActive;
 
   ngOnInit() {
     this.particles = Array.from({ length: 20 }, () => {
