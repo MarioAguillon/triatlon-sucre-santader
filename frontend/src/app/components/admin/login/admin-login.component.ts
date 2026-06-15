@@ -93,7 +93,7 @@ import { AuthService }        from '../../../services/auth.service';
       justify-content: center;
       position: relative;
       overflow: hidden;
-      background: #07090f;
+      background: #040609; /* Deeper dark background */
       padding: 1.5rem;
     }
 
@@ -105,8 +105,9 @@ import { AuthService }        from '../../../services/auth.service';
     .bg-gradient {
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse at 30% 50%, rgba(26,107,255,0.12) 0%, transparent 60%),
-                  radial-gradient(ellipse at 70% 20%, rgba(255,107,0,0.08) 0%, transparent 50%);
+      background: radial-gradient(circle at 20% 40%, rgba(26,107,255,0.08) 0%, transparent 60%),
+                  radial-gradient(circle at 80% 80%, rgba(0,200,83,0.05) 0%, transparent 50%);
+      filter: blur(60px);
     }
 
     .login-card {
@@ -115,6 +116,18 @@ import { AuthService }        from '../../../services/auth.service';
       padding: 2.5rem;
       position: relative;
       z-index: 1;
+      background: rgba(13, 17, 23, 0.65);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 20px;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
+      animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
     /* Logo */
@@ -124,10 +137,13 @@ import { AuthService }        from '../../../services/auth.service';
       gap: 1rem;
       margin-bottom: 2rem;
       padding-bottom: 1.5rem;
-      border-bottom: 1px solid var(--c-border);
+      border-bottom: 1px solid rgba(255,255,255,0.04);
     }
 
-    .logo-icon { font-size: 2.5rem; }
+    .logo-icon { 
+      font-size: 2.5rem; 
+      filter: drop-shadow(0 0 12px rgba(255,215,0,0.3));
+    }
 
     .login-logo h1 {
       font-family: 'Bebas Neue', cursive;
@@ -135,30 +151,35 @@ import { AuthService }        from '../../../services/auth.service';
       color: var(--c-white);
       letter-spacing: 0.05em;
       line-height: 1;
+      text-shadow: 0 2px 10px rgba(255,255,255,0.1);
     }
 
     .login-logo p {
       font-size: 0.75rem;
       color: var(--c-muted);
-      margin-top: 2px;
+      margin-top: 4px;
+      letter-spacing: 0.03em;
     }
 
     /* Form */
-    .login-form { display: flex; flex-direction: column; gap: 1.2rem; }
+    .login-form { display: flex; flex-direction: column; gap: 1.4rem; }
 
     .login-error {
-      background: rgba(255,50,50,0.1);
-      border: 1px solid rgba(255,50,50,0.3);
-      border-radius: var(--r-sm);
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      border-radius: 12px;
       padding: 0.8rem 1rem;
-      color: #ff7070;
-      font-size: 0.88rem;
+      color: #f87171;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
 
     label {
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       font-weight: 600;
       color: var(--c-muted);
       text-transform: uppercase;
@@ -166,24 +187,31 @@ import { AuthService }        from '../../../services/auth.service';
     }
 
     input {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid var(--c-border);
-      border-radius: var(--r-sm);
-      padding: 0.85rem 1rem;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 0.9rem 1rem;
       color: var(--c-white);
       font-family: var(--font-body);
-      font-size: 1rem;
+      font-size: 0.95rem;
       outline: none;
       width: 100%;
-      transition: all var(--tr-fast);
+      transition: all 0.25s ease;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    input:hover {
+      background: rgba(255,255,255,0.05);
+      border-color: rgba(255,255,255,0.15);
     }
 
     input:focus {
+      background: rgba(255,255,255,0.06);
       border-color: var(--c-blue);
-      box-shadow: 0 0 0 3px rgba(26,107,255,0.15);
+      box-shadow: 0 0 0 4px rgba(26,107,255,0.15), inset 0 2px 4px rgba(0,0,0,0.1);
     }
 
-    input::placeholder { color: var(--c-muted); opacity: 0.5; }
+    input::placeholder { color: var(--c-muted); opacity: 0.4; }
 
     .pass-wrap { position: relative; }
 
@@ -191,7 +219,7 @@ import { AuthService }        from '../../../services/auth.service';
 
     .toggle-pass {
       position: absolute;
-      right: 0.8rem;
+      right: 1rem;
       top: 50%;
       transform: translateY(-50%);
       background: none;
@@ -199,7 +227,13 @@ import { AuthService }        from '../../../services/auth.service';
       cursor: pointer;
       font-size: 1rem;
       line-height: 1;
-      padding: 0;
+      padding: 4px;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+    
+    .toggle-pass:hover {
+      background: rgba(255,255,255,0.08);
     }
 
     .login-btn {
@@ -208,13 +242,27 @@ import { AuthService }        from '../../../services/auth.service';
       margin-top: 0.5rem;
       padding: 1rem;
       font-size: 1rem;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #1a6bff, #0047cc);
+      box-shadow: 0 8px 24px rgba(26,107,255,0.25), inset 0 1px 0 rgba(255,255,255,0.15);
+      border: 1px solid rgba(26,107,255,0.5);
     }
 
-    .login-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .login-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(26,107,255,0.35), inset 0 1px 0 rgba(255,255,255,0.15);
+    }
+
+    .login-btn:disabled { 
+      opacity: 0.6; 
+      cursor: not-allowed; 
+      transform: none; 
+      box-shadow: none;
+    }
 
     .spinner {
       width: 16px; height: 16px;
-      border: 2px solid rgba(255,255,255,0.3);
+      border: 2px solid rgba(255,255,255,0.2);
       border-top-color: #fff;
       border-radius: 50%;
       animation: spin 0.8s linear infinite;
@@ -224,15 +272,17 @@ import { AuthService }        from '../../../services/auth.service';
     @keyframes spin { to { transform: rotate(360deg); } }
 
     .back-link {
-      display: block;
+      display: inline-block;
+      width: 100%;
       text-align: center;
       margin-top: 1.5rem;
       font-size: 0.85rem;
       color: var(--c-muted);
-      transition: color var(--tr-fast);
+      transition: color 0.2s;
+      text-decoration: none;
     }
 
-    .back-link:hover { color: var(--c-white); }
+    .back-link:hover { color: var(--c-white); text-decoration: underline; }
   `]
 })
 export class AdminLoginComponent {

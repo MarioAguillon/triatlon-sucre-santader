@@ -275,8 +275,10 @@ type DashView = 'list' | 'edit';
     /* ── Sidebar ────────────────────── */
     .admin-sidebar {
       width: 260px;
-      background: var(--c-surface);
-      border-right: 1px solid var(--c-border);
+      background: rgba(13, 17, 23, 0.4);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-right: 1px solid rgba(255,255,255,0.04);
       display: flex;
       flex-direction: column;
       padding: 1.5rem;
@@ -313,15 +315,23 @@ type DashView = 'list' | 'edit';
     .nav-item {
       width: 100%;
       text-align: left;
-      background: rgba(26,107,255,0.12);
-      border: 1px solid rgba(26,107,255,0.25);
-      border-radius: var(--r-sm);
+      background: linear-gradient(135deg, rgba(26,107,255,0.15), rgba(0,71,204,0.05));
+      border: 1px solid rgba(26,107,255,0.3);
+      border-radius: 12px;
       padding: 0.8rem 1rem;
-      color: var(--c-blue-light);
+      color: #4d8eff;
       font-family: var(--font-body);
       font-size: 0.9rem;
       font-weight: 600;
       cursor: pointer;
+      box-shadow: 0 4px 12px rgba(26,107,255,0.1);
+      transition: all 0.3s ease;
+    }
+    
+    .nav-item:hover {
+      background: linear-gradient(135deg, rgba(26,107,255,0.25), rgba(0,71,204,0.1));
+      transform: translateX(4px);
+      box-shadow: 0 6px 16px rgba(26,107,255,0.15);
     }
 
     .sidebar-user {
@@ -380,8 +390,13 @@ type DashView = 'list' | 'edit';
       align-items: center;
       justify-content: space-between;
       padding: 1.5rem 2rem;
-      background: var(--c-surface);
-      border-bottom: 1px solid var(--c-border);
+      background: transparent;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      position: sticky;
+      top: 0;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      z-index: 10;
     }
 
     .admin-header h2 {
@@ -394,13 +409,15 @@ type DashView = 'list' | 'edit';
     .admin-header p { font-size: 0.85rem; color: var(--c-muted); }
 
     .stat-chip {
-      background: rgba(26,107,255,0.1);
-      border: 1px solid rgba(26,107,255,0.25);
-      border-radius: var(--r-md);
-      padding: 0.6rem 1.2rem;
+      background: rgba(13, 17, 23, 0.6);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(26,107,255,0.2);
+      border-radius: 16px;
+      padding: 0.6rem 1.4rem;
       display: flex;
       flex-direction: column;
       align-items: center;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.05);
     }
 
     .chip-num {
@@ -498,31 +515,45 @@ type DashView = 'list' | 'edit';
 
     .admin-table {
       width: 100%;
-      border-collapse: collapse;
+      border-collapse: separate;
+      border-spacing: 0 8px;
       font-size: 0.88rem;
     }
 
     .admin-table th {
       text-align: left;
-      padding: 0.7rem 0.9rem;
-      background: var(--c-card);
+      padding: 0.7rem 1.2rem;
       color: var(--c-muted);
       font-size: 0.72rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.08em;
-      border-bottom: 1px solid var(--c-border);
       white-space: nowrap;
+      border: none;
+      background: transparent;
+    }
+
+    .admin-table tbody tr {
+      background: rgba(13, 17, 23, 0.4);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      transition: all 0.2s ease;
+    }
+
+    .admin-table tbody tr:hover {
+      background: rgba(26, 107, 255, 0.05);
+      transform: scale(1.002);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
     }
 
     .admin-table td {
-      padding: 0.75rem 0.9rem;
-      border-bottom: 1px solid rgba(255,255,255,0.04);
+      padding: 1rem 1.2rem;
       color: var(--c-text);
       vertical-align: middle;
+      border: none;
     }
 
-    .admin-table tr:hover td { background: rgba(255,255,255,0.02); }
+    .admin-table td:first-child { border-radius: 12px 0 0 12px; }
+    .admin-table td:last-child { border-radius: 0 12px 12px 0; }
 
     .td-id    { color: var(--c-muted); width: 40px; }
     .td-name  { font-weight: 600; color: var(--c-white); }
