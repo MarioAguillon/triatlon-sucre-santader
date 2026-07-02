@@ -3,10 +3,9 @@
 // ============================================================
 import { Component } from '@angular/core';
 import { HeroComponent }            from '../hero/hero.component';
-import { AboutComponent }           from '../about/about.component';
+import { NoticiasComponent }          from '../noticias/noticias.component';
 import { DisciplinesComponent }     from '../disciplines/disciplines.component';
 import { PremiacionComponent }      from '../premiacion/premiacion.component';
-import { InvitationComponent }      from '../invitation/invitation.component';
 import { RegistrationComponent }    from '../registration/registration.component';
 import { RutasComponent }           from '../rutas/rutas.component';
 import { GalleryPrimeraComponent }  from '../gallery-primera/gallery-primera.component';
@@ -23,10 +22,9 @@ import { NavbarComponent }          from '../navbar/navbar.component';
   imports: [
     NavbarComponent,
     HeroComponent,
-    AboutComponent,
+    NoticiasComponent,
     DisciplinesComponent,
     PremiacionComponent,
-    InvitationComponent,
     RegistrationComponent,
     RutasComponent,
     GalleryPrimeraComponent,
@@ -40,10 +38,9 @@ import { NavbarComponent }          from '../navbar/navbar.component';
     <app-navbar />
     <main>
       <app-hero />
-      <app-about />
+      <app-noticias />
       <app-disciplines />
       <app-premiacion />
-      <app-invitation />
       <app-registration />
       <app-rutas />
       <app-gallery-primera />
