@@ -21,9 +21,8 @@ import { CommonModule } from '@angular/common';
 
         <ul class="nav-links" [class.open]="menuOpen()">
           <li><a href="#inicio"      (click)="closeMenu()">Inicio</a></li>
-          <li><a href="#evento"      (click)="closeMenu()">El Evento</a></li>
+          <li><a href="#noticias"    (click)="closeMenu()">Noticias</a></li>
           <li><a href="#disciplinas" (click)="closeMenu()">Disciplinas</a></li>
-          <li><a href="#invitacion"  (click)="closeMenu()">Invitación</a></li>
           <li><a href="#jerseys"      (click)="closeMenu()">Jerseys</a></li>
           <li><a href="#galeria-primera" (click)="closeMenu()">Galería</a></li>
           <li><a href="#patrocinadores" (click)="closeMenu()">Patrocinadores</a></li>

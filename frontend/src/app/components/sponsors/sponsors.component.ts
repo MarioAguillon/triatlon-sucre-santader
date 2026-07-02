@@ -29,6 +29,12 @@ import { Sponsor }                   from '../../models/participant.model';
           </p>
         </div>
 
+        <!-- Alcaldía Prominente -->
+        <a href="https://www.sucre-santander.gov.co/" target="_blank" rel="noopener noreferrer" class="alcaldia-wrapper">
+          <img src="patrocinadores/logo_alcaldia.png" alt="Escudo Alcaldía de Sucre" class="alcaldia-logo">
+          <h3 class="alcaldia-text">ALCALDÍA DE SUCRE SANTANDER</h3>
+        </a>
+
         <!-- Categories -->
         <div class="sponsor-categories">
           @for (cat of categories; track cat.tipo) {
@@ -37,7 +43,7 @@ import { Sponsor }                   from '../../models/participant.model';
                 <span class="material-symbols-outlined">{{ cat.icon }}</span>
                 <span>{{ cat.label }}</span>
               </div>
-              <div class="sponsor-grid">
+              <div class="sponsor-grid" [class]="'grid-' + cat.tipo">
                 @for (s of getSponsorsByType(cat.tipo); track s.id) {
                   <div class="sponsor-card" [class]="'cat-' + cat.tipo">
                     @if (s.logo_url) {
@@ -99,6 +105,69 @@ import { Sponsor }                   from '../../models/participant.model';
 
     .section-header { margin-bottom: 3.5rem; }
 
+    /* ── Alcaldía Principal Premium ──────────── */
+    .alcaldia-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 2rem auto 2.5rem auto; /* Reducido para que esté más pegado a las tarjetas */
+      max-width: 550px;
+      padding: 3.5rem 1.5rem;
+      gap: 1.5rem;
+      background: linear-gradient(180deg, rgba(20,25,35,0.7) 0%, rgba(5,8,12,0.95) 100%);
+      border: 1px solid rgba(255,255,255,0.03);
+      border-top: 1px solid rgba(255,255,255,0.1);
+      border-radius: 28px;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.6), inset 0 2px 20px rgba(255,255,255,0.03);
+      position: relative;
+      overflow: hidden;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .alcaldia-wrapper:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 40px 70px rgba(0,0,0,0.8), inset 0 2px 20px rgba(255,255,255,0.05);
+    }
+    
+    .alcaldia-wrapper::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .alcaldia-logo {
+      height: 260px;
+      z-index: 1;
+      object-fit: contain;
+      filter: drop-shadow(0 15px 25px rgba(0,0,0,0.6));
+      transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    
+    .alcaldia-wrapper:hover .alcaldia-logo {
+      transform: scale(1.05) translateY(-5px);
+    }
+    
+    .alcaldia-text {
+      z-index: 1;
+      font-size: 1.8rem;
+      font-weight: 900;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-align: center;
+      margin: 0;
+      background: linear-gradient(180deg, #ffffff 0%, #9ba3b5 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.8));
+    }
+
     /* ── Categories ─────────────────── */
     .sponsor-categories {
       display: flex;
@@ -124,6 +193,12 @@ import { Sponsor }                   from '../../models/participant.model';
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
       gap: 1rem;
+    }
+    
+    /* Grid específico para personas (imágenes horizontales más anchas) */
+    .sponsor-grid.grid-persona {
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
     }
 
     .sponsor-card {
@@ -156,8 +231,43 @@ import { Sponsor }                   from '../../models/participant.model';
       transition: filter var(--tr-fast);
     }
 
-    .sponsor-card:hover .sponsor-logo {
+    .sponsor-card:not(.cat-persona):hover .sponsor-logo {
       filter: brightness(0) invert(1);
+    }
+
+    /* ── Estilos específicos para Tarjetas de Personas (Imágenes Completas) ── */
+    .sponsor-card.cat-persona {
+      padding: 0;
+      border: none;
+      background: transparent;
+      overflow: hidden;
+      border-radius: 16px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      display: block; 
+      height: auto; /* Deja que la imagen dicte la altura */
+      cursor: pointer;
+    }
+
+    .sponsor-card.cat-persona .sponsor-logo {
+      width: 100%;
+      height: auto; /* Natural aspect ratio */
+      max-height: none;
+      filter: none; 
+      display: block;
+      transition: transform var(--tr-med), box-shadow var(--tr-med);
+    }
+
+    .sponsor-card.cat-persona:hover {
+      transform: none; /* Desactivamos el scale del padre para no romper border-radius */
+    }
+
+    .sponsor-card.cat-persona:hover .sponsor-logo {
+      transform: scale(1.05);
+      filter: none;
+    }
+
+    .sponsor-card.cat-persona .sponsor-name {
+      display: none; /* Ocultamos el texto porque ya viene en la imagen */
     }
 
     .sponsor-placeholder {
@@ -248,11 +358,16 @@ import { Sponsor }                   from '../../models/participant.model';
   `]
 })
 export class SponsorsComponent implements OnInit {
-  sponsors = signal<Sponsor[]>([]);
+  sponsors = signal<Sponsor[]>([
+    { id: 101, nombre: 'Heymar García Ariza', tipo: 'persona', logo_url: 'patrocinadores/tarjeta_heymar.png' },
+    { id: 102, nombre: 'Carlos Darío Marín', tipo: 'persona', logo_url: 'patrocinadores/tarjeta_carlos.png' },
+    { id: 103, nombre: 'Cristian Mateus Marín', tipo: 'persona', logo_url: 'patrocinadores/tarjeta_cristian.png' },
+    { id: 104, nombre: 'Hely Marin González', tipo: 'persona', logo_url: 'patrocinadores/tarjeta_hely.png' }
+  ]);
   loading  = signal(true);
 
   categories = [
-    { tipo: 'titulo', label: 'Patrocinadores de Título', icon: 'workspace_premium' },
+    { tipo: 'persona', label: 'Aportes Individuales', icon: 'groups' },
   ];
 
   constructor(private regSvc: RegistrationService) {}
@@ -262,7 +377,11 @@ export class SponsorsComponent implements OnInit {
     this.particles = Array.from({ length: 20 }, () => { const x = Math.random() * 100; const dur = 8 + Math.random() * 12; const del = Math.random() * 8; const size = 2 + Math.random() * 4; return `left:${x}%;width:${size}px;height:${size}px;animation-duration:${dur}s;animation-delay:${del}s`; });
 
     this.regSvc.getSponsors().subscribe({
-      next: data => { this.sponsors.set(data); this.loading.set(false); },
+      next: data => { 
+        // Mezclamos los quemados con los de la base de datos
+        this.sponsors.set([...this.sponsors(), ...data]); 
+        this.loading.set(false); 
+      },
       error: ()   => this.loading.set(false),
     });
   }
