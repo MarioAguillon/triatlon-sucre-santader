@@ -362,7 +362,8 @@ export class SponsorsComponent implements OnInit {
     { id: 101, nombre: 'Heymar García Ariza', tipo: 'persona', logo_url: 'patrocinadores/tarjeta_heymar.png' },
     { id: 102, nombre: 'Carlos Darío Marín', tipo: 'persona', logo_url: 'patrocinadores/tarjeta_carlos.png' },
     { id: 103, nombre: 'Cristian Mateus Marín', tipo: 'persona', logo_url: 'patrocinadores/tarjeta_cristian.png' },
-    { id: 104, nombre: 'Hely Marin González', tipo: 'persona', logo_url: 'patrocinadores/tarjeta_hely.png' }
+    { id: 104, nombre: 'Hely Marin González', tipo: 'persona', logo_url: 'patrocinadores/tarjeta_hely.png' },
+    { id: 105, nombre: 'Néstor', tipo: 'persona', logo_url: 'patrocinadores/tarjeta_nestor.png' }
   ]);
   loading  = signal(true);
 

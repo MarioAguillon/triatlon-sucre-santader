@@ -26,10 +26,10 @@ import { CommonModule } from '@angular/common';
               <span class="news-badge">🔥 ÚLTIMA HORA</span>
               <h3 class="news-title-large">¡Faltan solo {{ daysLeft }} días!</h3>
               <p class="news-body">
-                La Triatlón Sucre Sin Límites 2.0 está a la vuelta de la esquina. Cada día se suman más atletas de élite y nuevos patrocinadores a este gran reto.
+                ¡Qué alegría ver a nuestra gente volver! Muchos sucreños que hoy viven en diferentes rincones de Colombia están empacando maletas para regresar a su pueblo y disfrutar de la Triatlón 2.0 este 18 de julio. Será un reencuentro inolvidable.
               </p>
               <p class="news-body">
-                Los cupos se están agotando rápidamente. ¡Asegura tu lugar hoy mismo y vive la experiencia!
+                Además, cada día se siguen sumando más amigos y patrocinadores que, con su granito de arena, hacen posible que vivamos este evento tan especial. ¡Asegura tu lugar y ven a celebrar con nosotros!
               </p>
               <a href="#inscripcion" class="news-cta">Inscribirse Ahora <i class="fas fa-arrow-right"></i></a>
             </div>
