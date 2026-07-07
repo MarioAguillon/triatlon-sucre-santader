@@ -45,7 +45,9 @@ import { Sponsor }                   from '../../models/participant.model';
               </div>
               <div class="sponsor-grid" [class]="'grid-' + cat.tipo">
                 @for (s of getSponsorsByType(cat.tipo); track s.id) {
-                  <div class="sponsor-card" [class]="'cat-' + cat.tipo">
+                  <div class="sponsor-card" [class]="'cat-' + cat.tipo" 
+                       [style.cursor]="s.sitio_web ? 'pointer' : ''"
+                       (click)="openLink(s.sitio_web)">
                     @if (s.logo_url) {
                       <img [src]="s.logo_url" [alt]="s.nombre" class="sponsor-logo" />
                     } @else {
@@ -195,8 +197,9 @@ import { Sponsor }                   from '../../models/participant.model';
       gap: 1rem;
     }
     
-    /* Grid específico para personas (imágenes horizontales más anchas) */
-    .sponsor-grid.grid-persona {
+    /* Grid específico para personas y empresas (imágenes horizontales más anchas) */
+    .sponsor-grid.grid-persona,
+    .sponsor-grid.grid-empresa {
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 1.5rem;
     }
@@ -231,12 +234,13 @@ import { Sponsor }                   from '../../models/participant.model';
       transition: filter var(--tr-fast);
     }
 
-    .sponsor-card:not(.cat-persona):hover .sponsor-logo {
+    .sponsor-card:not(.cat-persona):not(.cat-empresa):hover .sponsor-logo {
       filter: brightness(0) invert(1);
     }
 
-    /* ── Estilos específicos para Tarjetas de Personas (Imágenes Completas) ── */
-    .sponsor-card.cat-persona {
+    /* ── Estilos específicos para Tarjetas Completas (Personas y Empresas) ── */
+    .sponsor-card.cat-persona,
+    .sponsor-card.cat-empresa {
       padding: 0;
       border: none;
       background: transparent;
@@ -248,7 +252,8 @@ import { Sponsor }                   from '../../models/participant.model';
       cursor: pointer;
     }
 
-    .sponsor-card.cat-persona .sponsor-logo {
+    .sponsor-card.cat-persona .sponsor-logo,
+    .sponsor-card.cat-empresa .sponsor-logo {
       width: 100%;
       height: auto; /* Natural aspect ratio */
       max-height: none;
@@ -257,16 +262,19 @@ import { Sponsor }                   from '../../models/participant.model';
       transition: transform var(--tr-med), box-shadow var(--tr-med);
     }
 
-    .sponsor-card.cat-persona:hover {
+    .sponsor-card.cat-persona:hover,
+    .sponsor-card.cat-empresa:hover {
       transform: none; /* Desactivamos el scale del padre para no romper border-radius */
     }
 
-    .sponsor-card.cat-persona:hover .sponsor-logo {
+    .sponsor-card.cat-persona:hover .sponsor-logo,
+    .sponsor-card.cat-empresa:hover .sponsor-logo {
       transform: scale(1.05);
       filter: none;
     }
 
-    .sponsor-card.cat-persona .sponsor-name {
+    .sponsor-card.cat-persona .sponsor-name,
+    .sponsor-card.cat-empresa .sponsor-name {
       display: none; /* Ocultamos el texto porque ya viene en la imagen */
     }
 
@@ -363,11 +371,17 @@ export class SponsorsComponent implements OnInit {
     { id: 102, nombre: 'Carlos Darío Marín', tipo: 'persona', logo_url: 'patrocinadores/tarjeta_carlos.png' },
     { id: 103, nombre: 'Cristian Mateus Marín', tipo: 'persona', logo_url: 'patrocinadores/tarjeta_cristian.png' },
     { id: 104, nombre: 'Hely Marin González', tipo: 'persona', logo_url: 'patrocinadores/tarjeta_hely.png' },
-    { id: 105, nombre: 'Néstor', tipo: 'persona', logo_url: 'patrocinadores/tarjeta_nestor.png' }
+    { id: 105, nombre: 'Néstor', tipo: 'persona', logo_url: 'patrocinadores/tarjeta_nestor.png' },
+    { id: 106, nombre: 'Lelio', tipo: 'persona', logo_url: 'patrocinadores/tarjeta_lelio.png' },
+    { id: 107, nombre: 'Fanny', tipo: 'persona', logo_url: 'patrocinadores/tarjeta_fanny.png' },
+    { id: 108, nombre: 'Andres', tipo: 'persona', logo_url: 'patrocinadores/tarjeta_andres.png' },
+    { id: 109, nombre: 'Samantha', tipo: 'persona', logo_url: 'patrocinadores/tarjeta_samantha.png' },
+    { id: 110, nombre: 'Heladería Oohz', tipo: 'empresa', logo_url: 'patrocinadores/tarjeta_oohz.png', sitio_web: 'https://www.instagram.com/heladeriaoohz7?igsh=MXUzOHc0YXo0M3VhYQ==' }
   ]);
   loading  = signal(true);
 
   categories = [
+    { tipo: 'empresa', label: 'Empresas y Comercios', icon: 'storefront' },
     { tipo: 'persona', label: 'Aportes Individuales', icon: 'groups' },
   ];
 
@@ -389,5 +403,11 @@ export class SponsorsComponent implements OnInit {
 
   getSponsorsByType(tipo: string): Sponsor[] {
     return this.sponsors().filter(s => s.tipo === tipo);
+  }
+
+  openLink(url: string | undefined) {
+    if (url) {
+      window.open(url, '_blank');
+    }
   }
 }
