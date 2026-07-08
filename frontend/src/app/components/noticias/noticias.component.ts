@@ -40,7 +40,7 @@ import { CommonModule } from '@angular/common';
           <!-- Ejemplo Embed Instagram -->
           <div class="news-card">
             <div class="embed-container" style="padding: 1rem 0;">
-              <iframe src="https://www.instagram.com/p/DaV_KdUBeLy/embed" width="320" height="476" frameborder="0" scrolling="no" allowtransparency="true"></iframe>
+              <iframe src="https://www.instagram.com/reel/DaiE4h5OnGS/embed" width="320" height="476" frameborder="0" scrolling="no" allowtransparency="true"></iframe>
             </div>
             <div class="news-info">
               <span class="news-platform" style="color: #E1306C">● Instagram</span>
