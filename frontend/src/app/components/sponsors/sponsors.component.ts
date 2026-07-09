@@ -45,7 +45,7 @@ import { Sponsor }                   from '../../models/participant.model';
               </div>
               <div class="sponsor-grid" [class]="'grid-' + cat.tipo">
                 @for (s of getSponsorsByType(cat.tipo); track s.id) {
-                  <div class="sponsor-card" [class]="'cat-' + cat.tipo" 
+                  <div class="sponsor-card" [class]="'cat-' + cat.tipo" [class.has-logo]="!!s.logo_url" 
                        [style.cursor]="s.sitio_web ? 'pointer' : ''"
                        (click)="openLink(s.sitio_web)">
                     @if (s.logo_url) {
@@ -245,8 +245,8 @@ import { Sponsor }                   from '../../models/participant.model';
     }
 
     /* ── Estilos específicos para Tarjetas Completas (Personas y Empresas) ── */
-    .sponsor-card.cat-persona,
-    .sponsor-card.cat-empresa {
+    .sponsor-card.cat-persona.has-logo,
+    .sponsor-card.cat-empresa.has-logo {
       padding: 0;
       border: none;
       background: transparent;
@@ -260,12 +260,12 @@ import { Sponsor }                   from '../../models/participant.model';
       cursor: pointer;
     }
 
-    .sponsor-card.cat-empresa {
+    .sponsor-card.cat-empresa.has-logo {
       background: #ffffff;
     }
 
-    .sponsor-card.cat-persona .sponsor-logo,
-    .sponsor-card.cat-empresa .sponsor-logo {
+    .sponsor-card.cat-persona.has-logo .sponsor-logo,
+    .sponsor-card.cat-empresa.has-logo .sponsor-logo {
       width: 100%;
       height: 100%;
       object-fit: contain;
@@ -275,19 +275,18 @@ import { Sponsor }                   from '../../models/participant.model';
       transition: transform var(--tr-med), box-shadow var(--tr-med);
     }
 
-    .sponsor-card.cat-persona:hover,
-    .sponsor-card.cat-empresa:hover {
+    .sponsor-card.cat-persona.has-logo:hover,
+    .sponsor-card.cat-empresa.has-logo:hover {
       transform: none; /* Desactivamos el scale del padre para no romper border-radius */
     }
 
-    .sponsor-card.cat-persona:hover .sponsor-logo,
-    .sponsor-card.cat-empresa:hover .sponsor-logo {
+    .sponsor-card.cat-persona.has-logo:hover .sponsor-logo,
+    .sponsor-card.cat-empresa.has-logo:hover .sponsor-logo {
       transform: scale(1.05);
-      filter: none;
     }
 
-    .sponsor-card.cat-persona .sponsor-name,
-    .sponsor-card.cat-empresa .sponsor-name {
+    .sponsor-card.cat-persona.has-logo .sponsor-name,
+    .sponsor-card.cat-empresa.has-logo .sponsor-name {
       display: none; /* Ocultamos el texto porque ya viene en la imagen */
     }
 
@@ -416,7 +415,7 @@ export class SponsorsComponent implements OnInit {
   }
 
   getSponsorsByType(tipo: string): Sponsor[] {
-    return this.sponsors().filter(s => s.tipo === tipo);
+    return this.sponsors().filter(s => s.tipo === tipo && s.nombre && s.nombre.trim() !== '' && s.logo_url);
   }
 
   openLink(url: string | undefined) {
