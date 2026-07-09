@@ -204,6 +204,12 @@ import { Sponsor }                   from '../../models/participant.model';
       gap: 1.5rem;
     }
 
+    .sponsor-grid.grid-persona .sponsor-card,
+    .sponsor-grid.grid-empresa .sponsor-card {
+      aspect-ratio: 1 / 1;
+      justify-content: center;
+    }
+
     .sponsor-card {
       display: flex;
       flex-direction: column;
@@ -247,15 +253,22 @@ import { Sponsor }                   from '../../models/participant.model';
       overflow: hidden;
       border-radius: 16px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-      display: block; 
-      height: auto; /* Deja que la imagen dicte la altura */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
       cursor: pointer;
+    }
+
+    .sponsor-card.cat-empresa {
+      background: #ffffff;
     }
 
     .sponsor-card.cat-persona .sponsor-logo,
     .sponsor-card.cat-empresa .sponsor-logo {
       width: 100%;
-      height: auto; /* Natural aspect ratio */
+      height: 100%;
+      object-fit: contain;
       max-height: none;
       filter: none; 
       display: block;
@@ -376,7 +389,8 @@ export class SponsorsComponent implements OnInit {
     { id: 107, nombre: 'Fanny', tipo: 'persona', logo_url: 'patrocinadores/tarjeta_fanny.png' },
     { id: 108, nombre: 'Andres', tipo: 'persona', logo_url: 'patrocinadores/tarjeta_andres.png' },
     { id: 109, nombre: 'Samantha', tipo: 'persona', logo_url: 'patrocinadores/tarjeta_samantha.png' },
-    { id: 110, nombre: 'Heladería Oohz', tipo: 'empresa', logo_url: 'patrocinadores/tarjeta_oohz.png', sitio_web: 'https://www.instagram.com/heladeriaoohz7?igsh=MXUzOHc0YXo0M3VhYQ==' }
+    { id: 110, nombre: 'Heladería Oohz', tipo: 'empresa', logo_url: 'patrocinadores/tarjeta_oohz.png', sitio_web: 'https://www.instagram.com/heladeriaoohz7?igsh=MXUzOHc0YXo0M3VhYQ==' },
+    { id: 111, nombre: 'Dra Katherin Escamilla', tipo: 'empresa', logo_url: 'patrocinadores/tarjeta_katy.png', sitio_web: 'https://www.instagram.com/consultoriodrakatherin?igsh=NzdkbmNwYW14NXRx' }
   ]);
   loading  = signal(true);
 
