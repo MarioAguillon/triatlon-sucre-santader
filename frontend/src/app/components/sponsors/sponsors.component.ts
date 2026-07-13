@@ -390,7 +390,8 @@ export class SponsorsComponent implements OnInit {
     { id: 109, nombre: 'Samantha', tipo: 'persona', logo_url: 'patrocinadores/tarjeta_samantha.png' },
     { id: 110, nombre: 'Heladería Oohz', tipo: 'empresa', logo_url: 'patrocinadores/tarjeta_oohz.png', sitio_web: 'https://www.instagram.com/heladeriaoohz7?igsh=MXUzOHc0YXo0M3VhYQ==' },
     { id: 111, nombre: 'Dra Katherin Escamilla', tipo: 'empresa', logo_url: 'patrocinadores/tarjeta_katy.png', sitio_web: 'https://www.instagram.com/consultoriodrakatherin?igsh=NzdkbmNwYW14NXRx' },
-    { id: 112, nombre: 'Sosa', tipo: 'empresa', logo_url: 'patrocinadores/tarjeta_sosa.png', sitio_web: 'https://wa.me/573123540901' }
+    { id: 112, nombre: 'Sosa', tipo: 'empresa', logo_url: 'patrocinadores/tarjeta_sosa.png', sitio_web: 'https://wa.me/573123540901' },
+    { id: 113, nombre: 'Dany', tipo: 'empresa', logo_url: 'patrocinadores/tarjeta_dany.png', sitio_web: 'https://wa.me/573023432762' }
   ]);
   loading  = signal(true);
 
