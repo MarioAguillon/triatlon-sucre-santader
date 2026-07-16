@@ -390,11 +390,14 @@ export class SponsorsComponent implements OnInit {
     { id: 109, nombre: 'Samantha', tipo: 'persona', logo_url: 'patrocinadores/tarjeta_samantha.png' },
     { id: 114, nombre: 'Juan Peña', tipo: 'persona', logo_url: 'patrocinadores/tarjeta_juanpena.png' },
     { id: 115, nombre: 'Edwin', tipo: 'persona', logo_url: 'patrocinadores/tarjeta_edwin.png' },
+    { id: 119, nombre: 'Oscar', tipo: 'persona', logo_url: 'patrocinadores/tarjeta_oscar.png' },
     { id: 110, nombre: 'Heladería Oohz', tipo: 'empresa', logo_url: 'patrocinadores/tarjeta_oohz.png', sitio_web: 'https://www.instagram.com/heladeriaoohz7?igsh=MXUzOHc0YXo0M3VhYQ==' },
     { id: 111, nombre: 'Dra Katherin Escamilla', tipo: 'empresa', logo_url: 'patrocinadores/tarjeta_katy.png', sitio_web: 'https://www.instagram.com/consultoriodrakatherin?igsh=NzdkbmNwYW14NXRx' },
     { id: 112, nombre: 'Sosa', tipo: 'empresa', logo_url: 'patrocinadores/tarjeta_sosa.png', sitio_web: 'https://wa.me/573123540901' },
     { id: 113, nombre: 'Dany', tipo: 'empresa', logo_url: 'patrocinadores/tarjeta_dany.png', sitio_web: 'https://wa.me/573023432762' },
-    { id: 116, nombre: 'CIIS', tipo: 'empresa', logo_url: 'patrocinadores/tarjeta_ciis.png', sitio_web: 'https://wa.me/573022848504' }
+    { id: 116, nombre: 'CIIS', tipo: 'empresa', logo_url: 'patrocinadores/tarjeta_ciis.png', sitio_web: 'https://wa.me/573022848504' },
+    { id: 117, nombre: 'Disac', tipo: 'empresa', logo_url: 'patrocinadores/tarjeta_disac.png', sitio_web: 'https://www.instagram.com/disac_comercializadora?igsh=YWk3aDg3ZjN2dDY1' },
+    { id: 118, nombre: 'Alma', tipo: 'empresa', logo_url: 'patrocinadores/tarjeta_alma.png', sitio_web: 'https://wa.me/573144813369' }
   ]);
   loading  = signal(true);
 

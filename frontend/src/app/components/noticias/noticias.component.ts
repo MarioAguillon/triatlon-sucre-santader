@@ -26,12 +26,12 @@ import { CommonModule } from '@angular/common';
               <span class="news-badge">🔥 ÚLTIMA HORA</span>
               <h3 class="news-title-large">¡Faltan solo {{ daysLeft }} días!</h3>
               <p class="news-body">
-                ¡Qué alegría ver a nuestra gente volver! Muchos sucreños que hoy viven en diferentes rincones de Colombia están empacando maletas para regresar a su pueblo y disfrutar de la Triatlón 2.0 este 18 de julio. Será un reencuentro inolvidable.
+                ¡El tiempo vuela y ya solo faltan <strong>2 días</strong> para el gran evento! Muchos sucreños que hoy viven en diferentes rincones de Colombia ya están empacando maletas para regresar a su pueblo y disfrutar de la Triatlón 2.0 este 18 de julio. ¡Será un reencuentro inolvidable y no te lo puedes perder!
               </p>
               <p class="news-body">
-                Además, cada día se siguen sumando más amigos y patrocinadores que, con su granito de arena, hacen posible que vivamos este evento tan especial. 
+                <strong>¡No te quedes por fuera, inscríbete ahora mismo!</strong> Cada día se siguen sumando más amigos y patrocinadores que, con su granito de arena, hacen posible que vivamos este evento tan especial. 
                 <br><br>
-                <strong>Un agradecimiento muy especial a quienes ya se han unido a esta causa:</strong> La Alcaldía Municipal de Sucre Santander en cabeza de la señora alcaldesa Nelcy Tellez, y nuestros patrocinadores Heymar García Ariza, Carlos Darío Marín, Cristian Mateus Marín, Hely Marin González, Néstor, Lelio, Fanny, Andres, Samantha y la Heladería Oohz. ¡Mil gracias por su valioso aporte! Asegura tu lugar y ven a celebrar con nosotros.
+                <strong>Un agradecimiento muy especial a quienes ya se han unido a esta causa:</strong> La Alcaldía Municipal de Sucre Santander en cabeza de la señora alcaldesa Nelcy Tellez, y nuestros patrocinadores Heymar García Ariza, Carlos Darío Marín, Cristian Mateus Marín, Hely Marin González, Néstor, Lelio, Fanny, Andres, Samantha, Oscar, Heladería Oohz, Disac y Alma. ¡Mil gracias por su valioso aporte! Asegura tu lugar y ven a celebrar con nosotros.
               </p>
               <a href="#inscripcion" class="news-cta">Inscribirse Ahora <i class="fas fa-arrow-right"></i></a>
             </div>
@@ -40,7 +40,7 @@ import { CommonModule } from '@angular/common';
           <!-- Ejemplo Embed Instagram -->
           <div class="news-card">
             <div class="embed-container" style="padding: 1rem 0;">
-              <iframe src="https://www.instagram.com/reel/DaiE4h5OnGS/embed" width="320" height="476" frameborder="0" scrolling="no" allowtransparency="true"></iframe>
+              <iframe src="https://www.instagram.com/reel/Daz9dxMOUXg/embed" width="320" height="476" frameborder="0" scrolling="no" allowtransparency="true"></iframe>
             </div>
             <div class="news-info">
               <span class="news-platform" style="color: #E1306C">● Instagram</span>
