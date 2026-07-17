@@ -397,7 +397,8 @@ export class SponsorsComponent implements OnInit {
     { id: 113, nombre: 'Dany', tipo: 'empresa', logo_url: 'patrocinadores/tarjeta_dany.png', sitio_web: 'https://wa.me/573023432762' },
     { id: 116, nombre: 'CIIS', tipo: 'empresa', logo_url: 'patrocinadores/tarjeta_ciis.png', sitio_web: 'https://wa.me/573022848504' },
     { id: 117, nombre: 'Disac', tipo: 'empresa', logo_url: 'patrocinadores/tarjeta_disac.png', sitio_web: 'https://www.instagram.com/disac_comercializadora?igsh=YWk3aDg3ZjN2dDY1' },
-    { id: 118, nombre: 'Alma', tipo: 'empresa', logo_url: 'patrocinadores/tarjeta_alma.png', sitio_web: 'https://wa.me/573144813369' }
+    { id: 118, nombre: 'Alma', tipo: 'empresa', logo_url: 'patrocinadores/tarjeta_alma.png', sitio_web: 'https://wa.me/573144813369' },
+    { id: 120, nombre: 'Armando', tipo: 'empresa', logo_url: 'patrocinadores/tarjeta_armando.png', sitio_web: 'https://wa.me/573102198939' }
   ]);
   loading  = signal(true);
 
